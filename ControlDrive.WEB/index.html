@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<html ng-app="ControlDrive">
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+
+    <script>
+        
+        var app = angular.module("ControlDrive", [])
+            .controller('ServiciosController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
+                var urlApi = "http://localhost/API/api/servicios";
+                var urlApiConductores = "http://localhost/API/api/conductores";
+                
+                $scope.servicios = [];
+                $scope.servicio = {
+                    //Hora: "22:30",// "10:20",
+                    //EstadoCodigo: "PD",
+                    //FechaD: "11/12/1988",
+                    //Radicado: "11201231",
+                    //AseguradoraId: "3",
+                    ////Aseguradora: {Nombre:"Mapfre"},
+                    //VehiculoPlaca: "ODEU12",
+                    ////Vehiculo: { Placa: "ODEU12", Referencia:"Corsa" },
+                    //AseguradoId: "1",
+                    //ConductorId: "1"
+                    //Vehiculo: { Placa: "ODE61D", Referencia: "Duke", Marca: "KTM" },
+                    //Asegurado: { Id: 1, Nombre: "Alejandro Asegurado" },
+                    //Conductor: { Id: 1, Nombre: "Javier conductor" }
+                };
+                $scope.conductores = [];
+                $scope.Obtener = function () {
+                    $http.get(urlApi).
+                        then(function (response) {
+                            $scope.servicios = response.data;
+                        }, function (response) {
+                            alert(response.data.ExceptionMessage);
+                        });
+                }
+                $scope.Guardar = function (servicio) {
+                    servicio.Fecha = servicio.Hora + ' ' + servicio.FechaD;
+                    servicio.EstadoCodigo = "EJ";
+                    $http.post(urlApi, servicio).
+                        then(function (response) {
+                            $scope.Obtener();
+                        }, function (response) {
+                            alert(response.data.ExceptionMessage);
+                        });
+                }
+                $scope.Actualizar = function (servicio) {
+                    servicio.Fecha = servicio.Hora + ' ' + servicio.FechaD;
+                    $http.put(urlApi + "/" + servicio.Id, servicio).
+                        then(function (response) {
+                            $scope.Obtener();
+                        }, function (response) {
+                            alert(response.data.ExceptionMessage);
+                        });
+                }
+                $scope.CargarServicio = function (servicio) {
+                    $scope.servicio = servicio;
+                    $scope.servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');
+                    $scope.servicio.FechaD = $filter('date')(servicio.Fecha, 'dd/MM/yyyy');
+                }
+
+                $scope.ObtenerConductores = function () {
+                    $http.get(urlApiConductores).
+                        then(function (response) {
+                            $scope.conductores = response.data;
+                        }, function (response) {
+                            alert(response.data.ExceptionMessage);
+                        });
+                }
+                $scope.ObtenerConductores();
+                $scope.Obtener();
+            }])
+            .controller('ConductorController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
+                var urlApi = "http://localhost/API/api/Conductores";
+                $scope.Conductores = [];
+                $scope.Conductor = {};
+                $scope.Alert();
+                $scope.Obtener = function () {
+                    $http.get(urlApi).
+                        then(function (response) {
+                            $scope.Conductores = response.data;
+                        }, function (response) {
+                            alert(response.data.ExceptionMessage);
+                        });
+                }
+                $scope.Nuevo = function (conductor) {
+                    $http.post(urlApi, conductor).
+                        then(function (response) {
+                            $scope.Obtener();
+                        }, function (response) {
+                            alert(response.data.ExceptionMessage);
+                        });
+                }
+
+            }]);
+        
+    </script>
+</head>
+<body>
+    <div ng-controller="ServiciosController as svcCtrl">
+        <input type="button" ng-click="Obtener();" value="Obtener" />
+        <input type="button" ng-click="Guardar(servicio);" value="Guardar" />
+        <input type="button" ng-click="Actualizar(servicio);" value="Actualizar" />
+
+        <div class="panel panel-default" >
+            <div class="panel-heading">Nuevo servicio</div>
+            <div class="panel-body">
+                <form class="form">
+                    <fieldset>
+                        <legend>Datos servicio</legend>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-2">
+                                <div class="form-group">
+                                    <label for="TxtHora">Hora</label>
+                                    <input ng-model="servicio.Hora" type="text" class="form-control" id="TxtHora" placeholder="HH:mm">
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtFecha">Fecha</label>
+                                    <input ng-model="servicio.FechaD" type="text" class="form-control" id="TxtFecha" placeholder="dd/MM/yyyy">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtRadicado">Radicado</label>
+                                    <input ng-model="servicio.Radicado" type="text" class="form-control" id="TxtRadicado">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="SelAseguradora">Aseguradora</label>
+                                    <!--<select ng-init="servicio.AseguradoraId = servicio.AseguradoraId || '-1'" ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">-->
+                                        <select ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">
+                                            <!--<option value="-1">-- Seleccione --</option>-->
+                                            <option value="1">Bolivar</option>
+                                            <option value="4">Mapfre</option>
+                                        </select>
+</div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="SelConductores">Conductor</label>
+                                    <select ng-model="servicio.ConductorId" class="form-control" id="SelConductores" ng-repeat="conductor in conductores">
+                                        <option value="{{conductor.Id}}">{{ conductor.Nombre }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Vehiculo</legend>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label for="TxtPlaca">Placa</label>
+                                    <input ng-model="servicio.VehiculoPlaca" type="text" class="form-control" id="TxtPlaca" placeholder="" size="6">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtMarca">Marca</label>
+                                    <input ng-model="servicio.Vehiculo.Marca" type="text" class="form-control" id="TxtMarca" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtReferencia">Referencia</label>
+                                    <input ng-model="servicio.Vehiculo.Referencia" type="text" class="form-control" id="TxtReferencia" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="TxtObservaciones">Observaciones</label>
+                                    <input  ng-model="servicio.Vehiculo.Observaciones" type="text" class="form-control" id="TxtObservaciones" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Asegurado</legend>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="TxtNombreAsegurado">Nombre</label>
+                                    <input ng-model="servicio.Asegurado.Nombre" type="text" class="form-control" id="TxtNombreAsegurado">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtTelefono1">Teléfono 1</label>
+                                    <input ng-model="servicio.Asegurado.Telefono1" type="tel" class="form-control" id="TxtTelefono1" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtTelefono2">Teléfono 2</label>
+                                    <input ng-model="servicio.Asegurado.Telefono2" type="tel" class="form-control" id="TxtTelefono2" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Ruta</legend>
+                        <h4>Inicio</h4>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="TxtDireccionInicio">Dirección</label>
+                                    <input ng-model="servicio.DireccionInicio.Descripcion" type="text" class="form-control" id="TxtDireccionInicio">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtBarrio">Barrio</label>
+                                    <input ng-model="servicio.DireccionInicio.Barrio" type="text" class="form-control" id="TxtBarrio" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <h4>Destino</h4>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="TxtDireccionDestino">Dirección</label>
+                                    <input ng-model="servicio.DireccionDestino.Descripcion" type="text" class="form-control" id="TxtDireccionDestino">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="TxtBarrioDestino">Barrio</label>
+                                    <input ng-model="servicio.DireccionDestino.Barrio" type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        
+        <div class="panel panel-default">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Fecha y Hora
+                        </th>
+                        <th>
+                            Estado
+                        </th>
+                        <th>
+                            Radicado
+                        </th>
+                        <th>
+                            Aseguradora
+                        </th>
+                        <th>
+                            Vehiculo
+                        </th>
+                        <th>
+                            Asegurado
+                        </th>
+                        <th>
+                            Conductor
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="svr in servicios">
+                    <tr>
+                        <td>
+                            {{svr.Fecha | date:'dd/MM/yyyy'}} - {{svr.Fecha | date:'HH:mm'}}
+                        </td>
+                        <td>
+                            {{svr.Estado.Descripcion }}
+                        </td>
+                        <td>
+                            {{svr.Radicado }}
+                        </td>
+                        <td>
+                            {{svr.Aseguradora.Nombre }}
+                        </td>
+                        <td>
+                            {{svr.Vehiculo.Placa }} <spa>-</spa>{{svr.Vehiculo.Marca }}
+                        </td>
+                        <td>
+                            {{svr.Asegurado.Nombre }}
+                        </td>
+
+                        <td>
+                            {{svr.Conductor.Nombre }}
+                        </td>
+                        <td>
+                            <input type="button" ng-click="CargarServicio(svr);" value="Editar" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
