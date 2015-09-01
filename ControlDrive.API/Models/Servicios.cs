@@ -20,7 +20,7 @@ namespace ControlDrive.API.Models
         
         public string Radicado { get; set; }
 
-        public string VehiculoPlaca { get; set; }
+        public int? VehiculoId { get; set; }
 
         public virtual Vehiculo Vehiculo { get; set; }
 
@@ -41,7 +41,7 @@ namespace ControlDrive.API.Models
 
         public int? ConductorId { get; set; }
 
-        //public virtual Conductor Conductor { get; set; }
+        public virtual Conductor Conductor { get; set; }
     }
 
     public class Aseguradora
@@ -76,7 +76,8 @@ namespace ControlDrive.API.Models
 
     public class Vehiculo
     {
-        [Key]
+        public int Id { get; set; }
+        
         public string Placa { get; set; }
 
         public string Marca { get; set; }

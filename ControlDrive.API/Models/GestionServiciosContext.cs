@@ -31,6 +31,8 @@ namespace ControlDrive.API.Models
 
         public System.Data.Entity.DbSet<ControlDrive.API.Models.Conductor> Conductores { get; set; }
 
+        public System.Data.Entity.DbSet<ControlDrive.API.Models.Vehiculo> Vehiculos { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

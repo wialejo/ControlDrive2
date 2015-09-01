@@ -64,17 +64,32 @@ namespace ControlDrive.API.Controllers
                 return BadRequest();
             }
 
-            if (servicio.AseguradoraId == 0)
+            if (servicio.VehiculoId == null)
             {
-                var NuevaAseguradora = db.Aseguradoras.Add(servicio.Aseguradora);
-                servicio.AseguradoraId = NuevaAseguradora.Id;
+                var nuevoVehiculo = db.Vehiculos.Add(servicio.Vehiculo);
+                db.SaveChanges();
+                servicio.VehiculoId = nuevoVehiculo.Id;
+                
             }
+
+            //if (servicio.AseguradoraId == 0)
+            //{
+            //    var NuevaAseguradora = db.Aseguradoras.Add(servicio.Aseguradora);
+            //    servicio.AseguradoraId = NuevaAseguradora.Id;
+            //}
             if (servicio.AseguradoId == 0)
             {
                 var NuevoAsegurado = db.Asegurados.Add(servicio.Asegurado);
                 servicio.AseguradoId = NuevoAsegurado.Id;
             }
 
+            
+            //db.Entry(servicio.Asegurado).State = EntityState.Modified;
+            //db.Entry(servicio.Aseguradora).State = EntityState.Modified;
+            //db.Entry(servicio.Conductor).State = EntityState.Modified;
+            //db.Entry(servicio.Vehiculo).State = EntityState.Modified;
+            //db.Entry(servicio.DireccionDestino).State = EntityState.Modified;
+            //db.Entry(servicio.DireccionInicio).State = EntityState.Modified;
             db.Entry(servicio).State = EntityState.Modified;
 
             try
@@ -105,10 +120,10 @@ namespace ControlDrive.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (servicio.AseguradoraId == 0) {
-                var NuevaAseguradora = db.Aseguradoras.Add(servicio.Aseguradora);
-                servicio.AseguradoraId = NuevaAseguradora.Id;
-            }
+            //if (servicio.AseguradoraId == 0) {
+            //    var NuevaAseguradora = db.Aseguradoras.Add(servicio.Aseguradora);
+            //    servicio.AseguradoraId = NuevaAseguradora.Id;
+            //}
             if (servicio.AseguradoId == 0)
             {
                 var NuevoAsegurado = db.Asegurados.Add(servicio.Asegurado);
