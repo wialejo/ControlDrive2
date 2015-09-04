@@ -16,8 +16,9 @@ namespace ControlDrive.API.Controllers
     {
         private GestionServiciosContext db = new GestionServiciosContext();
 
-
         // GET: api/Conductores
+
+        [Authorize]
         public IQueryable<Conductor> GetConductores()
         {
             return db.Conductores;

@@ -7,12 +7,13 @@ using System.Web.Http;
 
 namespace ControlDrive.API.Controllers
 {
+    [Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2 resakjhsdkasdds" };
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
