@@ -1,0 +1,65 @@
+<!-- list -->
+<ul class="nav">
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span translate="aside.nav.HEADER">Gestión</span>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.nuevo">
+      <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+      <span class="font-bold">Nuevo servicio</span>
+    </a>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.serviciosConsulta">
+      <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+      <span class="font-bold">Consulta servicios</span>
+    </a>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.rutasConsulta">
+      <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+      <span class="font-bold">Consulta rutas</span>
+    </a>
+  </li>
+    <li ui-sref-active="active">
+        <a ui-sref="app.conductores">
+            <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+            <span class="font-bold">Conductores</span>
+        </a>
+    </li>
+
+  <li class="line dk"></li>
+
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span >Servicios</span>
+  </li>
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <b class="badge bg-info pull-right">3</b>
+      <i class="fa fa-truck"></i>
+      <span>Operación</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>Operación</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.seguimiento">
+          <span>Seguimiento</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.nuevo">
+          <span>nuevo servicio</span>
+        </a>
+      </li>    
+    </ul>
+  </li>
+</ul>
+<!-- / list -->

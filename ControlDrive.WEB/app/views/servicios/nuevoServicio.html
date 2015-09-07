@@ -1,0 +1,149 @@
+<div ng-controller="ServiciosController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3"> servicio</h1>
+    </div>
+    <div class="wrapper-md">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <!--<div class="panel-heading font-bold">Nuevo servicio</div>-->
+                    <div class="panel-body">
+                        <form class="form" name="form" novalidate ng-submit="form.$valid && Guardar(servicio);">
+                            <fieldset>
+                                <legend>Datos servicio</legend>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-2">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtHora.$invalid  && !form.TxtHora.$pristine}">
+                                            <label for="TxtHora">Hora</label>
+                                            <input ng-model="servicio.Hora" ng-minlength="5" ng-maxlength="5" required type="text" class="form-control" id="TxtHora" name="TxtHora" placeholder="HH:mm">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-2">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtFecha.$invalid  && !form.TxtFecha.$pristine}">
+                                            <label for="TxtFecha">Fecha</label>
+                                            <input ng-model="servicio.FechaD" required type="text" class="form-control" name="TxtFecha" placeholder="dd/MM/yyyy">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="TxtRadicado">Radicado</label>
+                                            <input ng-model="servicio.Radicado" required type="text" class="form-control" id="TxtRadicado">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="SelAseguradora">Aseguradora</label>
+                                            <!--<select ng-init="servicio.AseguradoraId = servicio.AseguradoraId || '-1'" ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">-->
+                                            <select ng-model="servicio.AseguradoraId" required class="form-control" id="SelAseguradora">
+                                                <option value="">-- seleccione --</option> 
+                                                <option value="1">Bolivar</option>
+                                                <option value="4">Mapfre</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="SelConductores">Conductor</label>
+                                            <select ng-options="conductor.Id as conductor.Nombre for conductor in conductores" ng-model="servicio.ConductorId" required class="form-control" id="SelConductores">
+                                                <option value="">-- seleccione --</option> 
+                                                <!--<option  ng-repeat="conductor in conductores" value="{{conductor.Id}}">{{ conductor.Nombre }}</option>-->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Vehiculo</legend>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="TxtPlaca">Placa</label>
+                                            <input ng-model="servicio.Vehiculo.Placa" required type="text" class="form-control" id="TxtPlaca" placeholder="" size="6">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="TxtMarca">Marca</label>
+                                            <input ng-model="servicio.Vehiculo.Marca" required type="text" class="form-control" id="TxtMarca" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="TxtReferencia">Referencia</label>
+                                            <input ng-model="servicio.Vehiculo.Referencia" type="text" class="form-control" id="TxtReferencia" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="TxtObservaciones">Observaciones</label>
+                                            <input ng-model="servicio.Vehiculo.Observaciones" type="text" class="form-control" id="TxtObservaciones" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Asegurado</legend>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="TxtNombreAsegurado">Nombre</label>
+                                            <input ng-model="servicio.Asegurado.Nombre" required type="text" class="form-control" id="TxtNombreAsegurado">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="TxtTelefono1">Teléfono 1</label>
+                                            <input ng-model="servicio.Asegurado.Telefono1" type="tel" class="form-control" id="TxtTelefono1" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="TxtTelefono2">Teléfono 2</label>
+                                            <input ng-model="servicio.Asegurado.Telefono2" type="tel" class="form-control" id="TxtTelefono2" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Ruta</legend>
+                                <h4>Inicio</h4>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="TxtDireccionInicio">Dirección</label>
+                                            <input ng-model="servicio.DireccionInicio.Descripcion" required type="text" class="form-control" id="TxtDireccionInicio">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="TxtBarrio">Barrio</label>
+                                            <input ng-model="servicio.DireccionInicio.Barrio" required type="text" class="form-control" id="TxtBarrio" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4>Destino</h4>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="TxtDireccionDestino">Dirección</label>
+                                            <input ng-model="servicio.DireccionDestino.Descripcion" required type="text" class="form-control" id="TxtDireccionDestino">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="TxtBarrioDestino">Barrio</label>
+                                            <input ng-model="servicio.DireccionDestino.Barrio" required type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <input ng-disabled="form.$invalid" type="submit" class="btn btn-primary" name="BtnNuevoServicio" value="Guardar servicio" />
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

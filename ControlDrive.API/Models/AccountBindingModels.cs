@@ -34,6 +34,11 @@ namespace ControlDrive.API.Models
 
     public class RegisterBindingModel
     {
+
+        [Required]
+        [Display(Name = "User name")]
+        public string userName { get; set; }
+
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }

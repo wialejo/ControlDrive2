@@ -1,0 +1,153 @@
+﻿<div ng-controller="ConductoresController">
+    <div class="clearfix bg-light lter b-b wrapper-md">
+        <h1 class="pull-left m-n font-thin h3">Conductores</h1>
+        <span class="pull-right">
+            <script type="text/ng-template" id="NuevoConductor.html">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal" ng-click="cancel()">×</a>
+                    <h3 class="m-t-none m-b font-thin">Nuevo conductor</h3>
+                </div>
+                <div class="modal-body wrapper-lg">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form name="form" class="form-horizontal" role="form" novalidate ng-submit="form.$valid && guardar(conductor);">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group"  ng-class="{ 'has-error' : form.TxtNombre.$invalid  && !form.TxtNombre.$pristine}">
+                                            <label>Nombre</label>
+                                            <input ng-model="conductor.Nombre" required type="text" name="TxtNombre" class="form-control" placeholder="nombre">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtEmail.$invalid  && !form.TxtEmail.$pristine}">
+                                            <label>Email</label>
+                                            <input ng-model="conductor.Email" required type="email" name="TxtEmail" class="form-control" placeholder="Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtTipoIdentifiacion.$invalid  && !form.TxtTipoIdentifiacion.$pristine}">
+                                            <label>Tipo Identificación</label>
+                                            <select ng-model="conductor.TipoIdentificacion" required name="TxtTipoIdentifiacion" class="form-control" >
+                                                <option value="CC">Cedula</option>
+                                                <option value="TI">Tarjeta Identidad</option>
+                                                <option value="PS">Pasaporte</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtIdentifiacion.$invalid  && !form.TxtIdentifiacion.$pristine}">
+                                            <label>Identificación</label>
+                                            <input ng-model="conductor.Identificacion" required type="number" name="TxtIdentifiacion" class="form-control" placeholder="Identificación">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtTelefonoPpal.$invalid  && !form.TxtTelefonoPpal.$pristine}">
+                                            <label>Teléfono 1</label>
+                                            <input ng-model="conductor.Telefono1" required type="text" name="TxtTelefonoPpal" class="form-control" placeholder="teléfono">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Teléfono 2</label>
+                                            <input ng-model="conductor.Telefono2" type="number" class="form-control" placeholder="teléfono">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Dirección</label>
+                                            <input ng-model="conductor.Direccion" type="text" class="form-control" placeholder="Dirección">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Activo</label>
+                                            <input ng-model="conductor.Activo" type="checkbox"  ng-init="checked=true" >
+                                        </div>
+                                    </div>  
+                                    <div class="col-sm-12">
+                                        <div class="checkbox m-t-lg">
+                                            <input type="submit" class="btn btn-primary pull-right" name="BtnNuevoConductor" value="Guardar" />
+                                        </div>
+                                     </div>
+                                </div>
+</form>
+                        </div>
+                    </div>
+                </div>
+            </script>
+            <button class="btn btn-info" ng-click="nuevo()">Agregar conductor</button>
+        </span>
+    </div>
+    <div class="wrapper-md">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-b">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 text-center">
+                                            Id
+                                        </th>
+                                        <th>
+                                            Nombre
+                                        </th>
+                                        <th>
+                                            Identificación
+                                        </th>
+                                        <th>
+                                            Email
+                                        </th>
+                                        <th>
+                                            Teléfonos
+                                        </th>
+                                        <th>
+                                            Dirección
+                                        </th>
+                                        <th>
+                                            Activo
+                                        </th>
+                                        <th class="text-center">
+                                            Acciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <thead>
+                                    <tr ng-repeat="conductor in conductores">
+                                        <td class="col-md-1 text-center">
+                                            {{conductor.Id}}
+                                        </td>
+                                        <td class="col-md-2">
+                                            {{conductor.Nombre}}
+                                        </td>
+                                        <td>
+                                            {{conductor.TipoIdentificacion}} - {{conductor.Identificacion}}
+                                        </td>
+                                        <td>
+                                            {{conductor.Email}}
+                                        </td>
+                                        <td>
+                                            {{conductor.Telefono1}} - {{conductor.Telefono2}}
+                                        </td>
+                                        <td>
+                                            {{conductor.Direccion}}
+                                        </td>
+                                        <td class="col-md-1 text-center">
+                                            {{conductor.Activo}}
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="button" value="Editar" class="btn btn-default btn-sm" ng-click="editar(conductor)" />
+                                            <input type="button" value="Eliminar" class="btn btn-danger btn-sm" ng-click="eliminar(conductor)" />
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

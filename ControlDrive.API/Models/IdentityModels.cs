@@ -20,8 +20,7 @@ namespace ControlDrive.API.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext()
-            : base("GestionServiciosContext", throwIfV1Schema: false)
+        public ApplicationDbContext(): base("name=ControlDriveDBConnectionString")
         {
         }
         

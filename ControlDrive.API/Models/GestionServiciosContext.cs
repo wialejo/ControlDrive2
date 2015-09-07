@@ -17,7 +17,7 @@ namespace ControlDrive.API.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
     
-        public GestionServiciosContext() : base("name=GestionServiciosContext")
+        public GestionServiciosContext() : base("name=ControlDriveDBConnectionString")
         {
         }
 
@@ -33,6 +33,8 @@ namespace ControlDrive.API.Models
 
         public System.Data.Entity.DbSet<ControlDrive.API.Models.Vehiculo> Vehiculos { get; set; }
 
+        public System.Data.Entity.DbSet<ControlDrive.API.Models.Seguimiento> Seguimientos { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -42,5 +44,6 @@ namespace ControlDrive.API.Models
             //.Property(l => l.Id)
             //.HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
+
     }
 }

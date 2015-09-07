@@ -1,313 +1,81 @@
 ﻿<!DOCTYPE html>
-<html ng-app="ControlDrive">
+<html lang="es" data-ng-app="app">
 <head>
-    <title></title>
     <meta charset="utf-8" />
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
-
-    <script>
-        
-        var app = angular.module("ControlDrive", [])
-            .controller('ServiciosController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
-                var urlApi = "http://localhost/API/api/servicios";
-                var urlApiConductores = "http://localhost/API/api/conductores";
-                
-                $scope.servicios = [];
-                $scope.servicio = {
-                    //Hora: "22:30",// "10:20",
-                    //EstadoCodigo: "PD",
-                    //FechaD: "11/12/1988",
-                    //Radicado: "11201231",
-                    //AseguradoraId: "3",
-                    ////Aseguradora: {Nombre:"Mapfre"},
-                    //VehiculoPlaca: "ODEU12",
-                    ////Vehiculo: { Placa: "ODEU12", Referencia:"Corsa" },
-                    //AseguradoId: "1",
-                    //ConductorId: "1"
-                    //Vehiculo: { Placa: "ODE61D", Referencia: "Duke", Marca: "KTM" },
-                    //Asegurado: { Id: 1, Nombre: "Alejandro Asegurado" },
-                    //Conductor: { Id: 1, Nombre: "Javier conductor" }
-                };
-                $scope.conductores = [];
-                $scope.Obtener = function () {
-                    $http.get(urlApi).
-                        then(function (response) {
-                            $scope.servicios = response.data;
-                        }, function (response) {
-                            alert(response.data.ExceptionMessage);
-                        });
-                }
-                $scope.Guardar = function (servicio) {
-                    servicio.Fecha = servicio.Hora + ' ' + servicio.FechaD;
-                    servicio.EstadoCodigo = "EJ";
-                    $http.post(urlApi, servicio).
-                        then(function (response) {
-                            $scope.Obtener();
-                        }, function (response) {
-                            alert(response.data.ExceptionMessage);
-                        });
-                }
-                $scope.Actualizar = function (servicio) {
-                    servicio.Fecha = servicio.Hora + ' ' + servicio.FechaD;
-                    $http.put(urlApi + "/" + servicio.Id, servicio).
-                        then(function (response) {
-                            $scope.Obtener();
-                        }, function (response) {
-                            alert(response.data.ExceptionMessage);
-                        });
-                }
-                $scope.CargarServicio = function (servicio) {
-                    $scope.servicio = servicio;
-                    $scope.servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');
-                    $scope.servicio.FechaD = $filter('date')(servicio.Fecha, 'dd/MM/yyyy');
-                }
-
-                $scope.ObtenerConductores = function () {
-                    $http.get(urlApiConductores).
-                        then(function (response) {
-                            $scope.conductores = response.data;
-                        }, function (response) {
-                            alert(response.data.ExceptionMessage);
-                        });
-                }
-                $scope.ObtenerConductores();
-                $scope.Obtener();
-            }])
-            .controller('ConductorController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
-                var urlApi = "http://localhost/API/api/Conductores";
-                $scope.Conductores = [];
-                $scope.Conductor = {};
-                $scope.Alert();
-                $scope.Obtener = function () {
-                    $http.get(urlApi).
-                        then(function (response) {
-                            $scope.Conductores = response.data;
-                        }, function (response) {
-                            alert(response.data.ExceptionMessage);
-                        });
-                }
-                $scope.Nuevo = function (conductor) {
-                    $http.post(urlApi, conductor).
-                        then(function (response) {
-                            $scope.Obtener();
-                        }, function (response) {
-                            alert(response.data.ExceptionMessage);
-                        });
-                }
-
-            }]);
-        
-    </script>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <title>Angular version | Angulr</title>
+    <meta name="description" content="Angularjs, Html5, Music, Landing, 4 in 1 ui kits package" />
+    <meta name="keywords" content="AngularJS, angular, bootstrap, admin, dashboard, panel, app, charts, components,flat, responsive, layout, kit, ui, route, web, app, widgets" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    
+    <link rel="stylesheet" href="libs/jquery/bootstrap/dist/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="libs/assets/animate.css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="libs/assets/font-awesome/css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="libs/assets/simple-line-icons/css/simple-line-icons.css" type="text/css" />
+    <link rel="stylesheet" href="app/css/font.css" type="text/css" />
+    <link rel="stylesheet" href="app/css/app.css" type="text/css" />
 </head>
-<body>
-    <div ng-controller="ServiciosController as svcCtrl">
-        <input type="button" ng-click="Obtener();" value="Obtener" />
-        <input type="button" ng-click="Guardar(servicio);" value="Guardar" />
-        <input type="button" ng-click="Actualizar(servicio);" value="Actualizar" />
+<body ng-controller="AppCtrl">
+    <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed,
+       'app-aside-fixed':app.settings.asideFixed,
+       'app-aside-folded':app.settings.asideFolded,
+       'app-aside-dock':app.settings.asideDock,
+       'container':app.settings.container}" ui-view></div>
 
-        <div class="panel panel-default" >
-            <div class="panel-heading">Nuevo servicio</div>
-            <div class="panel-body">
-                <form class="form">
-                    <fieldset>
-                        <legend>Datos servicio</legend>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-2">
-                                <div class="form-group">
-                                    <label for="TxtHora">Hora</label>
-                                    <input ng-model="servicio.Hora" type="text" class="form-control" id="TxtHora" placeholder="HH:mm">
-                                </div>
-                            </div>
-                            <div class="col-xs-6 col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtFecha">Fecha</label>
-                                    <input ng-model="servicio.FechaD" type="text" class="form-control" id="TxtFecha" placeholder="dd/MM/yyyy">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtRadicado">Radicado</label>
-                                    <input ng-model="servicio.Radicado" type="text" class="form-control" id="TxtRadicado">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="SelAseguradora">Aseguradora</label>
-                                    <!--<select ng-init="servicio.AseguradoraId = servicio.AseguradoraId || '-1'" ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">-->
-                                        <select ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">
-                                            <!--<option value="-1">-- Seleccione --</option>-->
-                                            <option value="1">Bolivar</option>
-                                            <option value="4">Mapfre</option>
-                                        </select>
-</div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="SelConductores">Conductor</label>
-                                    <select ng-model="servicio.ConductorId" class="form-control" id="SelConductores" ng-repeat="conductor in conductores">
-                                        <option value="{{conductor.Id}}">{{ conductor.Nombre }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Vehiculo</legend>
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                    <label for="TxtPlaca">Placa</label>
-                                    <input ng-model="servicio.VehiculoPlaca" type="text" class="form-control" id="TxtPlaca" placeholder="" size="6">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtMarca">Marca</label>
-                                    <input ng-model="servicio.Vehiculo.Marca" type="text" class="form-control" id="TxtMarca" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtReferencia">Referencia</label>
-                                    <input ng-model="servicio.Vehiculo.Referencia" type="text" class="form-control" id="TxtReferencia" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="TxtObservaciones">Observaciones</label>
-                                    <input  ng-model="servicio.Vehiculo.Observaciones" type="text" class="form-control" id="TxtObservaciones" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Asegurado</legend>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="TxtNombreAsegurado">Nombre</label>
-                                    <input ng-model="servicio.Asegurado.Nombre" type="text" class="form-control" id="TxtNombreAsegurado">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtTelefono1">Teléfono 1</label>
-                                    <input ng-model="servicio.Asegurado.Telefono1" type="tel" class="form-control" id="TxtTelefono1" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtTelefono2">Teléfono 2</label>
-                                    <input ng-model="servicio.Asegurado.Telefono2" type="tel" class="form-control" id="TxtTelefono2" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Ruta</legend>
-                        <h4>Inicio</h4>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="TxtDireccionInicio">Dirección</label>
-                                    <input ng-model="servicio.DireccionInicio.Descripcion" type="text" class="form-control" id="TxtDireccionInicio">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtBarrio">Barrio</label>
-                                    <input ng-model="servicio.DireccionInicio.Barrio" type="text" class="form-control" id="TxtBarrio" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                        <h4>Destino</h4>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="TxtDireccionDestino">Dirección</label>
-                                    <input ng-model="servicio.DireccionDestino.Descripcion" type="text" class="form-control" id="TxtDireccionDestino">
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="TxtBarrioDestino">Barrio</label>
-                                    <input ng-model="servicio.DireccionDestino.Barrio" type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-        
-        <div class="panel panel-default">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            Fecha y Hora
-                        </th>
-                        <th>
-                            Estado
-                        </th>
-                        <th>
-                            Radicado
-                        </th>
-                        <th>
-                            Aseguradora
-                        </th>
-                        <th>
-                            Vehiculo
-                        </th>
-                        <th>
-                            Asegurado
-                        </th>
-                        <th>
-                            Conductor
-                        </th>
-                    </tr>
-                </thead>
-                <tbody ng-repeat="svr in servicios">
-                    <tr>
-                        <td>
-                            {{svr.Fecha | date:'dd/MM/yyyy'}} - {{svr.Fecha | date:'HH:mm'}}
-                        </td>
-                        <td>
-                            {{svr.Estado.Descripcion }}
-                        </td>
-                        <td>
-                            {{svr.Radicado }}
-                        </td>
-                        <td>
-                            {{svr.Aseguradora.Nombre }}
-                        </td>
-                        <td>
-                            {{svr.Vehiculo.Placa }} <spa>-</spa>{{svr.Vehiculo.Marca }}
-                        </td>
-                        <td>
-                            {{svr.Asegurado.Nombre }}
-                        </td>
 
-                        <td>
-                            {{svr.Conductor.Nombre }}
-                        </td>
-                        <td>
-                            <input type="button" ng-click="CargarServicio(svr);" value="Editar" />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <!-- jQuery -->
+    <script src="libs/jquery/jquery/dist/jquery.js"></script>
+    <!-- Angular -->
+    <script src="libs/angular/angular/angular.js"></script>
+
+    <script src="libs/angular/angular-animate/angular-animate.js"></script>
+    <script src="libs/angular/angular-aria/angular-aria.js"></script>
+    <script src="libs/angular/angular-cookies/angular-cookies.js"></script>
+    <script src="libs/angular/angular-messages/angular-messages.js"></script>
+    <script src="libs/angular/angular-resource/angular-resource.js"></script>
+    <script src="libs/angular/angular-sanitize/angular-sanitize.js"></script>
+    <script src="libs/angular/angular-touch/angular-touch.js"></script>
+    <!-- ngMaterial -->
+    <script src="libs/angular/angular-material/angular-material.js"></script>
+
+    <script src="libs/angular/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="libs/angular/angular-local-storage.min.js"></script>
+    <script src="libs/angular/ngstorage/ngStorage.js"></script>
+    <script src="libs/angular/angular-ui-utils/ui-utils.js"></script>
+
+    <!-- bootstrap -->
+    <script src="libs/angular/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <!-- lazyload -->
+    <script src="libs/angular/oclazyload/dist/ocLazyLoad.js"></script>
+  <!-- translate -->
+  <script src="libs/angular/angular-translate/angular-translate.js"></script>
+  <script src="libs/angular/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="libs/angular/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+  <script src="libs/angular/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+    
+    <!-- App -->
+    <script src="app/js/app.js"></script>
+    <script src="app/js/config.js"></script>
+    <script src="app/js/config.lazyload.js"></script>
+    <script src="app/js/config.router.js"></script>
+    <script src="app/js/main.js"></script>
+    <script src="app/js/services/ui-load.js"></script>
+
+    <script src="app/js/services/authInterceptorService.js"></script>
+    <script src="app/js/services/authService.js"></script>
+    <script src="app/js/services/tokensManagerService.js"></script>
+
+  <script src="app/js/directives/setnganimate.js"></script>
+  <script src="app/js/directives/ui-butterbar.js"></script>
+  <script src="app/js/directives/ui-focus.js"></script>
+  <script src="app/js/directives/ui-fullscreen.js"></script>
+  <script src="app/js/directives/ui-jq.js"></script>
+  <script src="app/js/directives/ui-module.js"></script>
+  <script src="app/js/directives/ui-nav.js"></script>
+  <script src="app/js/directives/ui-scroll.js"></script>
+  <script src="app/js/directives/ui-shift.js"></script>
+  <script src="app/js/directives/ui-toggleclass.js"></script>
+
+    <!-- Lazy loading -->
 </body>
 </html>

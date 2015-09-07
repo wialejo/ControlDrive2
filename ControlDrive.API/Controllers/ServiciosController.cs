@@ -24,16 +24,7 @@ namespace ControlDrive.API.Controllers
         // GET: api/Servicios
         public IQueryable<Servicio> GetServicios()
         {
-
-            //var EstadoPendiente = new Estado() { Codigo = "PD", Descripcion = "PRUEBA" };
-            //var Ser1 = new Servicio() { Codigo = "2323", Fecha = DateTime.Now, Id = 1, Estado = EstadoPendiente };
-
-            //db.Entry(Ser1).State = EntityState.Modified;
-            //db.Entry(EstadoPendiente).State = EntityState.Added;
-            //db.SaveChanges();
             var servicios = db.Servicios;
-
-
             return servicios;
         }
 
