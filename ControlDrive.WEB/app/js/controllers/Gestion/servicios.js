@@ -1,26 +1,30 @@
-﻿var urlApi = "http://192.168.0.29/API/api/servicios";
-var urlApiConductores = "http://192.168.0.29/API/api/conductores";
+﻿var urlApiServicios = ApiUrl + "api/servicios";
+var urlApiConductores = ApiUrl + "api/conductores";
 
-app.controller('ServiciosController', ['$scope', '$http', '$filter', '$state', '$location', function ($scope, $http, $filter, $state, $location) {
+app.controller('ServiciosController', ['$scope', '$http', '$filter', '$state', '$location',
+    function ($scope,  $http, $filter, $state, $location) {
     $scope.servicios = [];
     $scope.servicio = {};
     $scope.esEdicion = false;
     $scope.conductores = [];
     $scope.Guardar = function (servicio) {
-        servicio.Fecha = servicio.Hora + ' ' + servicio.FechaD;
+        servicio.Fecha = new Date(servicio.Hora + ' ' + servicio.FechaD);
+        servicio.FechaRegistro = new Date($filter('date')(servicio.FechaRegistro , 'HH:mm dd/MM/yyyy'));
+        servicio.ConductorId = servicio.Conductor.Id; 
         if ($scope.esEdicion) {
-            $http.put(urlApi + "/" + servicio.Id, servicio).
+            $http.put(urlApiServicios + "/" + servicio.Id, servicio).
             then(function (response) {
-                alert("Actualizado");
+                //toaster.pop('success', '', 'Servicio actualizado correctamente.');
             }, function (response) {
                 alert(response.data.ExceptionMessage);
             });
         }
         else {
             servicio.EstadoCodigo = "EJ";
-            $http.post(urlApi, servicio).
+            $http.post(urlApiServicios, servicio).
                 then(function (response) {
                     alert("Creado");
+                    $scope.servicio = {};
                 }, function (response) {
                     alert(response.data.ExceptionMessage);
                 });
@@ -39,7 +43,7 @@ app.controller('ServiciosController', ['$scope', '$http', '$filter', '$state', '
             then(function (response) {
                 $scope.conductores = response.data;
             }, function (response) {
-                alert(response.data.ExceptionMessage);
+                //alert(response.data.ExceptionMessage);
             });
     }
     $scope.ObtenerConductores();
@@ -50,27 +54,12 @@ app.controller('ServiciosController', ['$scope', '$http', '$filter', '$state', '
 }])
 app.controller('ServiciosResumenController', ['$scope', '$http', function ($scope, $http) {
     $scope.servicio = {};
-    $scope.Seguimientos = function (servicio) {
-        $scope.servicio = servicio;
-    },
     $scope.Obtener = function () {
-        $http.get(urlApi).
+        $http.get(urlApiServicios).
             then(function (response) {
                 $scope.servicios = response.data;
-                $scope.servicios[0].Seguimientos =
-                    [{
-                        Id: 1,
-                        Fecha: new Date(),
-                        Usuario: { Id: 1, Nombre: 'Julian' },
-                        Observacion: 'Usuario en linea'
-                    }, {
-                        Id: 2,
-                        Fecha: new Date(),
-                        Usuario: { Id: 2, Nombre: 'David' },
-                        Observacion: 'Usuario en linea'
-                    }];
             }, function (response) {
-                alert(response.data.ExceptionMessage);
+               //alert(response.data.ExceptionMessage);
             });
     }
     $scope.Obtener();

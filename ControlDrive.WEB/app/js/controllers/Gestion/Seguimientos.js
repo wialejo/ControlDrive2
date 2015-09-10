@@ -1,10 +1,22 @@
 ﻿
+
 app.controller('SeguimientoController', ['$scope', '$http', function ($scope, $http) {
     var ApiUrlSeguimientos = ApiUrl + 'api/seguimientos/';
     $scope.servicio = {};
     $scope.Seguimientos = function (servicio) {
         $scope.servicio = servicio;
     },
+    $scope.ActualizarServicio = function () {
+          var urlApiServicios = ApiUrl + "api/servicios";
+
+          $http.put(urlApi + "/" +  $scope.servicio.Id,  $scope.servicio).
+          then(function (response) {
+              alert("actualizado");
+              //toaster.pop('success', '', 'Servicio actualizado correctamente.');
+          }, function (response) {
+              alert(response.data.ExceptionMessage);
+          });
+    }
     $scope.GuardarSeguimiento = function (seguimiento) {
         seguimiento.ServicioId = $scope.servicio.Id;
 
@@ -24,6 +36,14 @@ app.controller('SeguimientoController', ['$scope', '$http', function ($scope, $h
                   alert(response.data.ExceptionMessage);
               });
     }
+    $scope.ObtenerEstados = function () {
+        $http.get(ApiUrl + "api/estados").
+              then(function (response) {
+                  $scope.estados = response.data;
+              }, function (response) {
+                  alert(response.data.ExceptionMessage);
+              });
+    }
     $scope.ObtenerServicios = function () {
         $http.get(ApiUrl + 'api/servicios/').
               then(function (response) {
@@ -33,4 +53,5 @@ app.controller('SeguimientoController', ['$scope', '$http', function ($scope, $h
               });
     }
     $scope.ObtenerServicios();
+    $scope.ObtenerEstados();
 }]);

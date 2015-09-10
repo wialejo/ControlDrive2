@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Security.Principal;
 
 namespace ControlDrive.API.Models
 {
@@ -26,18 +28,20 @@ namespace ControlDrive.API.Models
         public virtual Direccion DireccionInicio { get; set; }
         public virtual Direccion DireccionDestino { get; set; }
         public int? ConductorId { get; set; }
-        public virtual Conductor Conductor { get; set; }
+        public Conductor Conductor { get; set; }
         public virtual ICollection<Seguimiento> Seguimientos { get; set; }
+        public DateTime FechaRegistro { get; internal set; }
     }
 
+    [Table("Seguimientos")]
     public class Seguimiento
     {
         public int Id { get; set; }
         public int ServicioId { get; set; }
         public DateTime Fecha { get; set; }
         public string Observacion { get; set; }
-        public string UserId { get; set; }
-        //public virtual IdentityUser User { get; set; }
+        public string UsuarioRegistroId { get; set; }
+        public virtual ApplicationUser UsuarioRegistro { get; set; }    
     }
 
 
@@ -54,6 +58,8 @@ namespace ControlDrive.API.Models
         public string Codigo { get; set; }
 
         public string Descripcion { get; set; }
+
+        public int Orden { get; set; }
     }
 
     public class Conductor
@@ -68,9 +74,6 @@ namespace ControlDrive.API.Models
         public string TipoIdentificacion { get; set; }
 
         public int  Identificacion { get; set; }
-
-
-        public Enums.Sexo Sexo { get; set; }
 
         [Required]
         public string Telefono1 { get; set; }

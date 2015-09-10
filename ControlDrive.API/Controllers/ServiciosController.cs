@@ -15,7 +15,7 @@ namespace ControlDrive.API.Controllers
 {
     public class ServiciosController : ApiController
     {
-        private GestionServiciosContext db = new GestionServiciosContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ServiciosController()
         {
@@ -24,7 +24,7 @@ namespace ControlDrive.API.Controllers
         // GET: api/Servicios
         public IQueryable<Servicio> GetServicios()
         {
-            var servicios = db.Servicios;
+            var servicios = db.Servicios.Include(c => c.Conductor);
             return servicios;
         }
 
@@ -60,7 +60,6 @@ namespace ControlDrive.API.Controllers
                 var nuevoVehiculo = db.Vehiculos.Add(servicio.Vehiculo);
                 db.SaveChanges();
                 servicio.VehiculoId = nuevoVehiculo.Id;
-                
             }
 
             //if (servicio.AseguradoraId == 0)
@@ -74,13 +73,8 @@ namespace ControlDrive.API.Controllers
                 servicio.AseguradoId = NuevoAsegurado.Id;
             }
 
-            
-            //db.Entry(servicio.Asegurado).State = EntityState.Modified;
-            //db.Entry(servicio.Aseguradora).State = EntityState.Modified;
-            //db.Entry(servicio.Conductor).State = EntityState.Modified;
-            //db.Entry(servicio.Vehiculo).State = EntityState.Modified;
-            //db.Entry(servicio.DireccionDestino).State = EntityState.Modified;
-            //db.Entry(servicio.DireccionInicio).State = EntityState.Modified;
+            servicio.FechaRegistro = DateTime.Now;
+
             db.Entry(servicio).State = EntityState.Modified;
 
             try
@@ -119,7 +113,9 @@ namespace ControlDrive.API.Controllers
             {
                 var NuevoAsegurado = db.Asegurados.Add(servicio.Asegurado);
                 servicio.AseguradoId = NuevoAsegurado.Id;
-            }   
+            }
+
+            servicio.FechaRegistro = DateTime.Now;
 
             db.Servicios.Add(servicio);
             db.SaveChanges();

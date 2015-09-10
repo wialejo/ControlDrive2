@@ -324,6 +324,7 @@
     <Content Include="app\fonts\sourcesanspro\sourcesanspro-bold.woff" />
     <Content Include="app\fonts\sourcesanspro\sourcesanspro-light.woff" />
     <Content Include="app\fonts\sourcesanspro\sourcesanspro.woff" />
+    <None Include="Properties\PublishProfiles\ColombiarRedesWEB.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

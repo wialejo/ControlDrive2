@@ -16,7 +16,7 @@ namespace ControlDrive.API.Controllers
 {
     public class SeguimientosController : ApiController
     {
-        private GestionServiciosContext db = new GestionServiciosContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Seguimientos
         public IQueryable<Seguimiento> GetSeguimientos()
@@ -76,7 +76,7 @@ namespace ControlDrive.API.Controllers
                 return BadRequest(ModelState);
             }
             seguimiento.Fecha = DateTime.Now;
-            seguimiento.UserId = HttpContext.Current.User.Identity.GetUserId();
+            seguimiento.UsuarioRegistroId = HttpContext.Current.User.Identity.GetUserId();
 
             db.Seguimientos.Add(seguimiento);
             db.SaveChanges();

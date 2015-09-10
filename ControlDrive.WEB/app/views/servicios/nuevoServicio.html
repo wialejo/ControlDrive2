@@ -1,12 +1,11 @@
 <div ng-controller="ServiciosController">
-    <div class="bg-light lter b-b wrapper-md">
-        <h1 class="m-n font-thin h3"> servicio</h1>
+    <div class="clearfix bg-light lter b-b wrapper-md">
+        <h1 class="pull-left m-n font-thin h3">Servicios</h1>
     </div>
-    <div class="wrapper-md">
+    <div class="wrapper-xs">
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
-                    <!--<div class="panel-heading font-bold">Nuevo servicio</div>-->
                     <div class="panel-body">
                         <form class="form" name="form" novalidate ng-submit="form.$valid && Guardar(servicio);">
                             <fieldset>
@@ -35,19 +34,24 @@
                                             <label for="SelAseguradora">Aseguradora</label>
                                             <!--<select ng-init="servicio.AseguradoraId = servicio.AseguradoraId || '-1'" ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">-->
                                             <select ng-model="servicio.AseguradoraId" required class="form-control" id="SelAseguradora">
-                                                <option value="">-- seleccione --</option> 
+                                                <option value="">-- seleccione --</option>
                                                 <option value="1">Bolivar</option>
-                                                <option value="4">Mapfre</option>
+                                                <option value="2">Mapfre</option>
+                                                <option value="3">Axa</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="SelConductores">Conductor</label>
-                                            <select ng-options="conductor.Id as conductor.Nombre for conductor in conductores" ng-model="servicio.ConductorId" required class="form-control" id="SelConductores">
-                                                <option value="">-- seleccione --</option> 
-                                                <!--<option  ng-repeat="conductor in conductores" value="{{conductor.Id}}">{{ conductor.Nombre }}</option>-->
-                                            </select>
+
+                                            <ui-select ng-model="servicio.Conductor" theme="bootstrap">
+                                                <ui-select-match placeholder="Conductor">{{$select.selected.Nombre}}</ui-select-match>
+                                                <ui-select-choices repeat="item in conductores | filter: $select.search">
+                                                    <div ng-bind-html="item.Nombre | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
                                         </div>
                                     </div>
                                 </div>
@@ -92,13 +96,13 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label for="TxtTelefono1">Teléfono 1</label>
+                                            <label for="TxtTelefono1">TelÃ©fono 1</label>
                                             <input ng-model="servicio.Asegurado.Telefono1" type="tel" class="form-control" id="TxtTelefono1" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label for="TxtTelefono2">Teléfono 2</label>
+                                            <label for="TxtTelefono2">TelÃ©fono 2</label>
                                             <input ng-model="servicio.Asegurado.Telefono2" type="tel" class="form-control" id="TxtTelefono2" placeholder="">
                                         </div>
                                     </div>
@@ -110,7 +114,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="TxtDireccionInicio">Dirección</label>
+                                            <label for="TxtDireccionInicio">DirecciÃ³n</label>
                                             <input ng-model="servicio.DireccionInicio.Descripcion" required type="text" class="form-control" id="TxtDireccionInicio">
                                         </div>
                                     </div>
@@ -125,7 +129,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="TxtDireccionDestino">Dirección</label>
+                                            <label for="TxtDireccionDestino">DirecciÃ³n</label>
                                             <input ng-model="servicio.DireccionDestino.Descripcion" required type="text" class="form-control" id="TxtDireccionDestino">
                                         </div>
                                     </div>

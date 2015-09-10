@@ -14,7 +14,7 @@ namespace ControlDrive.API.Controllers
 {
     public class ConductoresController : ApiController
     {
-        private GestionServiciosContext db = new GestionServiciosContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Conductores
 

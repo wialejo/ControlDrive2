@@ -40,7 +40,7 @@ angular.module('app')
                   url: '/serviciosConsulta',
                   controller: 'ServiciosController',
                   templateUrl: 'app/views/servicios/consultaServicios.html',
-                  resolve: load(['app/js/controllers/Gestion/servicios.js'])
+                  resolve: load(['ui.select','app/js/controllers/Gestion/servicios.js'])
               })
               .state('app.conductores', {
                   url: '/conductores',

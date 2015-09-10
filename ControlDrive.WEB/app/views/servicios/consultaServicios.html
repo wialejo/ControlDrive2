@@ -9,7 +9,8 @@
                 <div class="panel-body">
                     <div class="panel panel-default">
                         <div class="table-responsive">
-                            <table ui-jq="dataTable" ui-options="{
+                            <table class="table text-sm">
+                            <!--<table ui-jq="dataTable" ui-options="{
                                         aaData: servicios,
 
                                         aoColumns: [
@@ -22,7 +23,7 @@
                                                     { mData: 'Conductor.Nombre' }
                                                   ]
                                  
-                                }" class="table table-striped b-t b-b" >
+                                }" class="table table-striped b-t b-b" >-->
                                 <thead>
                                     <tr>
                                         <th>
@@ -44,39 +45,46 @@
                                             Asegurado
                                         </th>
                                         <th>
+                                            Ruta
+                                        </th>
+                                        <th>
                                             Conductor
                                         </th>
                                     </tr>
                                 </thead>
-                                <!--<tbody ng-repeat="svr in servicios">
-                <tr>
-                    <td>
-                        {{svr.Fecha | date:'dd/MM/yyyy'}} - {{svr.Fecha | date:'HH:mm'}}
-                    </td>
-                    <td>
-                        {{svr.Estado.Descripcion }}
-                    </td>
-                    <td>
-                        {{svr.Radicado }}
-                    </td>
-                    <td>
-                        {{svr.Aseguradora.Nombre }}
-                    </td>
-                    <td>
-                        {{svr.Vehiculo.Placa }} <spa>-</spa>{{svr.Vehiculo.Marca }}
-                    </td>
-                    <td>
-                        {{svr.Asegurado.Nombre }}
-                    </td>
-
-                    <td>
-                        {{svr.Conductor.Nombre }}
-                    </td>
-                    <td>
-                        <input type="button" ng-click="Editar(svr);" value="Editar" />
-                    </td>
-                </tr>
-            </tbody>-->
+                                <tbody ng-repeat="svr in servicios">
+                                <tr>
+                                    <td>
+                                         {{svr.Fecha | date:'HH:mm'}} <br />
+                                         {{svr.Fecha | date:'dd/MM/yyyy'}}
+                                    </td>
+                                    <td>
+                                        {{svr.Estado.Descripcion }}
+                                    </td>
+                                    <td>
+                                        {{svr.Radicado }}
+                                    </td>
+                                    <td>
+                                        {{svr.Aseguradora.Nombre }}
+                                    </td>
+                                    <td>
+                                        {{svr.Vehiculo.Placa }} <br /> {{svr.Vehiculo.Marca }} {{svr.Vehiculo.Referencia }}
+                                    </td>
+                                    <td>
+                                        {{svr.Asegurado.Nombre }} <br /> {{ svr.Asegurado.Telefono1 }} - {{ svr.Asegurado.Telefono2 }}
+                                    </td>
+                                    <td>
+                                        {{svr.DireccionInicio.Descripcion}} - {{svr.DireccionInicio.Barrio}} <br />
+                                        {{svr.DireccionDestino.Descripcion}} - {{svr.DireccionDestino.Barrio}}
+                                    </td>
+                                    <td>
+                                        {{svr.Conductor.Nombre }}
+                                    </td>
+                                    <td>
+                                        <input type="button" ng-click="Editar(svr);" value="Editar" class="btn btn-sm btn-info" />
+                                    </td>
+                                </tr>
+                            </tbody>
                             </table>
                         </div>
                     </div>

@@ -17,7 +17,8 @@ angular.module('app')
     }
   ])
 
-var ApiUrl= "http://192.168.0.29/API/";
+//var ApiUrl= "http://192.168.0.29/API/";
+var ApiUrl= "http://Localhost/API/";
 app.constant('ngAuthSettings', {
     apiServiceBaseUri: ApiUrl,
     clientId: 'ngAuthApp'

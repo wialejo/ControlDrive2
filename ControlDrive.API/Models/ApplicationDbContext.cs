@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -8,7 +9,7 @@ using System.Web;
 
 namespace ControlDrive.API.Models
 {
-    public class GestionServiciosContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         // You can add custom code to this file. Changes will not be overwritten.
         // 
@@ -17,8 +18,13 @@ namespace ControlDrive.API.Models
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
     
-        public GestionServiciosContext() : base("name=ControlDriveDBConnectionString")
+        public ApplicationDbContext() : base("name=ControlDriveDBConnectionString")
         {
+        }
+
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
         }
 
         public System.Data.Entity.DbSet<ControlDrive.API.Models.Servicio> Servicios { get; set; }
@@ -39,6 +45,9 @@ namespace ControlDrive.API.Models
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
+            modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
+            modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+            modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
 
             // modelBuilder.Entity<Servicio>()
             //.Property(l => l.Id)

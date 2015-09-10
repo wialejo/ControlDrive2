@@ -3,89 +3,91 @@
     <div class="bg-light lter b-b wrapper-md">
         <h1 class="m-n font-thin h3">Seguimiento</h1>
     </div>
-
-    <div class="hbox hbox-auto-xs hbox-auto-sm  panel panel-default m-t-md m-b-n-sm pos-rlt">
-        <div class="col col-md-8">
-            <div class="table-responsive">
-                    <table class="table table-striped b-t b-light">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Fecha y hora
-                                </th>
-                                <th>
-                                    Estado
-                                </th>
-                                <th>
-                                    Radicado
-                                </th>
-                                <th>
-                                    Aseguradora
-                                </th>
-                                <th>
-                                    Conductor
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="servicio in servicios" ng-click="Seguimientos(servicio)">
-                                <td>
-                                    <strong>{{servicio.Fecha | date:'HH:mm'}}</strong> -
-                                    {{servicio.Fecha | date:'yyyy/MM/dd'}}
-                                </td>
-                                <td>
-                                    {{servicio.Estado.Descripcion}}
-                                </td>
-                                <td>
-                                    {{servicio.Radicado}}
-                                </td>
-                                <td>
-                                    {{servicio.Aseguradora.Nombre}}
-                                </td>
-                                <td>
-                                    {{servicio.Conductor.Nombre}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-        </div>
-        <div class="col col-md-4 bg-light dk b-r bg-auto">
-            <div >
-                <ul class="list-group list-group-lg no-radius m-b-none m-t-n-xxs">
-                    <li ng-repeat="seguimiento in servicio.Seguimientos" class="list-group-item clearfix b-l-3x">
-                        <a ui-sref="app.page.profile" class="avatar thumb pull-left m-r">
-                            <img ng-src="app/img/no_user.jpg" src="app/img/no_user.jpg">
-                        </a>
-                        <div class="pull-right text-sm text-muted">
-                            <span class="hidden-xs">{{ seguimiento.Fecha | date:'HH:mm yyyy/MM/dd' }}</span>
-                        </div>
-                        <div class="clear">
+    <div class="wrapper-xs">
+        <div class="row">
+            <div class="col-sm-12">
+                <div >
+                    <div class="col-sm-8">
+                        <div class="panel panel-default">
                             <div>
-                                <strong><a ui-sref="app.mail.detail({mailId:mail.id})" class="text-md">{{seguimiento.Usuario.Nombre}}</a></strong>
+                                <table class="table table-striped b-t b-light">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha hora</th>
+                                            <th class="col-md-1">Estado</th>
+                                            <th>Radicado</th>
+                                            <th>Ruta</th>
+                                            <th>Conductor</th>
+                                            <th class="col-md-1">#
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-xs">
+                                        <tr ng-repeat="servicio in servicios" ng-click="Seguimientos(servicio)">
+                                            <td>
+                                                <strong>{{servicio.Fecha | date:'HH:mm'}}</strong> <br />
+                                                {{servicio.Fecha | date:'yyyy/MM/dd'}}
+                                            </td>
+                                            <td>
+                                                {{servicio.Estado.Descripcion}}
+                                            </td>
+                                            <td>
+                                                {{servicio.Aseguradora.Nombre}} <br />
+                                                {{servicio.Radicado}}
+                                            </td>
+                                            <td>
+                                                Inicio: {{servicio.DireccionInicio.Descripcion}} - {{servicio.DireccionInicio.Barrio}} <br />
+                                                Destino: {{servicio.DireccionDestino.Descripcion}} - {{servicio.DireccionDestino.Barrio}}
+                                            </td>
+                                            <td>
+                                                {{servicio.Conductor.Nombre}} <br />
+                                                Tel1: <strong>{{servicio.Conductor.Telefono1}}</strong> <strong>{{servicio.Conductor.Telefono2}}</strong>
+                                            </td>
+                                            <td>
+                                                <b class="badge bg-info pull-right">{{servicio.Seguimientos.length}}</b>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="text-ellipsis m-t-xs">{{seguimiento.Observacion}}</div>
                         </div>
-                    </li>
-                    <li >
-                        <div class="panel panel-default m-t-md m-b-n-sm pos-rlt">
-                            <form class="ng-pristine ng-valid" ng-submit="GuardarSeguimiento(seguimiento)">
-                                <textarea ng-model="seguimiento.Observacion" class="form-control no-border" rows="2"  placeholder="Ingrese su observación"></textarea>
-                                <div class="panel-footer bg-light lter clearfix">
-                                    <button class="btn btn-info pull-right btn-sm" type="submit" >Guardar</button>
-                                    <div class="form-inline">
-                                        <select class="form-control">
-                                            <option value="value">En sitio</option>
-                                            <option value="value">En camino</option>
-                                        </select>
-                                    </div>
+                    </div>
+                    <div class="col-sm-4" ng-show="servicio.Id">
+                        <!--<div class="panel panel-default">-->
+                            <!--<div class="panel-heading">Seguimientos</div>-->
+                                <div class="panel panel-default m-t-xs m-b-n-xs pos-rlt">
+                                    <form class="ng-pristine ng-valid" ng-submit="GuardarSeguimiento(seguimiento)">
+                                        <textarea ng-model="seguimiento.Observacion" class="form-control no-border" rows="1" placeholder="Ingrese su observación"></textarea>
+                                        <div class="panel-footer bg-light lter clearfix">
+                                            <button class="btn btn-info pull-right btn-sm" type="submit">Guardar</button>
+                                            <div class="form-inline">
+                                                <select ng-model="servicio.Estado" ng-options="estado.Descripcion for estado in estados" class="form-control form-control-xs">
+                                                    <option value="">Seleccione estado</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                        </div>
-
-                    </li>
-                </ul>
-
+                                <br />
+                                <ul class="list-group list-group-xs no-radius m-b-none m-t-n-xxs ">
+                                    <li ng-repeat="seguimiento in servicio.Seguimientos | orderBy:'-Fecha'" class="list-group-item clearfix b-l-3x ">
+                                        <a ui-sref="app.page.profile" class="avatar thumb pull-left s-r">
+                                            <img ng-src="app/img/no_user.jpg" src="app/img/no_user.jpg">
+                                        </a>
+                                        <div class="pull-right text-sm text-muted">
+                                            <span class="hidden-xs">{{ seguimiento.Fecha | date:'HH:mm yyyy/MM/dd' }}</span>
+                                        </div>
+                                        <div class="clear">
+                                            <div>
+                                                <strong class="text-xs">{{seguimiento.UsuarioRegistro.Nombre}}</strong>
+                                            </div>
+                                            <div class="text-xs text-ellipsis m-t-xs">{{seguimiento.Observacion}}</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                        <!--</div>-->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
