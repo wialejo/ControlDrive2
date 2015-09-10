@@ -154,10 +154,13 @@
     <Content Include="libs\angular\angular-ui-calendar\src\calendar.js" />
     <Content Include="libs\angular\angular-ui-grid\ui-grid.bootstrap.css" />
     <Content Include="libs\angular\angular-ui-grid\ui-grid.css" />
+    <Content Include="libs\angular\angular-ui-grid\ui-grid.eot" />
     <Content Include="libs\angular\angular-ui-grid\ui-grid.js" />
     <Content Include="libs\angular\angular-ui-grid\ui-grid.min.css" />
     <Content Include="libs\angular\angular-ui-grid\ui-grid.min.js" />
     <Content Include="libs\angular\angular-ui-grid\ui-grid.svg" />
+    <Content Include="libs\angular\angular-ui-grid\ui-grid.ttf" />
+    <Content Include="libs\angular\angular-ui-grid\ui-grid.woff" />
     <Content Include="libs\angular\angular-ui-router\release\angular-ui-router.js" />
     <Content Include="libs\angular\angular-ui-router\release\angular-ui-router.min.js" />
     <Content Include="libs\angular\angular-ui-select\dist\select.css" />
@@ -260,9 +263,6 @@
     <Content Include="libs\jquery\screenfull\dist\screenfull.min.js" />
     <Content Include="libs\jquery\slimscroll\jquery.slimscroll.min.js" />
     <Content Include="packages.config" />
-    <Content Include="libs\angular\angular-ui-grid\ui-grid.eot" />
-    <Content Include="libs\angular\angular-ui-grid\ui-grid.ttf" />
-    <Content Include="libs\angular\angular-ui-grid\ui-grid.woff" />
     <Content Include="libs\assets\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="libs\assets\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="libs\assets\font-awesome\fonts\fontawesome-webfont.woff" />
