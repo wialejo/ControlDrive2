@@ -25,22 +25,19 @@ angular.module('app')
               })
               .state('app.nuevo', {
                   url: '/nuevo',
-                  controller: 'ServiciosController',
                   templateUrl: 'app/views/servicios/nuevoServicio.html',
-                  resolve: load(['app/js/controllers/Gestion/servicios.js'])
+                  resolve: load(['ui.select','toaster','app/js/controllers/Gestion/nuevoServicio.js'])
               })
               .state('app.editar', {
                   url: '/editar',
-                  controller: 'ServiciosController',
                   templateUrl: 'app/views/servicios/nuevoServicio.html',
                   params: { servicio: null },
-                  resolve: load(['app/js/controllers/Gestion/servicios.js'])
+                  resolve: load(['ui.select','toaster','app/js/controllers/Gestion/nuevoServicio.js'])
               })
-              .state('app.serviciosConsulta', {
-                  url: '/serviciosConsulta',
-                  controller: 'ServiciosController',
+              .state('app.consultaServicios', {
+                  url: '/consultaServicios',
                   templateUrl: 'app/views/servicios/consultaServicios.html',
-                  resolve: load(['ui.select','app/js/controllers/Gestion/servicios.js'])
+                  resolve: load(['app/js/controllers/Gestion/consultaServicios.js'])
               })
               .state('app.conductores', {
                   url: '/conductores',
