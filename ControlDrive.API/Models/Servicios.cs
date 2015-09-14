@@ -41,7 +41,8 @@ namespace ControlDrive.API.Models
         public DateTime Fecha { get; set; }
         public string Observacion { get; set; }
         public string UsuarioRegistroId { get; set; }
-        public virtual ApplicationUser UsuarioRegistro { get; set; }    
+        public virtual ApplicationUser UsuarioRegistro { get; set; }
+        public string NuevoEstado { get; set; }
     }
 
 
@@ -109,6 +110,8 @@ namespace ControlDrive.API.Models
 
         public string Descripcion { get; set; }
 
+        public string Ciudad { get; set; }
+
         public string Barrio { get; set; }
     }
 
@@ -123,7 +126,7 @@ namespace ControlDrive.API.Models
         public int Id { get; set; }
 
         public string Nombre { get; set; }
-
+        
         public string Telefono1 { get; set; }
 
         public string Telefono2 { get; set; }

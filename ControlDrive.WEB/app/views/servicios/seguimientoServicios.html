@@ -36,8 +36,8 @@
                                                 {{servicio.Radicado}}
                                             </td>
                                             <td>
-                                                Inicio: {{servicio.DireccionInicio.Descripcion}} - {{servicio.DireccionInicio.Barrio}} <br />
-                                                Destino: {{servicio.DireccionDestino.Descripcion}} - {{servicio.DireccionDestino.Barrio}}
+                                                Inicio: {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad}}, {{servicio.DireccionInicio.Barrio}} <br />
+                                                Destino: {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad}}, {{servicio.DireccionDestino.Barrio}}
                                             </td>
                                             <td>
                                                 {{servicio.Conductor.Nombre}} <br />
@@ -56,12 +56,12 @@
                         <!--<div class="panel panel-default">-->
                             <!--<div class="panel-heading">Seguimientos</div>-->
                                 <div class="panel panel-default m-t-xs m-b-n-xs pos-rlt">
-                                    <form class="ng-pristine ng-valid" ng-submit="GuardarSeguimiento(seguimiento)">
-                                        <textarea ng-model="seguimiento.Observacion" class="form-control no-border" rows="1" placeholder="Ingrese su observación"></textarea>
+                                    <form class="ng-pristine ng-valid" ng-submit="GuardarSeguimiento(nuevoSeguimiento)">
+                                        <textarea ng-model="nuevoSeguimiento.Observacion" class="form-control no-border" rows="1" placeholder="Ingrese su observación"></textarea>
                                         <div class="panel-footer bg-light lter clearfix">
                                             <button class="btn btn-info pull-right btn-sm" type="submit">Guardar</button>
                                             <div class="form-inline">
-                                                <select ng-model="servicio.Estado" ng-options="estado.Descripcion for estado in estados" class="form-control form-control-xs">
+                                                <select ng-model="servicio.EstadoCodigo" required ng-options="estado.Codigo as estado.Descripcion for estado in estados" class="form-control form-control-xs">
                                                     <option value="">Seleccione estado</option>
                                                 </select>
                                             </div>

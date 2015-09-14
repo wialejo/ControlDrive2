@@ -6,8 +6,8 @@
     $scope.esEdicion = false;
     $scope.conductores = [];
     $scope.Guardar = function (servicio) {
-        servicio.Fecha = new Date(servicio.Hora + ' ' + servicio.FechaD);
-        servicio.FechaRegistro = new Date($filter('date')(servicio.FechaRegistro , 'HH:mm dd/MM/yyyy'));
+        var d = servicio.FechaD.split("/").slice(0,3).reverse();
+        servicio.Fecha = new Date(d+" " + servicio.Hora);
         servicio.ConductorId = servicio.Conductor.Id; 
         if ($scope.esEdicion) {
             $http.put(urlApiServicios + "/" + servicio.Id, servicio).

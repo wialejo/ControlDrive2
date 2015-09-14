@@ -26,13 +26,13 @@ angular.module('app')
               .state('app.nuevo', {
                   url: '/nuevo',
                   templateUrl: 'app/views/servicios/nuevoServicio.html',
-                  resolve: load(['ui.select','toaster','app/js/controllers/Gestion/nuevoServicio.js'])
+                  resolve: load(['toaster', 'ui.select','app/js/controllers/Gestion/nuevoServicio.js'])
               })
               .state('app.editar', {
                   url: '/editar',
                   templateUrl: 'app/views/servicios/nuevoServicio.html',
                   params: { servicio: null },
-                  resolve: load(['ui.select','toaster','app/js/controllers/Gestion/nuevoServicio.js'])
+                  resolve: load(['toaster','ui.select','app/js/controllers/Gestion/nuevoServicio.js'])
               })
               .state('app.consultaServicios', {
                   url: '/consultaServicios',
@@ -56,7 +56,6 @@ angular.module('app')
               .state('app.seguimiento', {
                   url: '/servicios/seguimiento',
                   templateUrl: 'app/views/servicios/seguimientoServicios.html',
-                  controller: 'SeguimientoController',
                   resolve: load(['app/js/controllers/Gestion/seguimientos.js'])
               })
               .state('app.dashboard-v1', {

@@ -88,6 +88,8 @@
     <Content Include="app\fonts\Material-Design-Icons.svg" />
     <Content Include="app\img\a0.jpg" />
     <Content Include="app\img\no_user.jpg" />
+    <Content Include="app\js\controllers\Gestion\ConsultaServicios.js" />
+    <Content Include="app\js\controllers\Gestion\nuevoServicio.js" />
     <Content Include="app\js\controllers\Gestion\seguimientos.js" />
     <Content Include="app\js\controllers\signin.js" />
     <Content Include="app\js\controllers\signup.js" />
@@ -117,7 +119,6 @@
     <Content Include="app\js\config.router.js" />
     <Content Include="app\js\controllers\Configuracion\conductores.js" />
     <Content Include="app\js\controllers\Configuracion\login.js" />
-    <Content Include="app\js\controllers\Gestion\servicios.js" />
     <Content Include="app\js\main.js" />
     <Content Include="app\js\services\authInterceptorService.js" />
     <Content Include="app\js\services\authService.js" />

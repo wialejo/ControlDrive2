@@ -62,6 +62,9 @@ namespace ControlDrive.API.Controllers
                 servicio.VehiculoId = nuevoVehiculo.Id;
             }
 
+            servicio.Aseguradora = null;
+            servicio.Seguimientos = null;
+
             //if (servicio.AseguradoraId == 0)
             //{
             //    var NuevaAseguradora = db.Aseguradoras.Add(servicio.Aseguradora);
@@ -74,7 +77,11 @@ namespace ControlDrive.API.Controllers
             }
 
             servicio.FechaRegistro = DateTime.Now;
-
+            //db.Entry(servicio.Seguimientos).State = EntityState.Detached;
+            db.Entry(servicio.Vehiculo).State = EntityState.Modified;
+            db.Entry(servicio.DireccionInicio).State = EntityState.Modified;
+            db.Entry(servicio.DireccionDestino).State = EntityState.Modified;
+            db.Entry(servicio.Asegurado).State = EntityState.Modified;
             db.Entry(servicio).State = EntityState.Modified;
 
             try

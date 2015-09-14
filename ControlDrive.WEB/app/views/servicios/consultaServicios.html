@@ -1,11 +1,14 @@
 <div class="bg-light lter b-b wrapper-md">
-    <h1 class="m-n font-thin h3">Gestión</h1>
+    <h1 class="m-n font-thin h3">Gestion</h1>
 </div>
 <div class="wrapper-md" ng-controller="consultaServiciosController">
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-default">
-                <!--<div class="panel-heading font-bold">Nuevo servicio</div>-->
+                <div class="panel-heading form-inline">
+                    <label for="Filtrar">Filtrar</label>
+                    <input type="text" placeholder="Buscar..." ng-model="search" class="form-control">
+                </div>
                 <div class="panel-body">
                     <div class="panel panel-default">
                         <div class="table-responsive">
@@ -38,7 +41,7 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="svr in servicios">
+                                <tbody ng-repeat="svr in servicios | filter:search">
                                 <tr>
                                     <td>
                                          {{svr.Fecha | date:'HH:mm'}} <br />
@@ -60,8 +63,8 @@
                                         {{svr.Asegurado.Nombre }} <br /> {{ svr.Asegurado.Telefono1 }} - {{ svr.Asegurado.Telefono2 }}
                                     </td>
                                     <td>
-                                        {{svr.DireccionInicio.Descripcion}} - {{svr.DireccionInicio.Barrio}} <br />
-                                        {{svr.DireccionDestino.Descripcion}} - {{svr.DireccionDestino.Barrio}}
+                                        {{svr.DireccionInicio.Descripcion}}, {{svr.DireccionInicio.Ciudad}}, {{svr.DireccionInicio.Barrio}} <br />
+                                        {{svr.DireccionDestino.Descripcion}}, {{svr.DireccionDestino.Ciudad}}, {{svr.DireccionDestino.Barrio}}
                                     </td>
                                     <td>
                                         {{svr.Conductor.Nombre }}

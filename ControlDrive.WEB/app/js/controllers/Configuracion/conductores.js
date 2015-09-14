@@ -1,4 +1,5 @@
-﻿var urlApiConductores = "http://192.168.0.29/API/api/conductores";
+﻿
+var urlApiConductores = ApiUrl + "api/conductores";
 app.controller('ConductoresController', ['$scope', '$modal', '$log', '$http',
     function ($scope, $modal, $log, $http) {
     $scope.esEdicion = false;

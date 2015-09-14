@@ -97,13 +97,13 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="TxtTelefono1">Teléfono 1</label>
-                                            <input ng-model="servicio.Asegurado.Telefono1" type="tel" class="form-control" id="TxtTelefono1" placeholder="">
+                                            <input ng-model="servicio.Asegurado.Telefono1"  ng-minlength="10"  ng-maxlength="10" type="tel" class="form-control" id="TxtTelefono1" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="TxtTelefono2">Teléfono 2</label>
-                                            <input ng-model="servicio.Asegurado.Telefono2" type="tel" class="form-control" id="TxtTelefono2" placeholder="">
+                                            <input ng-model="servicio.Asegurado.Telefono2" ng-minlength="10"  ng-maxlength="10" type="tel" class="form-control" id="TxtTelefono2" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -120,8 +120,14 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
+                                            <label for="TxtBarrioDestino">Ciudad</label>
+                                            <input ng-model="servicio.DireccionInicio.Ciudad" required type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
                                             <label for="TxtBarrio">Barrio</label>
-                                            <input ng-model="servicio.DireccionInicio.Barrio" required type="text" class="form-control" id="TxtBarrio" placeholder="">
+                                            <input ng-model="servicio.DireccionInicio.Barrio"  type="text" class="form-control" id="TxtBarrio" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -135,8 +141,14 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
+                                            <label for="TxtBarrioDestino">Ciudad</label>
+                                            <input ng-model="servicio.DireccionDestino.Ciudad" required type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
                                             <label for="TxtBarrioDestino">Barrio</label>
-                                            <input ng-model="servicio.DireccionDestino.Barrio" required type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                            <input ng-model="servicio.DireccionDestino.Barrio" type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
                                         </div>
                                     </div>
                                 </div>

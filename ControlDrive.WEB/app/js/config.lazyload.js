@@ -181,7 +181,7 @@ angular.module('app')
   .config(['$ocLazyLoadProvider', 'MODULE_CONFIG', function($ocLazyLoadProvider, MODULE_CONFIG) {
       // We configure ocLazyLoad to use the lib script.js as the async loader
       $ocLazyLoadProvider.config({
-          debug:  false,
+          debug:  true,
           events: true,
           modules: MODULE_CONFIG
       });

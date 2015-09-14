@@ -76,7 +76,14 @@ namespace ControlDrive.API.Controllers
                 return BadRequest(ModelState);
             }
             seguimiento.Fecha = DateTime.Now;
+
             seguimiento.UsuarioRegistroId = HttpContext.Current.User.Identity.GetUserId();
+
+            if (db.Servicios.Find(seguimiento.ServicioId).EstadoCodigo != seguimiento.NuevoEstado)
+            {
+                seguimiento.Observacion = seguimiento.Observacion + "  -- Nuevo estado: " + db.Estados.Find(seguimiento.NuevoEstado).Descripcion;
+                db.Servicios.Find(seguimiento.ServicioId).EstadoCodigo = seguimiento.NuevoEstado;
+            }
 
             db.Seguimientos.Add(seguimiento);
             db.SaveChanges();

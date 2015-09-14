@@ -18,11 +18,16 @@ app.controller('SeguimientoController', ['$scope', '$http', function ($scope, $h
           });
     }
     $scope.GuardarSeguimiento = function (seguimiento) {
+        if(!seguimiento){
+          seguimiento = {};
+        }
         seguimiento.ServicioId = $scope.servicio.Id;
+        seguimiento.NuevoEstado = $scope.servicio.EstadoCodigo;
 
         $http.post(ApiUrlSeguimientos, seguimiento).
                 then(function (response) {
-                    $scope.servicio.Seguimientos.push(response.data);
+                  $scope.ObtenerServicios();
+                  $scope.servicio.Seguimientos.push(response.data);
                     seguimiento = {};
                 }, function (response) {
                     alert(response.data.ExceptionMessage);
