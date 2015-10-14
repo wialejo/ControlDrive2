@@ -1,0 +1,71 @@
+﻿<div ng-controller="CiudadesController">
+    <div class="clearfix bg-light lter b-b wrapper-md">
+        <h1 class="pull-left m-n font-thin h3">Ciudades</h1>
+    </div>
+        <div class="wrapper-md">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-b">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-1 text-center">
+                                            Id
+                                        </th>
+                                        <th>
+                                            Nombre
+                                        </th>
+                                        <th  class="text-center">
+                                            Tarifa
+                                        </th>
+                                        <th  class="text-center">
+                                            Acciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <thead>
+                                    <tr ng-repeat="ciudad in ciudades">
+                                        <td class="col-md-1 text-center">
+                                            {{ciudad.Id}}
+                                        </td>
+                                        <td class="col-md-2">
+                                            {{ciudad.Nombre}}
+                                        </td>
+                                        <td>
+                                            {{ciudad.Tarifa}}
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="button" value="Editar" class="btn btn-default btn-sm" ng-click="editar(ciudad)" />
+                                            <input type="button" value="Eliminar" class="btn btn-danger btn-sm" ng-click="eliminar(ciudad)" />
+                                        </td>
+                                    </tr>
+                                </thead>
+                                 <form name="form" class="form-horizontal" role="form" novalidate ng-submit="guardar(nuevaCiudad);">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="col-md-1 text-center">
+                                                    Nueva ciudad
+                                                </td>
+                                                <td >
+                                                    <input type="text" class="form-control"  required ng-model="nuevaCiudad.Nombre" name="txtCiudad" />
+                                                </td>
+                                                <td class="col-md-2">
+                                                    <input type="text" class="form-control" ng-model="nuevaCiudad.Tarifa" name="txtTarifa" />
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="submit" value="Guardar" class="btn btn-primary btn-sm"ng-click=guardar(nuevaCiudad);"" />
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </form>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

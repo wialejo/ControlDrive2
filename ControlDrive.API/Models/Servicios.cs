@@ -18,6 +18,7 @@ namespace ControlDrive.API.Models
         public virtual Estado Estado { get; set; }
         [Required]
         public DateTime Fecha { get; set; }
+        public TimeSpan Hora { get; set; }
         public string Radicado { get; set; }
         public int? VehiculoId { get; set; }
         public virtual Vehiculo Vehiculo { get; set; }
@@ -109,10 +110,20 @@ namespace ControlDrive.API.Models
         public int Id { get; set; }
 
         public string Descripcion { get; set; }
+       
+        public int CiudadId { get; set; }
 
-        public string Ciudad { get; set; }
+        [ForeignKey("CiudadId")]
+        public virtual Ciudad Ciudad { get; set; }
 
         public string Barrio { get; set; }
+    }
+
+    public class Ciudad
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Tarifa { get; set; }
     }
 
     public class Barrio

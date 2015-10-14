@@ -14,26 +14,31 @@
                                     <div class="col-xs-6 col-sm-2">
                                         <div class="form-group" ng-class="{ 'has-error' : form.TxtHora.$invalid  && !form.TxtHora.$pristine}">
                                             <label for="TxtHora">Hora</label>
-                                            <input ng-model="servicio.Hora" ng-minlength="5" ng-maxlength="5" required type="text" class="form-control" id="TxtHora" name="TxtHora" placeholder="HH:mm">
+                                            <input tabindex="1" ng-model="servicio.Hora" 
+                                            ui-mask="99:99"  model-view-value="true" required type="text" class="form-control" id="TxtHora" name="TxtHora" placeholder="HH:mm">
                                         </div>
                                     </div>
                                     <div class="col-xs-6 col-sm-2">
                                         <div class="form-group" ng-class="{ 'has-error' : form.TxtFecha.$invalid  && !form.TxtFecha.$pristine}">
                                             <label for="TxtFecha">Fecha</label>
-                                            <input ng-model="servicio.FechaD" required type="text" class="form-control" name="TxtFecha" placeholder="dd/MM/yyyy">
+                                            <input  tabindex="2" 
+                                                     ng-model="servicio.FechaD" 
+                                                    required  
+                                                    ui-mask="99/99/9999"  model-view-value="true"
+                                                    type="text" class="form-control" name="TxtFecha" placeholder="dd/MM/yyyy">
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
                                         <div class="form-group">
-                                            <label for="TxtRadicado">Radicado</label>
-                                            <input ng-model="servicio.Radicado" required type="text" class="form-control" id="TxtRadicado">
+                                            <label for="TxtRadicado">Consecutivo</label>
+                                            <input tabindex="3" ng-model="servicio.Radicado" type="text" class="form-control" id="TxtRadicado">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.SelAseguradora.$invalid  && !form.SelAseguradora.$pristine}">
                                             <label for="SelAseguradora">Aseguradora</label>
                                             <!--<select ng-init="servicio.AseguradoraId = servicio.AseguradoraId || '-1'" ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">-->
-                                            <select ng-model="servicio.AseguradoraId" required class="form-control" id="SelAseguradora">
+                                            <select tabindex="4"  ng-model="servicio.AseguradoraId" required class="form-control" id="SelAseguradora" name="SelAseguradora">
                                                 <option value="">-- seleccione --</option>
                                                 <option value="1">Bolivar</option>
                                                 <option value="2">Mapfre</option>
@@ -45,9 +50,9 @@
                                         <div class="form-group">
                                             <label for="SelConductores">Conductor</label>
 
-                                            <ui-select ng-model="servicio.Conductor" theme="bootstrap">
-                                                <ui-select-match placeholder="Conductor">{{$select.selected.Nombre}}</ui-select-match>
-                                                <ui-select-choices repeat="item in conductores | filter: $select.search">
+                                            <ui-select tabindex="5" ng-model="servicio.Conductor" theme="bootstrap" reset-search-input="false">
+                                                <ui-select-match placeholder="Conductor" >{{$select.selected.Nombre}}</ui-select-match>
+                                                <ui-select-choices  repeat="item in conductores | filter: $select.search">
                                                     <div ng-bind-html="item.Nombre | highlight: $select.search"></div>
                                                 </ui-select-choices>
                                             </ui-select>
@@ -60,27 +65,32 @@
                                 <legend>Vehiculo</legend>
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtPlaca.$invalid  && !form.TxtPlaca.$pristine}">
                                             <label for="TxtPlaca">Placa</label>
-                                            <input ng-model="servicio.Vehiculo.Placa" required type="text" class="form-control" id="TxtPlaca" placeholder="" size="6">
+                                            <input tabindex="6" ng-model="servicio.Vehiculo.Placa" 
+                                                   ng-minlength="5" 
+                                                   ng-maxlength="6"
+                                                   required="" 
+                                                   title="Ingrese la placa del vehículo sin espacios"
+                                                   type="text" class="form-control" id="TxtPlaca" name="TxtPlaca" placeholder="" >
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="TxtMarca">Marca</label>
-                                            <input ng-model="servicio.Vehiculo.Marca" required type="text" class="form-control" id="TxtMarca" placeholder="">
+                                            <input  tabindex="7" ng-model="servicio.Vehiculo.Marca" type="text" class="form-control" id="TxtMarca" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="TxtReferencia">Referencia</label>
-                                            <input ng-model="servicio.Vehiculo.Referencia" type="text" class="form-control" id="TxtReferencia" placeholder="">
+                                            <input  tabindex="8" ng-model="servicio.Vehiculo.Referencia" type="text" class="form-control" id="TxtReferencia" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="TxtObservaciones">Observaciones</label>
-                                            <input ng-model="servicio.Vehiculo.Observaciones" type="text" class="form-control" id="TxtObservaciones" placeholder="">
+                                            <input tabindex="9" ng-model="servicio.Vehiculo.Observaciones" type="text" class="form-control" id="TxtObservaciones" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -89,21 +99,26 @@
                                 <legend>Asegurado</legend>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtNombreAsegurado.$invalid  && !form.TxtNombreAsegurado.$pristine}">
                                             <label for="TxtNombreAsegurado">Nombre</label>
-                                            <input ng-model="servicio.Asegurado.Nombre" required type="text" class="form-control" id="TxtNombreAsegurado">
+                                            <input  tabindex="10" ng-model="servicio.Asegurado.Nombre" required type="text" class="form-control" id="TxtNombreAsegurado" name="TxtNombreAsegurado">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtTelefono1.$invalid  && !form.TxtTelefono1.$pristine}">
                                             <label for="TxtTelefono1">Teléfono 1</label>
-                                            <input ng-model="servicio.Asegurado.Telefono1"  ng-minlength="10"  ng-maxlength="10" type="tel" class="form-control" id="TxtTelefono1" placeholder="">
+                                            <input  tabindex="11" ng-model="servicio.Asegurado.Telefono1"
+                                                    ui-mask="(999) 999-9999"
+                                                    required  
+                                                    type="tel" class="form-control" id="TxtTelefono1" name="TxtTelefono1" >
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="TxtTelefono2">Teléfono 2</label>
-                                            <input ng-model="servicio.Asegurado.Telefono2" ng-minlength="10"  ng-maxlength="10" type="tel" class="form-control" id="TxtTelefono2" placeholder="">
+                                            <input  tabindex="12" ng-model="servicio.Asegurado.Telefono2" 
+                                                    ui-mask="(999) 999-9999"
+                                                    type="tel" class="form-control" id="TxtTelefono2" name="TxtTelefono2">
                                         </div>
                                     </div>
                                 </div>
@@ -113,48 +128,60 @@
                                 <h4>Inicio</h4>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtDireccionInicio.$invalid  && !form.TxtDireccionInicio.$pristine}">
                                             <label for="TxtDireccionInicio">Dirección</label>
-                                            <input ng-model="servicio.DireccionInicio.Descripcion" required type="text" class="form-control" id="TxtDireccionInicio">
+                                            <input tabindex="13" ng-model="servicio.DireccionInicio.Descripcion" required type="text" class="form-control" name="TxtDireccionInicio">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="TxtBarrioDestino">Ciudad</label>
-                                            <input ng-model="servicio.DireccionInicio.Ciudad" required type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.SelCiudadInicio.$invalid  && !form.SelCiudadInicio.$pristine}">
+                                            <label for="SelCiudadInicio">Ciudad</label>
+                                            <select tabindex="14" 
+                                                    ng-model="servicio.DireccionInicio.Ciudad" 
+                                                    required 
+                                                    ng-options=" ciudad.Nombre for ciudad in ciudades track by ciudad.Id"
+                                                    class="form-control" id="SelCiudadInicio" name="SelCiudadInicio">
+                                                <option value="">-- seleccione --</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="TxtBarrio">Barrio</label>
-                                            <input ng-model="servicio.DireccionInicio.Barrio"  type="text" class="form-control" id="TxtBarrio" placeholder="">
+                                            <input tabindex="15" ng-model="servicio.DireccionInicio.Barrio" type="text" id="TxtBarrio" class="form-control">
                                         </div>
                                     </div>
                                 </div>
                                 <h4>Destino</h4>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.TxtDireccionDestino.$invalid  && !form.TxtDireccionDestino.$pristine}">
                                             <label for="TxtDireccionDestino">Dirección</label>
-                                            <input ng-model="servicio.DireccionDestino.Descripcion" required type="text" class="form-control" id="TxtDireccionDestino">
+                                            <input tabindex="16" ng-model="servicio.DireccionDestino.Descripcion" required type="text" class="form-control" name="TxtDireccionDestino">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="TxtBarrioDestino">Ciudad</label>
-                                            <input ng-model="servicio.DireccionDestino.Ciudad" required type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.SelCiudadDestino.$invalid  && !form.SelCiudadDestino.$pristine}">
+                                            <label for="SelCiudadDestino">Ciudad</label>
+                                            <select tabindex="17"
+                                                    ng-model="servicio.DireccionDestino.Ciudad"
+                                                    required
+                                                    ng-options=" ciudad.Nombre for ciudad in ciudades track by ciudad.Id"
+                                                    class="form-control" id="SelCiudadDestino" name="SelCiudadDestino">
+                                                <option value="">-- seleccione --</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="TxtBarrioDestino">Barrio</label>
-                                            <input ng-model="servicio.DireccionDestino.Barrio" type="text" class="form-control" id="TxtBarrioDestino" placeholder="">
+                                            <input tabindex="18" ng-model="servicio.DireccionDestino.Barrio" type="text" class="form-control" id="TxtBarrioDestino">
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <input ng-disabled="form.$invalid" type="submit" class="btn btn-primary" name="BtnNuevoServicio" value="Guardar servicio" />
+                                <input tabindex="19"  ng-disabled="form.$invalid || isSaving" type="submit" class="btn btn-info" name="BtnNuevoServicio" value="Guardar servicio" />
                             </fieldset>
                         </form>
                     </div>

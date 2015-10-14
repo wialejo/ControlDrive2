@@ -21,7 +21,9 @@ angular.module('app')
               .state('app', {
                   //abstract: true,
                   url: '/app',
-                  templateUrl: "app/tpl/app.html"
+                  templateUrl: "app/tpl/app.html",
+                  resolve: load(['app/js/controllers/signup.js'])
+
               })
               .state('app.nuevo', {
                   url: '/nuevo',
@@ -44,6 +46,12 @@ angular.module('app')
                   controller: 'ConductoresController',
                   templateUrl: 'app/views/Configuracion/Conductores.html',
                   resolve: load(['app/js/controllers/Configuracion/conductores.js'])
+              })
+              .state('app.ciudades', {
+                  url: '/Ciudades',
+                  controller: 'CiudadesController',
+                  templateUrl: 'app/views/Configuracion/Ciudades.html',
+                  resolve: load(['app/js/controllers/Configuracion/Ciudades.js'])
               })
               .state('app.rutasConsulta', {
                   url: '/rutasConsulta',

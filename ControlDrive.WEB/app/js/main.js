@@ -6,9 +6,13 @@ angular.module('app')
   .controller('AppCtrl', ['$scope', '$location', '$localStorage', '$window', 'authService', function ($scope, $location, $localStorage, $window, authService) {
       
       $scope.authentication = authService.authentication;
+
       $scope.logOut = function () {
           authService.logOut();
-          $location.path('/app');
+          $location.path('/access/signin');
+      }
+      if (!$scope.authentication.isAuth) {
+          $location.path('/access/signin');
       }
 
       // add 'ie' classes to html
@@ -19,7 +23,7 @@ angular.module('app')
       // config
       $scope.app = {
         name: 'Control drive',
-        version: '2.0.2',
+        version: '0.0.1',
         // for chart colors
         color: {
           primary: '#7266ba',

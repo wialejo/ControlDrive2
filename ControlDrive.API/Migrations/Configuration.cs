@@ -13,6 +13,7 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(ControlDrive.API.Models.ApplicationDbContext context)

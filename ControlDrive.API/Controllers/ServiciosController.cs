@@ -55,33 +55,20 @@ namespace ControlDrive.API.Controllers
                 return BadRequest();
             }
 
-            if (servicio.VehiculoId == null)
-            {
-                var nuevoVehiculo = db.Vehiculos.Add(servicio.Vehiculo);
-                db.SaveChanges();
-                servicio.VehiculoId = nuevoVehiculo.Id;
-            }
+            
 
-            servicio.Aseguradora = null;
             servicio.Seguimientos = null;
-
-            //if (servicio.AseguradoraId == 0)
-            //{
-            //    var NuevaAseguradora = db.Aseguradoras.Add(servicio.Aseguradora);
-            //    servicio.AseguradoraId = NuevaAseguradora.Id;
-            //}
-            if (servicio.AseguradoId == 0)
-            {
-                var NuevoAsegurado = db.Asegurados.Add(servicio.Asegurado);
-                servicio.AseguradoId = NuevoAsegurado.Id;
-            }
-
+            servicio.DireccionInicio.CiudadId = servicio.DireccionInicio.Ciudad.Id;
+            servicio.DireccionDestino.CiudadId = servicio.DireccionDestino.Ciudad.Id;
+            servicio.DireccionInicio.Ciudad = null;
+            servicio.DireccionDestino.Ciudad = null;
+            servicio.Vehiculo.Placa = servicio.Vehiculo.Placa.ToUpper();
             servicio.FechaRegistro = DateTime.Now;
-            //db.Entry(servicio.Seguimientos).State = EntityState.Detached;
-            db.Entry(servicio.Vehiculo).State = EntityState.Modified;
+
+            db.Entry(servicio.Vehiculo).State = servicio.Vehiculo.Id == 0 ? EntityState.Added : EntityState.Modified;
+            db.Entry(servicio.Asegurado).State = servicio.Asegurado.Id == 0 ? EntityState.Added : EntityState.Modified;
             db.Entry(servicio.DireccionInicio).State = EntityState.Modified;
             db.Entry(servicio.DireccionDestino).State = EntityState.Modified;
-            db.Entry(servicio.Asegurado).State = EntityState.Modified;
             db.Entry(servicio).State = EntityState.Modified;
 
             try
@@ -121,9 +108,13 @@ namespace ControlDrive.API.Controllers
                 var NuevoAsegurado = db.Asegurados.Add(servicio.Asegurado);
                 servicio.AseguradoId = NuevoAsegurado.Id;
             }
-
+            servicio.Vehiculo.Placa = servicio.Vehiculo.Placa.ToUpper();
             servicio.FechaRegistro = DateTime.Now;
 
+            servicio.DireccionInicio.CiudadId = servicio.DireccionInicio.Ciudad.Id;
+            servicio.DireccionDestino.CiudadId = servicio.DireccionDestino.Ciudad.Id;
+            servicio.DireccionInicio.Ciudad = null;
+            servicio.DireccionDestino.Ciudad = null;
             db.Servicios.Add(servicio);
             db.SaveChanges();
 

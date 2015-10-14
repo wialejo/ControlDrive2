@@ -87,7 +87,9 @@
     <Content Include="app\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="app\fonts\Material-Design-Icons.svg" />
     <Content Include="app\img\a0.jpg" />
+    <Content Include="app\img\logo.png" />
     <Content Include="app\img\no_user.jpg" />
+    <Content Include="app\js\controllers\Configuracion\Ciudades.js" />
     <Content Include="app\js\controllers\Gestion\ConsultaServicios.js" />
     <Content Include="app\js\controllers\Gestion\nuevoServicio.js" />
     <Content Include="app\js\controllers\Gestion\seguimientos.js" />
@@ -112,6 +114,8 @@
     <Content Include="app\tpl\page_forgotpwd.html" />
     <Content Include="app\tpl\page_lockme.html" />
     <Content Include="app\tpl\page_signup.html" />
+    <Content Include="app\views\Configuracion\Ciudades.html" />
+    <Content Include="app\views\servicios\detalleServicio.html" />
     <Content Include="index.html" />
     <Content Include="app\js\app.js" />
     <Content Include="app\js\config.js" />

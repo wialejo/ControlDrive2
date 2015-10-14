@@ -1,12 +1,89 @@
 ﻿
-<div ng-controller="SeguimientoController">
+<div ng-controller="seguimientoController">
     <div class="bg-light lter b-b wrapper-md">
-        <h1 class="m-n font-thin h3">Seguimiento</h1>
+        <h1 class="m-n font-thin h3">Seguimiénto</h1>
     </div>
+
+    <script type="text/ng-template" id="detalleServicio.html">
+        <div class="modal-header wrapper-sm">
+            <a class="close" data-dismiss="modal" ng-click="cancel()">×</a>
+            <h3 class="m-t-none m-b font-thin">servicio: ({{servicio.Id}})</h3>
+        </div>
+        <div class="modal-body wrapper-sm " >
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4>Datos servicio </h4>
+                    <dl class="dl-horizontal">
+                        <dt>Fecha y hora:</dt>
+                        <dd>
+                            {{servicio.Fecha | date:'HH:mm'}} - {{servicio.Fecha | date:'yyyy/MM/dd'}}
+                        </dd>
+                        <dt>Consecutivo:</dt>
+                        <dd>
+                            {{servicio.Radicado}}
+                        </dd>
+                        <dt>Aseguradora:</dt>
+                        <dd>
+                            {{servicio.Aseguradora.Nombre }}
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-sm-6">
+                    <h4>Vehículo</h4>
+                    <dl class="dl-horizontal">
+                        <dt>Placa:</dt>
+                        <dd>
+                            {{servicio.Vehiculo.Placa}}
+                        </dd>
+                        <dt>Marca:</dt>
+                        <dd>
+                            {{servicio.Vehiculo.Marca}} - {{servicio.Vehiculo.Referencia}}
+                        </dd>
+                        <dt>Observaciones</dt>
+                        <dd>
+                            {{servicio.Vehiculo.Referencia}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4>Asegurado </h4>
+                    <dl class="dl-horizontal">
+                        <dt>Nombre:</dt>
+                        <dd>
+                            {{servicio.Asegurado.Nombre}}
+                        </dd>
+                        <dt>Teléfonos:</dt>
+                        <dd>
+                            {{servicio.Asegurado.Telefono1}} - {{servicio.Asegurado.Telefono2}}
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-sm-6">
+                    <h4>Ruta</h4>
+                    <dl class="dl-horizontal">
+                        <dt>Inicio</dt>
+                        <dd>
+                            - {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
+                        </dd>
+                        <dt>Destino:</dt>
+                        <dd>
+                            - {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+        </div>
+    </script>
+
+    <!--<button popover-template="detalleServicio.html" popover-title="Detalle del servicio" class="btn btn-info">Dynamic Popover</button>
+    <button popover="servicio" popover-title="Detalle del servicio" class="btn btn-info">Dynamic Popover</button>-->
     <div class="wrapper-xs">
         <div class="row">
             <div class="col-sm-12">
-                <div >
+                <div>
                     <div class="col-sm-8">
                         <div class="panel panel-default">
                             <div>
@@ -15,17 +92,19 @@
                                         <tr>
                                             <th>Fecha hora</th>
                                             <th class="col-md-1">Estado</th>
-                                            <th>Radicado</th>
+                                            <th>Consecutivo</th>
                                             <th>Ruta</th>
                                             <th>Conductor</th>
-                                            <th class="col-md-1">#
+                                            <th class="col-md-1">
+                                                #
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-xs">
                                         <tr ng-repeat="servicio in servicios" ng-click="Seguimientos(servicio)">
                                             <td>
-                                                <strong>{{servicio.Fecha | date:'HH:mm'}}</strong> <br />
+                                                <span ng-click="MostrarDetalles(servicio)" class="btn btn-link blue-500">{{servicio.Fecha | date:'HH:mm'}}</span>
+                                                <br />
                                                 {{servicio.Fecha | date:'yyyy/MM/dd'}}
                                             </td>
                                             <td>
@@ -36,8 +115,8 @@
                                                 {{servicio.Radicado}}
                                             </td>
                                             <td>
-                                                Inicio: {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad}}, {{servicio.DireccionInicio.Barrio}} <br />
-                                                Destino: {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad}}, {{servicio.DireccionDestino.Barrio}}
+                                                - {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}} <br />
+                                                - {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
                                             </td>
                                             <td>
                                                 {{servicio.Conductor.Nombre}} <br />
@@ -54,37 +133,39 @@
                     </div>
                     <div class="col-sm-4" ng-show="servicio.Id">
                         <!--<div class="panel panel-default">-->
-                            <!--<div class="panel-heading">Seguimientos</div>-->
-                                <div class="panel panel-default m-t-xs m-b-n-xs pos-rlt">
-                                    <form class="ng-pristine ng-valid" ng-submit="GuardarSeguimiento(nuevoSeguimiento)">
-                                        <textarea ng-model="nuevoSeguimiento.Observacion" class="form-control no-border" rows="1" placeholder="Ingrese su observación"></textarea>
-                                        <div class="panel-footer bg-light lter clearfix">
-                                            <button class="btn btn-info pull-right btn-sm" type="submit">Guardar</button>
-                                            <div class="form-inline">
-                                                <select ng-model="servicio.EstadoCodigo" required ng-options="estado.Codigo as estado.Descripcion for estado in estados" class="form-control form-control-xs">
-                                                    <option value="">Seleccione estado</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </form>
+                        <!--<div class="panel-heading">Seguimientos</div>-->
+                        <div class="panel panel-default m-t-xs m-b-n-xs pos-rlt">
+                            <form class="ng-pristine ng-valid" ng-submit="GuardarSeguimiento(nuevoSeguimiento)">
+                                <div class="panel-body  wrapper-sm">
+                                    <textarea ng-model="nuevoSeguimiento.Observacion" class="form-control" rows="1" placeholder="Ingrese su observación"></textarea>
                                 </div>
-                                <br />
-                                <ul class="list-group list-group-xs no-radius m-b-none m-t-n-xxs ">
-                                    <li ng-repeat="seguimiento in servicio.Seguimientos | orderBy:'-Fecha'" class="list-group-item clearfix b-l-3x ">
-                                        <a ui-sref="app.page.profile" class="avatar thumb pull-left s-r">
-                                            <img ng-src="app/img/no_user.jpg" src="app/img/no_user.jpg">
-                                        </a>
-                                        <div class="pull-right text-sm text-muted">
-                                            <span class="hidden-xs">{{ seguimiento.Fecha | date:'HH:mm yyyy/MM/dd' }}</span>
-                                        </div>
-                                        <div class="clear">
-                                            <div>
-                                                <strong class="text-xs">{{seguimiento.UsuarioRegistro.Nombre}}</strong>
-                                            </div>
-                                            <div class="text-xs text-ellipsis m-t-xs">{{seguimiento.Observacion}}</div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <div class="panel-footer bg-light lter clearfix">
+                                    <button ng-disabled="isSaving" class="btn btn-info pull-right btn-sm" type="submit">Guardar</button>
+                                    <div class="form-inline">
+                                        <select ng-model="servicio.EstadoCodigo" required ng-options="estado.Codigo as estado.Descripcion for estado in estados" class="form-control form-control-xs">
+                                            <option value="">Seleccione estado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <br />
+                        <ul class="list-group list-group-xs no-radius m-b-none m-t-n-xxs ">
+                            <li ng-repeat="seguimiento in servicio.Seguimientos | orderBy:'-Fecha'" class="list-group-item clearfix b-l-3x ">
+                                <a ui-sref="app.page.profile" class="avatar thumb pull-left s-r">
+                                    <img ng-src="app/img/no_user.jpg" src="app/img/no_user.jpg">
+                                </a>
+                                <div class="pull-right text-sm text-muted">
+                                    <span class="hidden-xs">{{ seguimiento.Fecha | date:'HH:mm yyyy/MM/dd' }}</span>
+                                </div>
+                                <div class="clear">
+                                    <div>
+                                        <strong class="text-xs">{{seguimiento.UsuarioRegistro.Nombre}}</strong>
+                                    </div>
+                                    <div class="text-xs text-ellipsis m-t-xs">{{seguimiento.Observacion}}</div>
+                                </div>
+                            </li>
+                        </ul>
                         <!--</div>-->
                     </div>
                 </div>

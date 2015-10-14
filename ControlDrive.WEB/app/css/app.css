@@ -5,6 +5,9 @@
 html {
   background-color: #f0f3f4;
 }
+.dl-horizontal {
+    text-align: left !important;
+}
 
 body {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -1813,8 +1816,8 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
   color: #ffffff !important;
-  background-color: #6254b2;
-  border-color: #5a4daa;
+  background-color: #52469a;
+  border:1px dashed #bcb9ca;
 }
 
 .btn-primary:active,
@@ -1895,8 +1898,8 @@ fieldset[disabled] .btn-success.active {
 .btn-info.active,
 .open .dropdown-toggle.btn-info {
   color: #ffffff !important;
-  background-color: #19a9d5;
-  border-color: #189ec8;
+  background-color: #1998bf;
+  border:1px dashed #dee5e7;
 }
 
 .btn-info:active,

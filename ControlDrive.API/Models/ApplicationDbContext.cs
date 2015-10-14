@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using ControlDrive.API.Migrations.ApplicationDbContext;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,6 +21,8 @@ namespace ControlDrive.API.Models
     
         public ApplicationDbContext() : base("name=ControlDriveDBConnectionString")
         {
+            Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
+
         }
 
         public static ApplicationDbContext Create()
@@ -41,6 +44,8 @@ namespace ControlDrive.API.Models
 
         public System.Data.Entity.DbSet<ControlDrive.API.Models.Seguimiento> Seguimientos { get; set; }
 
+        public System.Data.Entity.DbSet<ControlDrive.API.Models.Ciudad> Ciudades { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -48,6 +53,26 @@ namespace ControlDrive.API.Models
             modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
             modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
             modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+
+
+
+            modelBuilder.Entity<Servicio>()
+                .HasOptional(A => A.Asegurado);
+
+            modelBuilder.Entity<Servicio>()
+                .HasOptional(C => C.Conductor);
+
+            modelBuilder.Entity<Servicio>()
+                .HasOptional(DI => DI.DireccionInicio);
+
+            modelBuilder.Entity<Servicio>()
+                .HasOptional(DF => DF.DireccionDestino);
+
+            //modelBuilder.Entity<Direccion>()
+            //    .HasRequired(C => C.Ciudad)
+            //    .WithMany(d => d.Direcciones)
+            //    .HasForeignKey(d => d.CiudadId);
+
 
             // modelBuilder.Entity<Servicio>()
             //.Property(l => l.Id)
