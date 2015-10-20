@@ -1,4 +1,5 @@
 ﻿using ControlDrive.API.Migrations.ApplicationDbContext;
+using ControlDrive.CORE.Modelos;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,10 @@ namespace ControlDrive.API.Models
 
         public System.Data.Entity.DbSet<ControlDrive.API.Models.Ciudad> Ciudades { get; set; }
 
+        public System.Data.Entity.DbSet<ControlDrive.CORE.Modelos.Correo> Correos { get; set; }
+
+        public System.Data.Entity.DbSet<ControlDrive.CORE.Modelos.Cuenta> Cuentas { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -67,6 +72,9 @@ namespace ControlDrive.API.Models
 
             modelBuilder.Entity<Servicio>()
                 .HasOptional(DF => DF.DireccionDestino);
+
+            modelBuilder.Entity<Correo>()
+                .HasRequired(c => c.Cuenta);
 
             //modelBuilder.Entity<Direccion>()
             //    .HasRequired(C => C.Ciudad)

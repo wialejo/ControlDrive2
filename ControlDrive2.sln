@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlDrive.WEB", "Control
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlDrive.API", "ControlDrive.API\ControlDrive.API.csproj", "{9E84768F-2057-41A5-AF88-576FF1FEDE1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlDrive.CORE", "ControlDrive.CORE\ControlDrive.CORE.csproj", "{14734038-6D5A-472D-93A8-D6437FB7F4CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9E84768F-2057-41A5-AF88-576FF1FEDE1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E84768F-2057-41A5-AF88-576FF1FEDE1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E84768F-2057-41A5-AF88-576FF1FEDE1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14734038-6D5A-472D-93A8-D6437FB7F4CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14734038-6D5A-472D-93A8-D6437FB7F4CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14734038-6D5A-472D-93A8-D6437FB7F4CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14734038-6D5A-472D-93A8-D6437FB7F4CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

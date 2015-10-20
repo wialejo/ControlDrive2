@@ -221,8 +221,14 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\CR.pubxml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ControlDrive.CORE\ControlDrive.CORE.csproj">
+      <Project>{14734038-6d5a-472d-93a8-d6437fb7f4cd}</Project>
+      <Name>ControlDrive.CORE</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
       <SubType>Designer</SubType>

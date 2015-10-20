@@ -64,7 +64,7 @@ angular.module('app')
               .state('app.seguimiento', {
                   url: '/servicios/seguimiento',
                   templateUrl: 'app/views/servicios/seguimientoServicios.html',
-                  resolve: load(['app/js/controllers/Gestion/seguimientos.js'])
+                  resolve: load(['smart-table', 'app/js/controllers/Gestion/seguimientos.js'])
               })
               .state('app.dashboard-v1', {
                   url: '/dashboard-v1',

@@ -1,6 +1,9 @@
-﻿app.controller('seguimientoController', ['$scope', '$http', '$modal', function ($scope, $http, $modal) {
+﻿app.controller('seguimientoController', ['$scope','$filter', '$http', '$modal', '$state', function ($scope, $filter, $http, $modal, $state) {
     var ApiUrlSeguimientos = ApiUrl + 'api/seguimientos/';
     $scope.servicio = {};
+    $scope.servicios = [];
+    $scope.serviciosVisibles = [].concat($scope.servicios);
+    
     $scope.Seguimientos = function (servicio) {
         $scope.servicio = servicio;
     },
@@ -64,12 +67,21 @@
     $scope.MostrarDetalles = function (servicio) {
         var modalInstance = $modal.open({
             templateUrl: 'detalleServicio.html',
-            size: 'lg',
+            size: 'md',
             controller: function ($scope, $modalInstance, $http, servicio) {
                 $scope.servicio = servicio;
                 $scope.cancel = function () {
                     $modalInstance.dismiss('cancel');
                 };
+                $scope.Editar = function (servicio) {
+                    $scope.cancel();
+
+                    $scope.servicio = servicio;
+                    $scope.servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');
+                    $scope.servicio.FechaD = $filter('date')(servicio.Fecha, 'dd/MM/yyyy');
+                    $stateParams = servicio;
+                    $state.go('app.editar', { servicio: servicio })
+                }
             },
             resolve: {
                 servicio: function () {
@@ -78,4 +90,28 @@
             }
         });
     }
+    $scope.EnviarCorreo = function () {
+        var serviciosSeleccionados = [];
+        angular.forEach($scope.serviciosVisibles, function (servicio) {
+            if (servicio.isSelected)
+                serviciosSeleccionados.push(servicio);
+        });
+        var urlApiServicios = ApiUrl + "/api/servicios/EnviarCorreoSeguimiento";
+
+        //http://localhost/API2/api/servicios/EnviarCorreoSeguimiento
+        $http.post(urlApiServicios, serviciosSeleccionados)
+            .then(function (response) {
+                alert("Enviado");
+            }, function (response) {
+                alert(response.data.ExceptionMessage);
+            });
+    }
+
+    $scope.Seleccionar = function (seleccion) {
+        angular.forEach($scope.serviciosVisibles, function (servicio) {
+            servicio.isSelected = seleccion;
+        });
+    }
+    
 }]);
+

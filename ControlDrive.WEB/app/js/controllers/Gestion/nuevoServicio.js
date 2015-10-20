@@ -3,6 +3,7 @@
     var urlApiServicios = ApiUrl + "api/servicios";
     var urlApiConductores = ApiUrl + "api/conductores";
     var urlApiCiudades = ApiUrl + "api/Ciudades";
+    
     $scope.servicio = {};
 
     $scope.esEdicion = false;
@@ -29,8 +30,6 @@
         }
 
         servicio.Fecha = $filter('date')(fecha, 'yyyy-MM-dd HH:mm:ss');
-        if (servicio.Conductor)
-            servicio.ConductorId = servicio.Conductor.Id;
 
         if ($scope.esEdicion) {
             $http.put(urlApiServicios + "/" + servicio.Id, servicio).
@@ -77,8 +76,11 @@
             });
     }()
     if ($state.params.servicio != null) {
+        var servicio = $state.params.servicio;
+        servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');
+        servicio.FechaD = $filter('date')(servicio.Fecha, 'dd/MM/yyyy');
+        $scope.servicio = servicio;
         $scope.esEdicion = true;
-        $scope.servicio = $state.params.servicio;
     }
     
 }])

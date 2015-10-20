@@ -1,5 +1,6 @@
 namespace ControlDrive.API.Migrations.ApplicationDbContext
 {
+    using CORE.Modelos;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using Models;
@@ -49,7 +50,7 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 {
                     Id = 1,
                     Nombre = "Javier conductor martinez",
-                    Email = "javier@controldrive.com",
+                    Email = "wi_alejo@hotmail.com",
                     TipoIdentificacion = "CC",
                     Identificacion = 1018421359,
                     Telefono1 = "3112150087",
@@ -61,6 +62,39 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 new Asegurado() { Id = 1, Nombre = "Asegurado 1" }
             );
 
+            //context.Cuentas.AddOrUpdate(new Cuenta
+            //{
+            //    Id = 1,
+            //    Descripcion = "ControlDrive",
+            //    CorreoSalida = "Notificaciones@controldrive.com.co",
+            //    NombreMostrar = "ControlDrive",
+            //    CorreoRespuesta = "Notificaciones@controldrive.com.co",
+            //    NombreServidor = "controldrive.com.co",
+            //    NombreServidorIMAP = "controldrive.com.co",
+            //    NombreServidorPOP = "controldrive.com.co",
+            //    NombreServidorSMPT = "controldrive.com.co",
+            //    Puerto = 25,
+            //    Ssl = false,
+            //    Usuario = "Notificaciones@controldrive.com.co",
+            //    Contrasena = "Loreka8812"
+            //});
+
+            context.Cuentas.AddOrUpdate(new Cuenta
+            {
+                Id = 1,
+                Descripcion = "ControlDrive",
+                CorreoSalida = "wi_alejo@hotmail.com",
+                NombreMostrar = "ControlDrive",
+                CorreoRespuesta = "wi_alejo@hotmail.com",
+                NombreServidor = "smtp.live.com",
+                NombreServidorIMAP = "controldrive.com.co",
+                NombreServidorPOP = "controldrive.com.co",
+                NombreServidorSMPT = "smtp.live.com",
+                Puerto = 25,
+                Ssl = true,
+                Usuario = "wi_alejo@hotmail.com",
+                Contrasena = "Alejo123"
+            });
         }
     }
 }

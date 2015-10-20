@@ -29,7 +29,7 @@ namespace ControlDrive.API.Models
         public virtual Direccion DireccionInicio { get; set; }
         public virtual Direccion DireccionDestino { get; set; }
         public int? ConductorId { get; set; }
-        public Conductor Conductor { get; set; }
+        public virtual Conductor Conductor { get; set; }
         public virtual ICollection<Seguimiento> Seguimientos { get; set; }
         public DateTime FechaRegistro { get; internal set; }
     }

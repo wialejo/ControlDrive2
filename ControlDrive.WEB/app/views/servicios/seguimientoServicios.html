@@ -1,85 +1,39 @@
 ﻿
 <div ng-controller="seguimientoController">
-    <div class="bg-light lter b-b wrapper-md">
-        <h1 class="m-n font-thin h3">Seguimiénto</h1>
+    <div class="bg-light lter b-b wrapper-sm">
+      <h1 class="m-n font-thin h3">Seguimiénto</h1>
+    </div>
+    <div class="row-fluid bg-light lter b-b wrapper-xs">
+        <div class="inline">
+            <label class="checkbox i-checks m-l-xs m-b-xs">
+                <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
+                Seleccionar Todos
+            </label>
+        </div>
+        <div class="inline  wrapper-xs">
+            <input type="button" class="btn btn-default" name="EnviarCorreo" value="Enviar correo" ng-click="EnviarCorreo()" />
+        </div>
     </div>
 
-    <script type="text/ng-template" id="detalleServicio.html">
-        <div class="modal-header wrapper-sm">
-            <a class="close" data-dismiss="modal" ng-click="cancel()">×</a>
-            <h3 class="m-t-none m-b font-thin">servicio: ({{servicio.Id}})</h3>
-        </div>
-        <div class="modal-body wrapper-sm " >
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>Datos servicio </h4>
-                    <dl class="dl-horizontal">
-                        <dt>Fecha y hora:</dt>
-                        <dd>
-                            {{servicio.Fecha | date:'HH:mm'}} - {{servicio.Fecha | date:'yyyy/MM/dd'}}
-                        </dd>
-                        <dt>Consecutivo:</dt>
-                        <dd>
-                            {{servicio.Radicado}}
-                        </dd>
-                        <dt>Aseguradora:</dt>
-                        <dd>
-                            {{servicio.Aseguradora.Nombre }}
-                        </dd>
-                    </dl>
-                </div>
-                <div class="col-sm-6">
-                    <h4>Vehículo</h4>
-                    <dl class="dl-horizontal">
-                        <dt>Placa:</dt>
-                        <dd>
-                            {{servicio.Vehiculo.Placa}}
-                        </dd>
-                        <dt>Marca:</dt>
-                        <dd>
-                            {{servicio.Vehiculo.Marca}} - {{servicio.Vehiculo.Referencia}}
-                        </dd>
-                        <dt>Observaciones</dt>
-                        <dd>
-                            {{servicio.Vehiculo.Referencia}}
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>Asegurado </h4>
-                    <dl class="dl-horizontal">
-                        <dt>Nombre:</dt>
-                        <dd>
-                            {{servicio.Asegurado.Nombre}}
-                        </dd>
-                        <dt>Teléfonos:</dt>
-                        <dd>
-                            {{servicio.Asegurado.Telefono1}} - {{servicio.Asegurado.Telefono2}}
-                        </dd>
-                    </dl>
-                </div>
-                <div class="col-sm-6">
-                    <h4>Ruta</h4>
-                    <dl class="dl-horizontal">
-                        <dt>Inicio</dt>
-                        <dd>
-                            - {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
-                        </dd>
-                        <dt>Destino:</dt>
-                        <dd>
-                            - {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-
+    <script type="text/ng-template" id="detalleServicio.html" >
+        <div class="modal-body wrapper-lg " >
+            <h3 class="m-t-none m-b font-thin">Detalle del servicio: {{servicio.Id}}</h3>
+                <ul>
+                    <li><strong>Id: </strong> <span> {{servicio.Id}}</span></li>
+                    <li> <strong>Fecha y Hora: </strong><span> {{servicio.Fecha | date:'HH:mm'}} - {{servicio.Fecha | date:'dd/MM/yyyy'}}</span></li>
+                    <li><strong>Aseguradora: </strong><span> {{servicio.Aseguradora.Nombre }}</span> &nbsp;&nbsp;&nbsp; <strong>Consecutivo: </strong><span> {{servicio.Radicado}}</span></li>
+                    <br />
+                    <li><strong>Asegurado: </strong><span> {{servicio.Asegurado.Nombre}} <strong>Tel:</strong> {{servicio.Asegurado.Telefono1}} - {{servicio.Asegurado.Telefono2}}</span></li>
+                    <li><strong>Vehiculo: </strong><span> {{servicio.Vehiculo.Placa}} - {{servicio.Vehiculo.Marca}} - {{servicio.Vehiculo.Referencia}} - {{servicio.Vehiculo.Marca}} - {{servicio.Vehiculo.Observaciones}}</span></li>
+                    <br>
+                    <li><strong>Dirección inicio: </strong><span> {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}</span></li>
+                    <li><strong>Dirección destino: </strong><span> {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}</span></li>
+                </ul>
+                <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Editar" ng-click="Editar(servicio)" />
         </div>
     </script>
 
-    <!--<button popover-template="detalleServicio.html" popover-title="Detalle del servicio" class="btn btn-info">Dynamic Popover</button>
-    <button popover="servicio" popover-title="Detalle del servicio" class="btn btn-info">Dynamic Popover</button>-->
+
     <div class="wrapper-xs">
         <div class="row">
             <div class="col-sm-12">
@@ -87,25 +41,44 @@
                     <div class="col-sm-8">
                         <div class="panel panel-default">
                             <div>
-                                <table class="table table-striped b-t b-light">
+                                <table st-table="serviciosVisibles" st-safe-src="servicios" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Fecha hora</th>
-                                            <th class="col-md-1">Estado</th>
-                                            <th>Consecutivo</th>
+                                            <td colspan="6">
+                                                <div class="row wrapper-xs">
+                                                    <div class="col-sm-1 text-left">
+                                                    </div>
+                                                    <div class="col-sm-1 text-right">
+                                                        <strong>Filtros</strong>
+                                                    </div>
+                                                    <div class="col-sm-8">
+                                                        <input st-search placeholder="Buscar..." class="input-sm form-control" type="search" />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th st-sort="Id">Id</th>
+                                            <th st-sort="Fecha">Fecha hora</th>
+                                            <th st-sort="Estado.Descripcion" class="col-md-1">Estado</th>
+                                            <th st-sort="Aseguradora.Nombre">Consecutivo</th>
                                             <th>Ruta</th>
-                                            <th>Conductor</th>
+                                            <th st-sort="Conductor.Nombre">Conductor</th>
                                             <th class="col-md-1">
-                                                #
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-xs">
-                                        <tr ng-repeat="servicio in servicios" ng-click="Seguimientos(servicio)">
-                                            <td>
-                                                <span ng-click="MostrarDetalles(servicio)" class="btn btn-link blue-500">{{servicio.Fecha | date:'HH:mm'}}</span>
+                                        <tr  st-select-row="servicio" st-select-mode="multiple" ng-repeat="servicio in serviciosVisibles | orderBy:'-Fecha'" ng-click="Seguimientos(servicio)">
+                                            <td class="text-center" ng-click="MostrarDetalles(servicio)">
+                                                <a  class="btn-link blue-300 fa-underline">
+                                                    <u> {{servicio.Id}}</u>
+</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{servicio.Fecha | date:'HH:mm'}} 
                                                 <br />
-                                                {{servicio.Fecha | date:'yyyy/MM/dd'}}
+                                                {{servicio.Fecha | date:'dd/MM/yyyy'}}
                                             </td>
                                             <td>
                                                 {{servicio.Estado.Descripcion}}
@@ -124,16 +97,25 @@
                                             </td>
                                             <td>
                                                 <b class="badge bg-info pull-right">{{servicio.Seguimientos.length}}</b>
+                                                <label class="i-checks m-b-none">
+                                                    <input type="checkbox"  name="Seleccion" ng-model="servicio.Seleccionado" />
+                                                </label>
                                             </td>
                                         </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <!--<td colspan="5" class="text-center">-->
+                                            <td class="text-center no-margin" st-pagination="" st-items-by-page="10" colspan="6" >
+                                                <!--<div st-pagination="" st-items-by-page="4" st-displayed-pages="7" class="no-margin"></div>-->
+                                            </td>
+                                        </tr>
+                                   </tfoot>
                                 </table>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-4" ng-show="servicio.Id">
-                        <!--<div class="panel panel-default">-->
-                        <!--<div class="panel-heading">Seguimientos</div>-->
                         <div class="panel panel-default m-t-xs m-b-n-xs pos-rlt">
                             <form class="ng-pristine ng-valid" ng-submit="GuardarSeguimiento(nuevoSeguimiento)">
                                 <div class="panel-body  wrapper-sm">
@@ -166,7 +148,6 @@
                                 </div>
                             </li>
                         </ul>
-                        <!--</div>-->
                     </div>
                 </div>
             </div>
