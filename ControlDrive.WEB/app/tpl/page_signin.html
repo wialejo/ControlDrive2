@@ -2,7 +2,7 @@
   <a href class="navbar-brand block m-t">{{app.name}}</a>
   <div class="m-b-lg">
     <div class="wrapper text-center">
-      <strong>Iniciar sesión</strong>
+      <strong>Iniciar sesiÃ³n</strong>
     </div>
     <form name="form" class="form-validation">
       <div class="text-danger wrapper text-center" ng-show="message">
@@ -13,12 +13,12 @@
           <input type="text" placeholder="Usuario" class="form-control no-border" ng-model="loginData.userName" required>
         </div>
         <div class="list-group-item">
-           <input type="password" placeholder="Contraseña" class="form-control no-border" ng-model="loginData.password" required>
+           <input type="password" placeholder="ContraseÃ±a" class="form-control no-border" ng-model="loginData.password" required>
         </div>
       </div>
       <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" 
               ng-disabled='form.$invalid'>Iniciar</button>
-      <div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">¿Olvido su contraseña?</a></div>
+      <div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">Â¿Olvido su contraseÃ±a?</a></div>
     </form>
   </div>
 </div>

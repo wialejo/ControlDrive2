@@ -89,6 +89,12 @@ namespace ControlDrive.API.Models
 
     }
 
+
+    public class Periodo
+    {
+        public DateTime Inicio { get; set; }
+        public DateTime Fin { get; set; }
+    }
     
 
     public class Vehiculo

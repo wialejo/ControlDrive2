@@ -11,7 +11,20 @@
             </label>
         </div>
         <div class="inline  wrapper-xs">
-            <input type="button" class="btn btn-default" name="EnviarCorreo" value="Enviar correo" ng-click="EnviarCorreo()" />
+            <input type="button" class="btn btn-info" name="EnviarCorreo" value="Enviar correo" ng-click="EnviarCorreo()" />
+        </div>
+        <div class="inline  wrapper-xs">
+            <form ng-submit="ObtenerServicios()">
+                <div class="inline  wrapper-xs">
+                     <div class="form-group form-inline">
+                        <label for="TxtPeriodo">Periodo</label>
+                        <input tabindex="1" ng-model="periodo" required type="text" class="form-control" id="TxtPeriodo" name="TxtPeriodo" placeholder="dd/mm/aaaa" >
+                    </div>
+                </div>
+                <div class="inline  wrapper-xs">
+                    <input type="submit" class="btn btn-info" name="ObtenerServicios" value="Obtener servicios" />
+                </div>
+            </form>
         </div>
     </div>
 

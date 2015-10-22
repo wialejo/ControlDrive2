@@ -38,6 +38,34 @@ namespace ControlDrive.API.Controllers
             return servicios;
         }
 
+        
+
+
+
+        [Route("api/servicios/ServiciosByPeriodo")]
+        [HttpPost]
+        public IQueryable<Servicio> GetServiciosByPeriodo([FromBody]Periodo Fecha)
+        {
+            Periodo periodo = ObtenerPeriodo(Convert.ToDateTime(Fecha.Inicio));
+
+            var servicios = from s in db.Servicios
+                            where s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin
+                            select s;
+            return servicios;
+        }
+
+        private Periodo ObtenerPeriodo(DateTime Fecha)
+        {
+            Periodo periodo = new Periodo();
+            TimeSpan ti = new TimeSpan(18, 0, 0);
+            periodo.Inicio = Fecha.Date + ti ;
+            
+            TimeSpan tf = new TimeSpan(17, 59, 0);
+            periodo.Fin = Fecha.Date.AddDays(1) + tf;
+            return periodo;
+        }
+
+
         //GET: api/Servicios/5
         [ResponseType(typeof(Servicio))]
         public IHttpActionResult GetServicios(int id)
