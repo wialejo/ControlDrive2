@@ -55,6 +55,7 @@
     <Compile Include="Modelos\Correo.cs" />
     <Compile Include="Modelos\Cuenta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Servicios\Servicios.cs" />
     <Compile Include="Servicios\Utilidades.cs" />
   </ItemGroup>
   <ItemGroup>

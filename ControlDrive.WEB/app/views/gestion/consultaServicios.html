@@ -42,6 +42,9 @@
                                         <th>
                                             Conductor
                                         </th>
+                                        <th>
+                                            Ruta
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="svr in servicios | filter:search">
@@ -71,6 +74,9 @@
                                         </td>
                                         <td>
                                             {{svr.Conductor.Nombre }}
+                                        </td>
+                                        <td>
+                                            {{svr.Ruta.Nombre }}
                                         </td>
                                         <td>
                                             <input type="button" ng-click="Editar(svr);" value="Editar" class="btn btn-sm btn-info" />

@@ -87,6 +87,20 @@
                             <table class="table table-striped b-t b-b">
                                 <thead>
                                     <tr>
+                                        <td colspan="8">
+                                            <div class="row wrapper-xs">
+                                                <div class="col-sm-1 text-left">
+                                                </div>
+                                                <div class="col-sm-1 text-right">
+                                                    <strong>buscar</strong>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <input ng-model="busqueda" placeholder="Buscar..." class="input-sm form-control" type="search" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th class="col-md-1 text-center">
                                             Id
                                         </th>
@@ -114,7 +128,7 @@
                                     </tr>
                                 </thead>
                                 <thead>
-                                    <tr ng-repeat="conductor in conductores">
+                                    <tr ng-repeat="conductor in conductores | filter:busqueda">
                                         <td class="col-md-1 text-center">
                                             {{conductor.Id}}
                                         </td>

@@ -9,7 +9,7 @@
                     <div class="panel-body">
                         <form class="form" name="form" novalidate ng-submit="form.$valid && Guardar(servicio);">
                             <fieldset>
-                                <legend>Datos servicio</legend>
+                                <!--<legend>Datos servicio</legend>-->
                                 <div class="row">
                                     <div class="col-xs-6 col-sm-2">
                                         <div class="form-group" ng-class="{ 'has-error' : form.TxtHora.$invalid  && !form.TxtHora.$pristine}">
@@ -46,19 +46,42 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-5">
                                         <div class="form-group">
                                             <label for="SelConductores">Conductor</label>
 
                                             <ui-select tabindex="5" ng-model="servicio.Conductor" theme="bootstrap" reset-search-input="false">
-                                                <ui-select-match placeholder="Conductor" >{{$select.selected.Nombre}}</ui-select-match>
-                                                <ui-select-choices  repeat="item in conductores | filter: $select.search">
+                                                <ui-select-match placeholder="Conductor">{{$select.selected.Nombre}}</ui-select-match>
+                                                <ui-select-choices repeat="item in conductores | filter: $select.search">
                                                     <div ng-bind-html="item.Nombre | highlight: $select.search"></div>
                                                 </ui-select-choices>
                                             </ui-select>
 
                                         </div>
                                     </div>
+                                    <div class="col-sm-5">
+                                        <div class="form-group">
+                                            <label for="SelRuta">Ruta</label>
+
+                                            <ui-select tabindex="5" ng-model="servicio.Ruta" theme="bootstrap" reset-search-input="false">
+                                                <ui-select-match placeholder="Conductor">{{$select.selected.Nombre}}</ui-select-match>
+                                                <ui-select-choices repeat="item in conductores | filter: $select.search">
+                                                    <div ng-bind-html="item.Nombre | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                            <!--<ui-select tabindex="6" ng-model="servicio.Ruta" theme="bootstrap" reset-search-input="false">
+                                                <ui-select-match placeholder="Ruta">{{$select.selected.Conductor.Nombre}}</ui-select-match>
+                                                <ui-select-choices repeat="item in rutas | filter: $select.search">
+                                                    <div ng-bind-html="item.Conductor.Nombre | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>-->
+
+                                        </div>
+                                    </div>
+
                                 </div>
                             </fieldset>
                             <fieldset>

@@ -2,7 +2,9 @@
     var ApiUrlSeguimientos = ApiUrl + 'api/seguimientos/';
     $scope.servicio = {};
     $scope.servicios = [];
-    $scope.serviciosVisibles = [].concat($scope.servicios);
+    $scope.seguimiento = {};
+
+    $scope.servicios = [].concat($scope.servicios);
 
     var date = new Date();
     var mes = (date.getMonth() + 1);
@@ -10,11 +12,14 @@
     var dia = date.getDate();
     dia = dia < 10 ? "0" + dia.toString() : dia;
     var fechaActual = (dia + '/' + mes + '/' + date.getFullYear());
-    $scope.periodo = fechaActual;
+    //$scope.periodo = fechaActual;
+    $scope.periodo = "23/11/2015";
     
-    $scope.Seguimientos = function (servicio) {
+    $scope.VerSeguimientos = function (servicio) {
         $scope.servicio = servicio;
-    },
+        $scope.showEditRow(servicio)
+    }
+
     $scope.isSaving = false;
     $scope.ActualizarServicio = function () {
         var urlApiServicios = ApiUrl + "api/servicios";
@@ -27,19 +32,18 @@
             alert(response.data.ExceptionMessage);
         });
     }
-    $scope.GuardarSeguimiento = function (seguimiento) {
+    $scope.GuardarSeguimiento = function () {
         $scope.isSaving = true;
-        if (!seguimiento) {
-            seguimiento = {};
+        if (!$scope.seguimiento) {
+            $scope.seguimiento = {};
         }
-        seguimiento.ServicioId = $scope.servicio.Id;
-        seguimiento.NuevoEstado = $scope.servicio.EstadoCodigo;
+        $scope.seguimiento.ServicioId = $scope.servicio.Id;
+        $scope.seguimiento.NuevoEstado = $scope.servicio.EstadoCodigo;
 
-        $http.post(ApiUrlSeguimientos, seguimiento)
+        $http.post(ApiUrlSeguimientos, $scope.seguimiento)
             .then(function (response) {
-                seguimiento = {};
-                $scope.ObtenerServicios();
-                $scope.servicio.Seguimientos.push(response.data);
+                $scope.seguimiento = {};
+                $scope.ObtenerSeguimientos();
                 $scope.isSaving = false;
             }, function (response) {
                 $scope.isSaving = false;
@@ -47,13 +51,14 @@
             });
     }
     $scope.ObtenerSeguimientos = function () {
-        $http.get(ApiUrlSeguimientos + $scope.servicio.Id).
+        $http.get(ApiUrlSeguimientos + parseInt($scope.servicio.Id)).
               then(function (response) {
                   $scope.servicio.Seguimientos = response.data;
               }, function (response) {
                   alert(response.data.ExceptionMessage);
               });
     }
+
     $scope.ObtenerEstados = function () {
         $http.get(ApiUrl + "api/estados").
               then(function (response) {
@@ -62,6 +67,7 @@
                   alert(response.data.ExceptionMessage);
               });
     }
+
     $scope.ObtenerServicios = function () {
         var d = $scope.periodo.split("/").slice(0, 3).reverse();
         var fecha = new Date(d[1] + "/" + d[2] + "/" + d[0])
@@ -77,8 +83,11 @@
               });
     }
     $scope.ObtenerServicios();
+
     $scope.ObtenerEstados();
-    $scope.MostrarDetalles = function (servicio) {
+
+    $scope.MostrarDetalles = function (servicio, event) {
+        
         var modalInstance = $modal.open({
             templateUrl: 'detalleServicio.html',
             size: 'md',
@@ -104,10 +113,10 @@
             }
         });
     }
-    $scope.EnviarCorreo = function () {
+    $scope.EnviarCorreoConductor = function () {
         var serviciosSeleccionados = [];
-        angular.forEach($scope.serviciosVisibles, function (servicio) {
-            if (servicio.isSelected)
+        angular.forEach($scope.serviciosActivos, function (servicio) {
+            if (servicio.Seleccionado)
                 serviciosSeleccionados.push(servicio);
         });
         var urlApiServicios = ApiUrl + "/api/servicios/EnviarCorreoSeguimiento";
@@ -120,12 +129,37 @@
                 alert(response.data.ExceptionMessage);
             });
     }
+    $scope.EnviarCorreoRuta = function () {
+        var serviciosSeleccionados = [];
+        angular.forEach($scope.serviciosActivos, function (servicio) {
+            if (servicio.Seleccionado)
+                serviciosSeleccionados.push(servicio);
+        });
+        var urlApiServicios = ApiUrl + "/api/servicios/EnviarCorreoRutaSeguimiento";
+
+        //http://localhost/API2/api/servicios/EnviarCorreoSeguimiento
+        $http.post(urlApiServicios, serviciosSeleccionados)
+            .then(function (response) {
+                alert("Enviado");
+            }, function (response) {
+                alert(response.data.ExceptionMessage);
+            });
+    }
 
     $scope.Seleccionar = function (seleccion) {
-        angular.forEach($scope.serviciosVisibles, function (servicio) {
-            servicio.isSelected = seleccion;
+        angular.forEach($scope.servicios, function (servicio) {
+            servicio.Seleccionado = seleccion;
         });
     }
+
+    $scope.showEditRow = function (r) {
+        if ($scope.active != r) {
+            $scope.active = r;
+        }
+        else {
+            $scope.active = null;
+        }
+    };
     
 }]);
 

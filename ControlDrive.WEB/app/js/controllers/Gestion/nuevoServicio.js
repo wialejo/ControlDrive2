@@ -3,13 +3,14 @@
     var urlApiServicios = ApiUrl + "api/servicios";
     var urlApiConductores = ApiUrl + "api/conductores";
     var urlApiCiudades = ApiUrl + "api/Ciudades";
+    var urlApiRutas = ApiUrl + "api/rutas";
     
     $scope.servicio = {};
 
     $scope.esEdicion = false;
     $scope.conductores = [];
     $scope.ciudades = [];
-
+    $scope.rutas = [];
 
     var date = new Date();
     var mes = (date.getMonth() + 1);
@@ -21,7 +22,9 @@
     $scope.isSaving = false;
     $scope.servicio.FechaD = fechaActual;
     $scope.Guardar = function (servicio) {
+
         $scope.isSaving = true;
+
         var d = servicio.FechaD.split("/").slice(0, 3).reverse();
         var fecha = new Date(d[1] + "/" + d[2] + "/" + d[0] + " " + servicio.Hora)
         if (fecha == "Invalid Date") {
@@ -35,8 +38,9 @@
             $http.put(urlApiServicios + "/" + servicio.Id, servicio).
             then(function (response) {
                 $scope.isSaving = false;
-                //toaster.pop('success', 'Servicios', 'Servicio actualizado correctamente.');
                 alert('Servicio actualizado correctamente.');
+                toaster.pop('success', 'Servicios', 'Servicio actualizado correctamente.');
+                $scope.servicio = {};
             }, function (response) {
                 $scope.isSaving = false;
                 alert(response.data.ExceptionMessage);
@@ -75,6 +79,14 @@
                 //alert(response.data.ExceptionMessage);
             });
     }()
+    $scope.ObtenerRutas = function () {
+        $http.get(urlApiRutas).
+            then(function (response) {
+                $scope.rutas = response.data;
+            }, function (response) {
+                //alert(response.data.ExceptionMessage);
+            });
+    }();
     if ($state.params.servicio != null) {
         var servicio = $state.params.servicio;
         servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');

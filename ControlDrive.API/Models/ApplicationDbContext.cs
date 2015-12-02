@@ -1,5 +1,4 @@
 ﻿using ControlDrive.API.Migrations.ApplicationDbContext;
-using ControlDrive.CORE.Modelos;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -72,9 +71,7 @@ namespace ControlDrive.API.Models
 
             modelBuilder.Entity<Servicio>()
                 .HasOptional(DF => DF.DireccionDestino);
-
-            modelBuilder.Entity<Correo>()
-                .HasRequired(c => c.Cuenta);
+            
 
             //modelBuilder.Entity<Direccion>()
             //    .HasRequired(C => C.Ciudad)

@@ -12,6 +12,7 @@ namespace ControlDrive.API.Models
 {
     public class Servicio
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         public string EstadoCodigo { get; set; }
@@ -32,11 +33,14 @@ namespace ControlDrive.API.Models
         public virtual Conductor Conductor { get; set; }
         public virtual ICollection<Seguimiento> Seguimientos { get; set; }
         public DateTime FechaRegistro { get; internal set; }
+        public int? RutaId { get; set; }
+        public virtual Conductor Ruta { get; set; }
     }
-
+    
     [Table("Seguimientos")]
     public class Seguimiento
     {
+        [Key]
         public int Id { get; set; }
         public int ServicioId { get; set; }
         public DateTime Fecha { get; set; }
@@ -66,22 +70,18 @@ namespace ControlDrive.API.Models
 
     public class Conductor
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
         public string Nombre { get; set; }
-
         public string Email { get; set; }
-
         public string TipoIdentificacion { get; set; }
-
         public int  Identificacion { get; set; }
 
         [Required]
         public string Telefono1 { get; set; }
-
         public string Telefono2 { get; set; }
-
         public string Direccion { get; set; }
 
         [DefaultValue("true")]
@@ -99,6 +99,7 @@ namespace ControlDrive.API.Models
 
     public class Vehiculo
     {
+        [Key]
         public int Id { get; set; }
         
         public string Placa { get; set; }
@@ -127,6 +128,7 @@ namespace ControlDrive.API.Models
 
     public class Ciudad
     {
+        [Key]
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Tarifa { get; set; }
@@ -134,12 +136,14 @@ namespace ControlDrive.API.Models
 
     public class Barrio
     {
+        [Key]
         public int Id { get; set; }
         public string Nombre { get; set; }
     }
 
     public class Asegurado
     {
+        [Key]
         public int Id { get; set; }
 
         public string Nombre { get; set; }

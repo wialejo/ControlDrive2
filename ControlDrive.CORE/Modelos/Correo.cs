@@ -16,10 +16,6 @@ namespace ControlDrive.CORE.Modelos
         //[StringLength(2)]
         //public string CORestado { get; set; }
 
-        public virtual Cuenta Cuenta { get; set; }
-
-        public int CuentaId { get; set; }
-
         [Required]
         [StringLength(200)]
         public string CORasunto { get; set; }

@@ -17,5 +17,6 @@ angular.module('app', [
     'ui.load',
     'ui.jq',
     'oc.lazyLoad',
-    'ngMaterial'
+    'ngMaterial',
+    'angular.filter'
 ]);

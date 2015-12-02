@@ -27,19 +27,19 @@ angular.module('app')
               })
               .state('app.nuevo', {
                   url: '/nuevo',
-                  templateUrl: 'app/views/servicios/nuevoServicio.html',
-                  resolve: load(['toaster', 'ui.select','app/js/controllers/Gestion/nuevoServicio.js'])
+                  templateUrl: 'app/views/gestion/nuevoServicio.html',
+                  resolve: load(['toaster', 'ui.select', 'app/js/controllers/gestion/nuevoServicio.js'])
               })
               .state('app.editar', {
                   url: '/editar',
-                  templateUrl: 'app/views/servicios/nuevoServicio.html',
+                  templateUrl: 'app/views/gestion/nuevoServicio.html',
                   params: { servicio: null },
-                  resolve: load(['toaster','ui.select','app/js/controllers/Gestion/nuevoServicio.js'])
+                  resolve: load(['toaster', 'ui.select', 'app/js/controllers/gestion/nuevoServicio.js'])
               })
               .state('app.consultaServicios', {
                   url: '/consultaServicios',
-                  templateUrl: 'app/views/servicios/consultaServicios.html',
-                  resolve: load(['app/js/controllers/Gestion/consultaServicios.js'])
+                  templateUrl: 'app/views/gestion/consultaServicios.html',
+                  resolve: load(['app/js/controllers/gestion/consultaServicios.js'])
               })
               .state('app.conductores', {
                   url: '/conductores',
@@ -53,9 +53,11 @@ angular.module('app')
                   templateUrl: 'app/views/Configuracion/Ciudades.html',
                   resolve: load(['app/js/controllers/Configuracion/Ciudades.js'])
               })
-              .state('app.rutasConsulta', {
-                  url: '/rutasConsulta',
-                  templateUrl: 'app/views/rutas/consultaRutas.html'
+              .state('app.rutas', {
+                  url: '/rutas',
+                  controller: 'RutasController',
+                  templateUrl: 'app/views/gestion/rutas.html',
+                  resolve: load(['ui.select', 'app/js/controllers/gestion/rutas.js'])
               })
               .state('app.servicios', {
                   url: '/servicios',
@@ -63,8 +65,8 @@ angular.module('app')
               })
               .state('app.seguimiento', {
                   url: '/servicios/seguimiento',
-                  templateUrl: 'app/views/servicios/seguimientoServicios.html',
-                  resolve: load(['smart-table', 'app/js/controllers/Gestion/seguimientos.js'])
+                  templateUrl: 'app/views/gestion/seguimientoServicios.html',
+                  resolve: load(['smart-table', 'app/js/controllers/gestion/seguimientos.js'])
               })
               .state('app.dashboard-v1', {
                   url: '/dashboard-v1',

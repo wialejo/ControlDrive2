@@ -26,8 +26,9 @@ namespace ControlDrive.API.Controllers
 
         // GET: api/Seguimientos/5
         [ResponseType(typeof(Seguimiento))]
-        public IQueryable<Seguimiento> GetSeguimiento(int idServicio)
+        public IQueryable<Seguimiento> GetSeguimientos(int id)
         {
+            var idServicio = id;
             var seguimiento = db.Seguimientos.Where(s => s.ServicioId == idServicio);
             return seguimiento;
         }

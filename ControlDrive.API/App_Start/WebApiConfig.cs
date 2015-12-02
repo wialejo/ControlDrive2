@@ -13,7 +13,7 @@ namespace ControlDrive.API
     {
         public static void Register(HttpConfiguration config)
         {
-            EnableCrossSiteRequests(config);
+           // EnableCrossSiteRequests(config);
             AddRoutes(config);
         }
 
@@ -41,6 +41,8 @@ namespace ControlDrive.API
                 headers: "*",
                 methods: "*");
             config.EnableCors(cors);
+
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
         }
     }
 }

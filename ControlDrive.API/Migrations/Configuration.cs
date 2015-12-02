@@ -1,13 +1,10 @@
 namespace ControlDrive.API.Migrations.ApplicationDbContext
 {
+    using API.Models;
     using CORE.Modelos;
     using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.EntityFramework;
-    using Models;
     using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<ControlDrive.API.Models.ApplicationDbContext>
     {
@@ -15,6 +12,7 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
+
         }
 
         protected override void Seed(ControlDrive.API.Models.ApplicationDbContext context)
@@ -32,35 +30,35 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 });
 
             context.Estados.AddOrUpdate(
-                new Estado() { Codigo = "RG", Descripcion = "Registrado", Orden=1 },
+                new Estado() { Codigo = "RG", Descripcion = "Registrado", Orden = 1 },
                 new Estado() { Codigo = "ES", Descripcion = "En sitio", Orden = 2 },
                 new Estado() { Codigo = "EC", Descripcion = "En curso", Orden = 3 },
                 new Estado() { Codigo = "TE", Descripcion = "Terminado", Orden = 4 },
                 new Estado() { Codigo = "FL", Descripcion = "Fallido", Orden = 5 },
                 new Estado() { Codigo = "CN", Descripcion = "Cancelado", Orden = 6 }
-                
+
             );
             context.Aseguradoras.AddOrUpdate(
                 new Aseguradora() { Id = 1, Nombre = "Bolivar" },
                 new Aseguradora() { Id = 2, Nombre = "Mapfre" },
                 new Aseguradora() { Id = 3, Nombre = "Axa" }
             );
-            context.Conductores.AddOrUpdate(
-                new Conductor()
-                {
-                    Id = 1,
-                    Nombre = "Javier conductor martinez",
-                    Email = "wi_alejo@hotmail.com",
-                    TipoIdentificacion = "CC",
-                    Identificacion = 1018421359,
-                    Telefono1 = "3112150087",
-                    Direccion = "Cra 51 # 66a 22 Br San miguel",
-                    Activo = true
-                });
+            //context.Conductores.AddOrUpdate(
+            //    new Conductor()
+            //    {
+            //        Id = 1,
+            //        Nombre = "Javier conductor martinez",
+            //        Email = "wi_alejo@hotmail.com",
+            //        TipoIdentificacion = "CC",
+            //        Identificacion = 1018421359,
+            //        Telefono1 = "3112150087",
+            //        Direccion = "Cra 51 # 66a 22 Br San miguel",
+            //        Activo = true
+            //    });
 
-            context.Asegurados.AddOrUpdate(
-                new Asegurado() { Id = 1, Nombre = "Asegurado 1" }
-            );
+            //context.Asegurados.AddOrUpdate(
+            //    new Asegurado() { Id = 1, Nombre = "Asegurado 1" }
+            //);
 
             //context.Cuentas.AddOrUpdate(new Cuenta
             //{
@@ -83,17 +81,17 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
             {
                 Id = 1,
                 Descripcion = "ControlDrive",
-                CorreoSalida = "wi_alejo@hotmail.com",
-                NombreMostrar = "ControlDrive",
-                CorreoRespuesta = "wi_alejo@hotmail.com",
-                NombreServidor = "smtp.live.com",
-                NombreServidorIMAP = "controldrive.com.co",
-                NombreServidorPOP = "controldrive.com.co",
-                NombreServidorSMPT = "smtp.live.com",
-                Puerto = 25,
+                CorreoSalida = "arhcontroldrive@gmail.com",
+                NombreMostrar = "ARH - ControlDrive",
+                CorreoRespuesta = "arhcontroldrive@gmail.com",
+                NombreServidor = "smtp.gmail.com",
+                NombreServidorIMAP = "smtp.gmail.com",
+                NombreServidorPOP = "smtp.gmail.com",
+                NombreServidorSMPT = "smtp.gmail.com",
+                Puerto = 587,
                 Ssl = true,
-                Usuario = "wi_alejo@hotmail.com",
-                Contrasena = "Alejo123"
+                Usuario = "arhcontroldrive@gmail.com",
+                Contrasena = "Loreka8812"
             });
         }
     }

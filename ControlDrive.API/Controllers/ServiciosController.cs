@@ -37,11 +37,7 @@ namespace ControlDrive.API.Controllers
 
             return servicios;
         }
-
         
-
-
-
         [Route("api/servicios/ServiciosByPeriodo")]
         [HttpPost]
         public IQueryable<Servicio> GetServiciosByPeriodo([FromBody]Periodo Fecha)
@@ -64,7 +60,6 @@ namespace ControlDrive.API.Controllers
             periodo.Fin = Fecha.Date.AddDays(1) + tf;
             return periodo;
         }
-
 
         //GET: api/Servicios/5
         [ResponseType(typeof(Servicio))]
@@ -93,11 +88,22 @@ namespace ControlDrive.API.Controllers
                 return BadRequest();
             }
 
-            servicio.ConductorId = servicio.Conductor.Id;
-            db.Entry(servicio.Conductor).State = servicio.Conductor.Id == 0 ? EntityState.Added : EntityState.Modified;
-            
+            if (servicio.Conductor != null)
+            {
+                servicio.ConductorId = servicio.Conductor.Id;
+                servicio.Conductor = null;
+            }
+
+            if (servicio.Ruta != null)
+            {
+                servicio.RutaId = servicio.Ruta.Id;
+                servicio.Ruta = null;
+            }
+
             servicio.Aseguradora = null;
             servicio.Seguimientos = null;
+
+
             servicio.DireccionInicio.CiudadId = servicio.DireccionInicio.Ciudad.Id;
             servicio.DireccionDestino.CiudadId = servicio.DireccionDestino.Ciudad.Id;
             servicio.DireccionInicio.Ciudad = null;
@@ -143,8 +149,19 @@ namespace ControlDrive.API.Controllers
             //   var NuevaAseguradora = db.Aseguradoras.Add(servicio.Aseguradora);
             //   servicio.AseguradoraId = NuevaAseguradora.Id;
             //}
-            servicio.ConductorId = servicio.Conductor.Id;
-            db.Entry(servicio.Conductor).State = servicio.Conductor.Id == 0 ? EntityState.Added : EntityState.Modified;
+
+            if (servicio.Conductor != null)
+            {
+                servicio.ConductorId = servicio.Conductor.Id;
+                servicio.Conductor = null;
+            }
+
+            if (servicio.Ruta != null)
+            {
+                servicio.RutaId = servicio.Ruta.Id;
+                servicio.Ruta = null;
+            }
+
 
             if (servicio.AseguradoId == 0)
             {
@@ -164,7 +181,6 @@ namespace ControlDrive.API.Controllers
             return CreatedAtRoute("DefaultApi", new { id = servicio.Id }, servicio);
         }
 
-
         //POST: api/Servicios
         //[ResponseType(typeof(Servicio))]
         [Route("api/servicios/EnviarCorreoSeguimiento")]
@@ -172,55 +188,172 @@ namespace ControlDrive.API.Controllers
         public IHttpActionResult EnviarCorreoSeguimiento([FromBody]ICollection<Servicio> servicios)
         {
             IEnumerable<Conductor> Conductores = servicios.DistinctBy(s => s.ConductorId).Select(c => c.Conductor);
-            var correos = new List<Correo>();
-            var cuenta = db.Cuentas.FirstOrDefault();
+            var correosDeServiciosPorConductor = CrearCorreosDeServiciosPorConductor(Conductores, servicios);
+            EnviarCorreos(correosDeServiciosPorConductor);
 
-            foreach (var conductor in Conductores)
+            return Ok();
+        }
+
+        //POST: api/Servicios
+        //[ResponseType(typeof(Servicio))]
+        [Route("api/servicios/EnviarCorreoRutaSeguimiento")]
+        [HttpPost]
+        public IHttpActionResult EnviarCorreoRutaSeguimiento([FromBody]ICollection<Servicio> servicios)
+        {
+            IEnumerable<Conductor> Rutas = servicios.DistinctBy(s => s.RutaId).Select(c => c.Ruta);
+
+            var correosDeServiciosPorRuta = CrearCorreosDeServiciosPorRuta(Rutas, servicios);
+            EnviarCorreos(correosDeServiciosPorRuta);
+
+            return Ok();
+        }
+
+
+        private void EnviarCorreos(List<Correo> correos)
+        {
+            var cuenta = db.Cuentas.FirstOrDefault();
+            var SmtpClient = Smtp.IniciarSmtpClient(cuenta);
+            Smtp.EnviarMensajesAClienteSMTP(correos, cuenta, SmtpClient);
+        }
+
+        private List<Correo> CrearCorreosDeServiciosPorConductor(IEnumerable<Conductor> conductores, ICollection<Servicio> servicios)
+        {
+            var correosDeServiciosPorConductor = new List<Correo>();
+            foreach (var conductor in conductores)
             {
-                string mensaje = "<p>Servicios asignados:</p>";
+                string mensaje = "<p>Servicios asignados a: "+ conductor.Nombre +"</p>";
                 string destinatarios = string.Empty;
                 var Servicios = servicios.Where(s => s.ConductorId == conductor.Id);
                 destinatarios += string.Format("\"{0}\"<{1}>;", conductor.Nombre, conductor.Email);
 
-                foreach (var servicio in Servicios)
-                {
-                    mensaje += string.Format(@"
-                            <div style='margin:10px'>
-                            <hr>
-                            <ul>
-                                <li><span style='font-weight:bold;'>Id: </span><span>{15}</span></li>
-                                <li><span style='font-weight:bold;'>Fecha y Hora: </span><span>{0}</span></li>
-                                <li><span style='font-weight:bold;'>Consecutivo: </span><span>{1}</span></li>
-                                <li><span style='font-weight:bold;'>Aseguradora: </span><span>{2}</span></li>
-                                <br>                                                     
-                                <li><span style='font-weight:bold;'>Asegurado: </span><span>{3} Tel: {4} - {5}</span></li>
-                                <li><span style='font-weight:bold;'>Vehiculo: </span><span>{6} - {7} - {8}</span></li>
-                                <br>
-                                <li><span style='font-weight:bold;'>Dirección inicio: </span><span>{9}, {10}, {11}</span></li>
-                                <li><span style='font-weight:bold;'>Dirección destino: </span><span>{12}, {13}, {14}</span></li>
-                            </ul>
-                            </div>
-                    ", servicio.Fecha.ToString(), servicio.Radicado, servicio.Aseguradora.Nombre,
-                        servicio.Asegurado.Nombre, servicio.Asegurado.Telefono1, servicio.Asegurado.Telefono2,
-                        servicio.Vehiculo.Placa, servicio.Vehiculo.Marca, servicio.Vehiculo.Observaciones,
-                        servicio.DireccionInicio.Descripcion, servicio.DireccionInicio.Barrio, servicio.DireccionInicio.Ciudad.Nombre,
-                        servicio.DireccionDestino.Descripcion, servicio.DireccionDestino.Barrio, servicio.DireccionDestino.Ciudad.Nombre,
-                        servicio.Id.ToString()
-                        );
-                }
+                mensaje += ConstruirHtmlServicios(Servicios);
+
                 var correo = new Correo()
                 {
                     CORdestinatarios = destinatarios,
-                    CuentaId = cuenta.Id,
                     CORasunto = "Servicios de conductor elegido asignados",
                     CORmensajeHTML = mensaje
                 };
-                correos.Add(correo);
+                correosDeServiciosPorConductor.Add(correo);
             }
-            var SmtpClient = Smtp.IniciarSmtpClient(cuenta);
-            Smtp.EnviarMensajesAClienteSMTP(correos, cuenta, SmtpClient);
-            return Ok();
+            return correosDeServiciosPorConductor;
         }
+
+        private List<Correo> CrearCorreosDeServiciosPorRuta(IEnumerable<Conductor> rutas, ICollection<Servicio> servicios)
+        {
+            var correosDeServiciosPorConductor = new List<Correo>();
+            foreach (var ruta in rutas)
+            {
+                string mensaje = "<p>Servicios de la ruta: "+ ruta.Nombre +"</p>";
+                string destinatarios = string.Empty;
+                var Servicios = servicios.Where(s => s.RutaId == ruta.Id);
+                destinatarios += string.Format("\"{0}\"<{1}>;", ruta.Nombre, ruta.Email);
+
+                mensaje += ConstruirHtmlServicios(Servicios);
+
+                var correo = new Correo()
+                {
+                    CORdestinatarios = destinatarios,
+                    CORasunto = "Servicios asignados a su ruta",
+                    CORmensajeHTML = mensaje
+                };
+                correosDeServiciosPorConductor.Add(correo);
+            }
+            return correosDeServiciosPorConductor;
+        }
+
+        private string ConstruirHtmlServicios(IEnumerable<Servicio> Servicios)
+        {
+            string mensaje = @"
+                                <style>
+                                    table {
+                                        border-collapse: collapse;
+                                        color:darkgray;
+                                        font-size:12px;
+                                        width:100%;
+                                    }
+
+                                    table, th, td {
+                                        border: 1px solid lightgray;
+                                        padding: 2px;
+                                    }
+                                </style>
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Feha y hora</th>
+                                            <th>Consecutivo</th>
+                                            <th>Aseguradora</th>
+
+                                            <th>Asegurado</th>
+                                            <th>Vehiculo</th>
+
+                                            <th>Origen/destino</th>
+                                            <th>Conductor</th>
+                                            <th>Ruta</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>";
+
+            foreach (var servicio in Servicios)
+            {
+                if (servicio.Ruta == null)
+                    servicio.Ruta = new Conductor();
+                if (servicio.Conductor == null)
+                    servicio.Conductor = new Conductor();
+
+                mensaje += string.Format(@"
+                                        <tr>
+                                            <td>{0}</td>
+                                            <td>{1}</td>
+                                            <td>{2}</td>
+                                            <td>{3}</td>
+
+                                            <td>{4}</td>
+                                            <td>{5}</td>
+
+                                            <td>{6}</td>
+                                            <td>{7}</td>
+                                            <td>{8}</td>
+                                        </tr>
+                    ", 
+                    servicio.Id.ToString(), 
+                    servicio.Fecha.ToString("HH:mm MM/dd/yyyy"), 
+                    servicio.Radicado, 
+                    servicio.Aseguradora.Nombre,
+                    
+                    servicio.Asegurado.Nombre + 
+                    (!string.IsNullOrEmpty(servicio.Asegurado.Telefono1) ? ", " + servicio.Asegurado.Telefono1 : "") +
+                    (!string.IsNullOrEmpty(servicio.Asegurado.Telefono2) ? ", " + servicio.Asegurado.Telefono2 : ""),
+
+                    
+                    servicio.Vehiculo.Placa +
+                    (!string.IsNullOrEmpty(servicio.Vehiculo.Marca) ? ", " + servicio.Vehiculo.Marca : "") +
+                    (!string.IsNullOrEmpty(servicio.Vehiculo.Referencia) ? ", " + servicio.Vehiculo.Referencia : "") +
+                    (!string.IsNullOrEmpty(servicio.Vehiculo.Observaciones) ? ", " + servicio.Vehiculo.Observaciones : ""),
+
+
+                    "<strong>Inicio: </strong>" + servicio.DireccionInicio.Descripcion +
+                    (!string.IsNullOrEmpty(servicio.DireccionInicio.Barrio) ? ", " + servicio.DireccionInicio.Barrio: "") +
+                    (!string.IsNullOrEmpty(servicio.DireccionInicio.Ciudad.Nombre) ? ", " + servicio.DireccionInicio.Ciudad.Nombre : "") +
+
+                    "<strong><br/>Destino: </strong>" + servicio.DireccionDestino.Descripcion +
+                    (!string.IsNullOrEmpty(servicio.DireccionDestino.Barrio) ? ", " + servicio.DireccionDestino.Barrio : "") +
+                    (!string.IsNullOrEmpty(servicio.DireccionDestino.Ciudad.Nombre) ? ", " + servicio.DireccionDestino.Ciudad.Nombre : ""),
+
+                    (!string.IsNullOrEmpty(servicio.Conductor.Nombre) ? servicio.Conductor.Nombre : "") +  
+                    (!string.IsNullOrEmpty(servicio.Conductor.Telefono1) ? ", " + servicio.Conductor.Telefono1 : ""),
+                    (!string.IsNullOrEmpty(servicio.Ruta.Nombre) ? servicio.Ruta.Nombre : "")+
+                    (!string.IsNullOrEmpty(servicio.Ruta.Telefono1) ? ", " + servicio.Ruta.Telefono1 : "")
+                    );
+            }
+            return mensaje + "</tbody></table>";
+        }
+
+
+
 
         //DELETE: api/Servicios/5
         [ResponseType(typeof(Servicio))]
