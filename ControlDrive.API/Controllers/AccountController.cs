@@ -328,7 +328,7 @@ namespace ControlDrive.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.userName, Email = model.Email };
+            var user = new ApplicationUser() { UserName = model.userName, Email = model.Email, Nombre = model.nombre };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

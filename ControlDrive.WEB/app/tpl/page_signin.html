@@ -4,7 +4,7 @@
     <div class="wrapper text-center">
       <strong>Iniciar sesión</strong>
     </div>
-    <form name="form" class="form-validation">
+    <form name="form" class="form-validation" ng-submit="login()" >
       <div class="text-danger wrapper text-center" ng-show="message">
           {{message}}
       </div>
@@ -16,7 +16,7 @@
            <input type="password" placeholder="Contraseña" class="form-control no-border" ng-model="loginData.password" required>
         </div>
       </div>
-      <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="login()" 
+      <button type="submit" class="btn btn-lg btn-primary btn-block" 
               ng-disabled='form.$invalid'>Iniciar</button>
       <div class="text-center m-t m-b"><a ui-sref="access.forgotpwd">¿Olvido su contraseña?</a></div>
     </form>

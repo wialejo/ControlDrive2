@@ -27,7 +27,7 @@ namespace ControlDrive.API.Controllers
         //GET: api/Servicios
         public IQueryable<Servicio> GetServicios()
         {
-            var servicios = db.Servicios;
+            var servicios = db.Servicios.OrderBy(s => s.Fecha);
             //var servicios = from s in db.Servicios
             //                join c in db.Conductores on s.ConductorId equals c.Id
             //                join a in db.Aseguradoras on s.AseguradoraId equals a.Id
@@ -44,9 +44,9 @@ namespace ControlDrive.API.Controllers
         {
             Periodo periodo = ObtenerPeriodo(Convert.ToDateTime(Fecha.Inicio));
 
-            var servicios = from s in db.Servicios
-                            where s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin
-                            select s;
+            var servicios = (from s in db.Servicios
+                            where s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin && s.Estado.Codigo != "AN"
+                            select s).OrderBy(s => s.Fecha);
             return servicios;
         }
 
@@ -320,7 +320,7 @@ namespace ControlDrive.API.Controllers
                                         </tr>
                     ", 
                     servicio.Id.ToString(), 
-                    servicio.Fecha.ToString("HH:mm MM/dd/yyyy"), 
+                    servicio.Fecha.ToString("HH:mm dd/MM/yyyy"), 
                     servicio.Radicado, 
                     servicio.Aseguradora.Nombre,
                     

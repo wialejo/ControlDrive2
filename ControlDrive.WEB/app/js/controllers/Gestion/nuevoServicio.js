@@ -1,5 +1,5 @@
-﻿app.controller('nuevoServicioController', ['$scope', '$http', '$filter', '$state', 'toaster' , 
-    function ($scope,  $http, $filter, $state, toaster) {
+﻿app.controller('nuevoServicioController', ['$scope', '$http', '$filter', '$state', 'toastr',
+    function ($scope, $http, $filter, $state, toastr) {
     var urlApiServicios = ApiUrl + "api/servicios";
     var urlApiConductores = ApiUrl + "api/conductores";
     var urlApiCiudades = ApiUrl + "api/Ciudades";
@@ -28,7 +28,7 @@
         var d = servicio.FechaD.split("/").slice(0, 3).reverse();
         var fecha = new Date(d[1] + "/" + d[2] + "/" + d[0] + " " + servicio.Hora)
         if (fecha == "Invalid Date") {
-            alert("Fecha no valida")
+            toastr.warning('Fecha no valida.');
             return; 
         }
 
@@ -38,12 +38,11 @@
             $http.put(urlApiServicios + "/" + servicio.Id, servicio).
             then(function (response) {
                 $scope.isSaving = false;
-                alert('Servicio actualizado correctamente.');
-                toaster.pop('success', 'Servicios', 'Servicio actualizado correctamente.');
+                toastr.success('Servicio actualizado correctamente.');
                 $scope.servicio = {};
             }, function (response) {
                 $scope.isSaving = false;
-                alert(response.data.ExceptionMessage);
+                toastr.error(response.data.ExceptionMessage);
             });
         }
         else {
@@ -51,14 +50,14 @@
             $http.post(urlApiServicios, servicio).
                 then(function (response) {
                     if (response.status == 201) {
-                        alert("Servicio registrado correctamente.");
+                        toastr.success('Servicio registrado correctamente.');
                         $scope.servicio = response.data;
                     } else {
                         alert(response.statusText);
                     }
                     $scope.isSaving = false;
                 }, function (response) {
-                    alert(response.data.ExceptionMessage);
+                    toastr.error(response.data.ExceptionMessage);
                     $scope.isSaving = false;
                 });
         }
@@ -68,7 +67,7 @@
             then(function (response) {
                 $scope.ciudades = response.data;
             }, function (response) {
-                //alert(response.data.ExceptionMessage);
+                //toastr.error(response.data.ExceptionMessage);
             });
     }()
     $scope.ObtenerConductores = function () {
@@ -76,7 +75,7 @@
             then(function (response) {
                 $scope.conductores = response.data;
             }, function (response) {
-                //alert(response.data.ExceptionMessage);
+                //toastr.error(response.data.ExceptionMessage);
             });
     }()
     $scope.ObtenerRutas = function () {
@@ -84,7 +83,7 @@
             then(function (response) {
                 $scope.rutas = response.data;
             }, function (response) {
-                //alert(response.data.ExceptionMessage);
+                //toastr.error(response.data.ExceptionMessage);
             });
     }();
     if ($state.params.servicio != null) {

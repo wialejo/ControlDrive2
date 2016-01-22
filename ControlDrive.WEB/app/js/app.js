@@ -18,5 +18,6 @@ angular.module('app', [
     'ui.jq',
     'oc.lazyLoad',
     'ngMaterial',
-    'angular.filter'
+    'angular.filter',
+    'toastr'
 ]);

@@ -1,4 +1,4 @@
-﻿app.controller('seguimientoController', ['$scope','$filter', '$http', '$modal', '$state', function ($scope, $filter, $http, $modal, $state) {
+﻿app.controller('seguimientoController', ['$scope', '$filter', '$http', '$modal', '$state','toastr', function ($scope, $filter, $http, $modal, $state, toastr) {
     var ApiUrlSeguimientos = ApiUrl + 'api/seguimientos/';
     $scope.servicio = {};
     $scope.servicios = [];
@@ -26,10 +26,9 @@
 
         $http.put(urlApi + "/" + $scope.servicio.Id, $scope.servicio).
         then(function (response) {
-            alert("actualizado");
-            //toaster.pop('success', '', 'Servicio actualizado correctamente.');
+            toastr.success('Servicio actualizado correctamente.');
         }, function (response) {
-            alert(response.data.ExceptionMessage);
+            toastr.error(response.data.ExceptionMessage);
         });
     }
     $scope.GuardarSeguimiento = function () {
@@ -47,7 +46,7 @@
                 $scope.isSaving = false;
             }, function (response) {
                 $scope.isSaving = false;
-                alert(response.data.ExceptionMessage);
+                toastr.error(response.data.ExceptionMessage);
             });
     }
     $scope.ObtenerSeguimientos = function () {
@@ -55,7 +54,7 @@
               then(function (response) {
                   $scope.servicio.Seguimientos = response.data;
               }, function (response) {
-                  alert(response.data.ExceptionMessage);
+                  toastr.error(response.data.ExceptionMessage);
               });
     }
 
@@ -64,7 +63,7 @@
               then(function (response) {
                   $scope.estados = response.data;
               }, function (response) {
-                  alert(response.data.ExceptionMessage);
+                  toastr.error(response.data.ExceptionMessage);
               });
     }
 
@@ -79,7 +78,7 @@
               then(function (response) {
                   $scope.servicios = response.data;
               }, function (response) {
-                  alert(response.data.ExceptionMessage);
+                  toastr.error(response.data.ExceptionMessage);
               });
     }
     $scope.ObtenerServicios();
@@ -116,34 +115,39 @@
     $scope.EnviarCorreoConductor = function () {
         var serviciosSeleccionados = [];
         angular.forEach($scope.serviciosActivos, function (servicio) {
-            if (servicio.Seleccionado)
+            if (servicio.Seleccionado && servicio.Conductor)
                 serviciosSeleccionados.push(servicio);
         });
-        var urlApiServicios = ApiUrl + "/api/servicios/EnviarCorreoSeguimiento";
-
-        //http://localhost/API2/api/servicios/EnviarCorreoSeguimiento
-        $http.post(urlApiServicios, serviciosSeleccionados)
-            .then(function (response) {
-                alert("Enviado");
-            }, function (response) {
-                alert(response.data.ExceptionMessage);
-            });
+        
+        if (serviciosSeleccionados.length > 0) {
+            var urlApiServicios = ApiUrl + "/api/servicios/EnviarCorreoSeguimiento";
+            $http.post(urlApiServicios, serviciosSeleccionados)
+                .then(function (response) {
+                    toastr.success('Correo enviado correctamente.');
+                }, function (response) {
+                    toastr.error(response.data.ExceptionMessage);
+                });
+        }
+        else {
+            toastr.warning('El servicio seleccionado no tiene asignado un conductor.');
+        }
     }
     $scope.EnviarCorreoRuta = function () {
         var serviciosSeleccionados = [];
         angular.forEach($scope.serviciosActivos, function (servicio) {
-            if (servicio.Seleccionado)
+            if (servicio.Seleccionado && servicio.Ruta)
                 serviciosSeleccionados.push(servicio);
         });
-        var urlApiServicios = ApiUrl + "/api/servicios/EnviarCorreoRutaSeguimiento";
-
-        //http://localhost/API2/api/servicios/EnviarCorreoSeguimiento
-        $http.post(urlApiServicios, serviciosSeleccionados)
-            .then(function (response) {
-                alert("Enviado");
+        if (serviciosSeleccionados.length > 0) {
+            var urlApiServicios = ApiUrl + "/api/servicios/EnviarCorreoRutaSeguimiento";
+            $http.post(urlApiServicios, serviciosSeleccionados).then(function (response) {
+                toastr.success('Correo enviado a ruta correctamente.');
             }, function (response) {
-                alert(response.data.ExceptionMessage);
+                toastr.error(response.data.ExceptionMessage);
             });
+        } else {
+            toastr.warning('El servicio seleccionado no tiene asignada una ruta.');
+        }
     }
 
     $scope.Seleccionar = function (seleccion) {

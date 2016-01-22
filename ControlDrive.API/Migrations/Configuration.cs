@@ -35,7 +35,8 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 new Estado() { Codigo = "EC", Descripcion = "En curso", Orden = 3 },
                 new Estado() { Codigo = "TE", Descripcion = "Terminado", Orden = 4 },
                 new Estado() { Codigo = "FL", Descripcion = "Fallido", Orden = 5 },
-                new Estado() { Codigo = "CN", Descripcion = "Cancelado", Orden = 6 }
+                new Estado() { Codigo = "CN", Descripcion = "Cancelado", Orden = 6 },
+                new Estado() { Codigo = "AN", Descripcion = "Anulado", Orden = 7 }
 
             );
             context.Aseguradoras.AddOrUpdate(
