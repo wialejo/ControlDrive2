@@ -12,8 +12,8 @@
     var dia = date.getDate();
     dia = dia < 10 ? "0" + dia.toString() : dia;
     var fechaActual = (dia + '/' + mes + '/' + date.getFullYear());
-    //$scope.periodo = fechaActual;
-    $scope.periodo = "23/11/2015";
+    $scope.periodo = fechaActual;
+//    $scope.periodo = "23/11/2015";
     
     $scope.VerSeguimientos = function (servicio) {
         $scope.servicio = servicio;
@@ -42,7 +42,9 @@
         $http.post(ApiUrlSeguimientos, $scope.seguimiento)
             .then(function (response) {
                 $scope.seguimiento = {};
-                $scope.ObtenerSeguimientos();
+                //$scope.ObtenerSeguimientos();
+                toastr.success('Seguimiento guardado correctamente.');
+                $scope.ObtenerServicios();
                 $scope.isSaving = false;
             }, function (response) {
                 $scope.isSaving = false;

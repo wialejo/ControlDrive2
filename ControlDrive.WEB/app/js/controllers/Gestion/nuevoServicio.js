@@ -18,7 +18,11 @@
     var dia = date.getDate();
     dia = dia < 10 ? "0" + dia.toString() : dia;
     var fechaActual = (dia + '/' + mes + '/' + date.getFullYear());
-        
+
+    $scope.recargar = function () {
+        $state.go($state.current, {}, { reload: true });
+    }
+
     $scope.isSaving = false;
     $scope.servicio.FechaD = fechaActual;
     $scope.Guardar = function (servicio) {
@@ -51,7 +55,8 @@
                 then(function (response) {
                     if (response.status == 201) {
                         toastr.success('Servicio registrado correctamente.');
-                        $scope.servicio = response.data;
+                        //$scope.servicio = response.data;
+                        $scope.recargar();
                     } else {
                         alert(response.statusText);
                     }

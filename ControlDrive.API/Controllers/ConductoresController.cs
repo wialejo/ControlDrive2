@@ -19,15 +19,14 @@ namespace ControlDrive.API.Controllers
         // GET: api/Conductores
 
         [Authorize]
-        [HttpGet]
-        public IHttpActionResult Obtener()
+        public IQueryable<Conductor> GetConductores()
         {
-            return Ok(db.Conductores);
+            return db.Conductores;
         }
 
         // GET: api/Conductores/5
-        [HttpGet]
-        public IHttpActionResult ObtenerporId(int id)
+        [ResponseType(typeof(Conductor))]
+        public IHttpActionResult GetConductor(int id)
         {
             Conductor conductor = db.Conductores.Find(id);
             if (conductor == null)

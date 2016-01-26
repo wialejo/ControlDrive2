@@ -17,13 +17,20 @@ namespace ControlDrive.API.Controllers
     public class SeguimientosController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        
-        [HttpGet]
-        public IHttpActionResult ObtenerPorServicio(int id)
+
+        // GET: api/Seguimientos
+        public IQueryable<Seguimiento> GetSeguimientos()
+        {
+            return db.Seguimientos;
+        }
+
+        // GET: api/Seguimientos/5
+        [ResponseType(typeof(Seguimiento))]
+        public IQueryable<Seguimiento> GetSeguimientos(int id)
         {
             var idServicio = id;
             var seguimiento = db.Seguimientos.Where(s => s.ServicioId == idServicio);
-            return Ok(seguimiento);
+            return seguimiento;
         }
 
         // PUT: api/Seguimientos/5

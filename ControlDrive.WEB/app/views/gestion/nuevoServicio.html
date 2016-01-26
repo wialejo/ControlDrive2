@@ -14,7 +14,7 @@
                                     <div class="col-sm-2">
                                         <div class="form-group" ng-class="{ 'has-error' : form.TxtHora.$invalid  && !form.TxtHora.$pristine}">
                                             <label for="TxtHora">Hora*</label>
-                                            <input tabindex="1" ng-model="servicio.Hora" 
+                                            <input autofocus="autofocus" tabindex="1" ng-model="servicio.Hora" 
                                             ui-mask="99:99"  model-view-value="true" required type="text" class="form-control" id="TxtHora" name="TxtHora" placeholder="HH:mm">
                                         </div>
                                     </div>
@@ -82,7 +82,7 @@
                                         <div class="form-group" ng-class="{ 'has-error' : form.TxtPlaca.$invalid  && !form.TxtPlaca.$pristine}">
                                             <label for="TxtPlaca">Placa*</label>
                                             <input tabindex="10" ng-model="servicio.Vehiculo.Placa"
-                                                   ng-minlength="5"
+                                                   ng-minlength="3"
                                                    ng-maxlength="6"
                                                    required
                                                    title="Ingrese la placa del vehículo sin espacios"

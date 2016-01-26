@@ -166,7 +166,7 @@ angular.module('app')
       {
           name: 'smart-table',
           files: [
-              'libs/angular/angular-smart-table/dist/smart-table.js'
+              'libs/angular/angular-smart-table/dist/smart-table.min.js'
           ]
       },
       {

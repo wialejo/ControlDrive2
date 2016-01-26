@@ -1,12 +1,9 @@
-/*
+/* 
 
 */
 
 html {
   background-color: #f0f3f4;
-}
-.dl-horizontal {
-    text-align: left !important;
 }
 
 body {
@@ -2744,7 +2741,7 @@ fieldset[disabled] .i-checks input + i:before {
 }
 
 .st-selected td {
-  background: #d4d8d2 !important;
+  background: #f0f9ec !important;
 }
 
 .chosen-choices,
