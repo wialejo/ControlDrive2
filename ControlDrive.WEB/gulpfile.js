@@ -1,23 +1,29 @@
-﻿var gulp = require('gulp');
-var webserver = require('gulp-webserver')
-var minifyCSS = require('gulp-minify-css');
-var config = {
-    html: {
-        watch: './app/**/*.hml'
-    }
-}
+/**
+ *  Welcome to your gulpfile!
+ *  The gulp tasks are splitted in several files in the gulp directory
+ *  because putting all here was really too long
+ */
 
-gulp.task('watch', function () {
-    gulp.watch(config.html.watch)
+'use strict';
+
+var gulp = require('gulp');
+var wrench = require('wrench');
+
+/**
+ *  This will load all js or coffee files in the gulp directory
+ *  in order to load all gulp tasks
+ */
+wrench.readdirSyncRecursive('./gulp').filter(function(file) {
+  return (/\.(js|coffee)$/i).test(file);
+}).map(function(file) {
+  require('./gulp/' + file);
 });
 
-gulp.task('server', function () {
-    gulp.src('./')
-        .pipe(webserver({
-            host: '0.0.0.0',
-            port: 8080,
-            livereload: true
-        }));
-});
 
-gulp.task('default', ['server']);
+/**
+ *  Default task clean temporaries directories and launch the
+ *  main optimization build task
+ */
+gulp.task('default', ['clean'], function () {
+  gulp.start('build');
+});
