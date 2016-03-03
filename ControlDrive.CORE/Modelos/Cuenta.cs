@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ControlDrive.CORE.Modelos
 {
-    public class Cuenta
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
+
+    [Table("Cuenta")]
+    public partial class Cuenta
     {
-        public Cuenta()
-        {
-
-        }
-
-        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -61,6 +54,5 @@ namespace ControlDrive.CORE.Modelos
         [Required]
         [StringLength(50)]
         public string Contrasena { get; set; }
-
     }
 }

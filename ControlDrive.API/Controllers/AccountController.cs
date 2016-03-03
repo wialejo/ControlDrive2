@@ -13,11 +13,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using ControlDrive.API.Models;
-using ControlDrive.API.Providers;
-using ControlDrive.API.Results;
+using ControlDrive.Core.Modelos;
+using ControlDrive.Core.Providers;
+using ControlDrive.Core.Results;
 
-namespace ControlDrive.API.Controllers
+namespace ControlDrive.Core.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]

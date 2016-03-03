@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ControlDrive.API.Models
+namespace ControlDrive.Core.Modelos
 {
     // Models used as parameters to AccountController actions.
 

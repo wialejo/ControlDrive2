@@ -9,9 +9,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using ControlDrive.API.Models;
+using ControlDrive.Core.Modelos;
 
-namespace ControlDrive.API.Providers
+namespace ControlDrive.Core.Providers
 {
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
@@ -35,7 +35,7 @@ namespace ControlDrive.API.Providers
 
             if (user == null)
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                context.SetError("invalid_grant", "El usuario o la contraseña son incorrectos");
                 return;
             }
 

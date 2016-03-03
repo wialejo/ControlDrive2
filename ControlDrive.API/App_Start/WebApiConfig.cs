@@ -7,13 +7,13 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http.Cors;
 
-namespace ControlDrive.API
+namespace ControlDrive.Core
 {
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-           // EnableCrossSiteRequests(config);
+            //EnableCrossSiteRequests(config);
             AddRoutes(config);
         }
 
@@ -29,7 +29,7 @@ namespace ControlDrive.API
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional}
             );
         }
@@ -37,12 +37,12 @@ namespace ControlDrive.API
         private static void EnableCrossSiteRequests(HttpConfiguration config)
         {
             var cors = new EnableCorsAttribute(
-                origins: "*",
+                origins: "http://localhost:3000/",
                 headers: "*",
                 methods: "*");
             config.EnableCors(cors);
 
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+            //config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
         }
     }
 }

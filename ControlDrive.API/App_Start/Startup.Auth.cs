@@ -8,10 +8,10 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
-using ControlDrive.API.Providers;
-using ControlDrive.API.Models;
+using ControlDrive.Core.Providers;
+using ControlDrive.Core.Modelos;
 
-namespace ControlDrive.API
+namespace ControlDrive.Core
 {
     public partial class Startup
     {

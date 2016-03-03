@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(ControlDrive.API.Startup))]
+[assembly: OwinStartup(typeof(ControlDrive.Core.Startup))]
 
-namespace ControlDrive.API
+namespace ControlDrive.Core
 {
     public partial class Startup
     {

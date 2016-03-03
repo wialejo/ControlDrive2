@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ControlDrive.API.Models
+namespace ControlDrive.Core.Modelos
 {
     // Models returned by AccountController actions.
 

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace ControlDrive.API.Results
+namespace ControlDrive.Core.Results
 {
     public class ChallengeResult : IHttpActionResult
     {
