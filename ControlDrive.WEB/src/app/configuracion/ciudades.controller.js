@@ -2,7 +2,7 @@
 'use strict';
 angular.module('controldriveApp')
   .controller('CiudadesController', function (CiudadSvc, toastr, $scope) {
-    $scope.$parent.$parent.app.viewName = "Conductores";
+    $scope.$parent.$parent.app.viewName = "Ciudades";
     var vm = this;
     vm.esEdicion = false;
     vm.ciudades = [];
