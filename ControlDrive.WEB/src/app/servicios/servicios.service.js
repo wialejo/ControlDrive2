@@ -9,19 +9,18 @@
 				ObtenerParaSeguimiento: ObtenerParaSeguimiento,
 				ObtenerPorPeriodoCSV: ObtenerPorPeriodoCSV,
 				NotificarServiciosARuta: NotificarServiciosARuta,
-				NotificarServiciosAConductor : NotificarServiciosAConductor
+				NotificarServiciosAConductor: NotificarServiciosAConductor,
+				GuardarValores: GuardarValores,
+				Cerrar: Cerrar,
+			    Facturar: Facturar
 			}
 			function http(method, urlMetodo, data) {
 				var request = $http({
-				method: method,
-				url: ngAuthSettings.apiServiceBaseUri + 'api/' + urlMetodo,
-				headers: { 
-					'Access-Control-Allow-Origin':true	
-				},
-				data: data
-			});
-			// return (request.then(function (respuesta) { return respuesta }, ManejadorErrores.ResponseError));
-			return request;
+				    method: method,
+				    url: ngAuthSettings.apiServiceBaseUri + 'api/' + urlMetodo,
+				    data: data
+			    });
+			    return (request.then(function (respuesta) { return respuesta }, ManejadorErrores.ResponseError));
 			}
 			function Guardar(servicio) {
 				var url = "Servicio/Guardar/";
@@ -33,18 +32,19 @@
 				var obj = http("GET", url);
 				return obj
 			}
-			function Obtener(fechaInicial, fechaFinal) {
-				var url = "Servicio/Obtener";
+			function Obtener(fechaInicial, fechaFinal, estado) {
+			    var url = "servicio" + (estado ? "?estado=" + estado : "");
 				fechaFinal = fechaFinal + " 23:00"
 				var periodo = PeriodoSvc.FormatearParaApi(fechaInicial,fechaFinal);
 
 				var obj = http("POST", url, periodo);
 				return obj
 			}
+
 			function ObtenerParaSeguimiento(periodo) {
 				var periodo = PeriodoSvc.FormatearParaApi(periodo)
-				var url = "servicio/ObtenerParaSeguimiento/";
-				var obj = http("POST", url, periodo);
+				var url = "servicio";
+				var obj = http("POST", url, periodo)
 				return obj
 			}
 			function ObtenerStrCSV(periodo) {
@@ -53,13 +53,19 @@
 				return obj
 			}
 
-			function NotificarServiciosAConductor(servicios) {
-				var url = "servicio/NotificarServiciosAConductor/";
+			function NotificarServiciosAConductor(servicios, imprimir) {
+			    var url = "servicio/NotificarServiciosAConductor/";
+			    if (imprimir)
+			        url = "servicio/ObtenerHtmlServiciosAConductor/";
+
 				var obj = http("POST", url, servicios);
 				return obj
 			}
-			function NotificarServiciosARuta(servicios) {
-				var url = "servicio/NotificarServiciosARuta/";
+
+			function NotificarServiciosARuta(servicios, imprimir) {
+			    var url = "servicio/NotificarServiciosARuta/";
+			    if (imprimir)
+			        url = "servicio/ObtenerHtmlServiciosARuta/";
 				var obj = http("POST", url, servicios);
 				return obj
 			}
@@ -87,6 +93,24 @@
 				open('POST', url, periodo, '_blank');
 			}
 
+			function Cerrar(servicioId, valores) {
+			    var url = "servicio/" + servicioId + "/cerrar";
+			    var obj = http('PUT', url, valores);
+			    return obj;
+			}
+
+			function GuardarValores(servicioId, valores) {
+			    var url = "servicio/" + servicioId + "/valores";
+			    var obj = http('PUT', url, valores);
+
+			    return obj;
+			}
+
+			function Facturar(servicioId, noFactura) {
+			    var url = "servicio/" + servicioId + "/facturar/" + noFactura;
+			    var obj = http('PUT', url);
+			    return obj;
+			}
 		});
 })();
 

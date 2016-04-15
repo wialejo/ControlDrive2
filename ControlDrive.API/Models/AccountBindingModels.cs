@@ -51,7 +51,10 @@ namespace ControlDrive.Core.Modelos
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-        public string nombre { get; internal set; }
+
+        [Required]
+        [Display(Name = "Nombre")]
+        public string nombre { get; set; }
     }
 
     public class RegisterExternalBindingModel

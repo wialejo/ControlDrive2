@@ -17,8 +17,8 @@
 					},
 					data: data
 				});
-				return request;
-			}
+				return (request.then(function (respuesta) { return respuesta }, ManejadorErrores.ResponseError));
+            }
 			function Guardar(ciudad) {
 				var url = "Ciudades/Guardar/";
 				var obj = http('POST', url, ciudad );

@@ -25,7 +25,7 @@ namespace ControlDrive.CORE.Services
 
         public List<Estado> Obtener()
         {
-            var estados = _estadoRepositorio.GetAll().ToList();
+            var estados = _estadoRepositorio.GetAll().OrderBy(e=>e.Orden).ToList();
             return estados;
         }
 

@@ -763,7 +763,8 @@ body {
 .app-content-body {
   float: left;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
+  margin-top: 3px;
 }
 
 .app-footer {

@@ -58,28 +58,36 @@
                     .then(function(response){
                         $scope.aseguradoras = response.data;
                     })
-            }();
-
+            };
+            $scope.ObtenerAseguradoras();
+            
             $scope.ObtenerCiudades = function () {
                 CiudadSvc.Obtener()
                     .then(function (response) {
                         $scope.ciudades = response.data;
                     })
-            }()
+            }
+            $scope.ObtenerCiudades();
 
-            $scope.ObtenerConductores = function () {
-                ConductorSvc.Obtener()
-                    .then(function (response) {
-                        $scope.conductores = response.data;
-                    })
-            }()
+            $scope.ObtenerConductores = function (filtro) {
+                if (filtro) {
+                    ConductorSvc.ObtenerPorDescripcion(filtro)
+                        .then(function (response) {
+                            $scope.conductores = response.data;
+                        })
+                } else {
+                    $scope.conductores = [];
+                }
+            }
+
 
             $scope.ObtenerFechaSiguienteDia = function (hora) {
                 var bits = hora.split(':');
                 var horas = bits[0];
 
                 var date = new Date();
-                if(horas < 6){
+                var dateactual = new Date().getHours();
+                if (horas < 6 && dateactual > 6) {
                     $scope.CambioFecha = true ;
                     date.setDate(date.getDate() + 1);
                 }else{

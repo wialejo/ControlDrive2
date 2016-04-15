@@ -14,6 +14,7 @@ using ControlDrive.CORE.Modelos;
 
 namespace ControlDrive.Core.Controllers
 {
+    [Authorize]
     public class EstadosController : ApiController
     {
         private readonly ICommonInterface<Estado> _estadoService;

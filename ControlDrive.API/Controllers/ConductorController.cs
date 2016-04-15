@@ -14,6 +14,7 @@ using ControlDrive.CORE.Services;
 
 namespace ControlDrive.Core.Controllers
 {
+    [Authorize]
     public class ConductorController : ApiController
     {
         private readonly ICommonInterface<Conductor> _conductorSevice;
@@ -35,6 +36,12 @@ namespace ControlDrive.Core.Controllers
         {
             var conductor  = _conductorSevice.ObtenerPorId(id);
             return Ok(conductor);
+        }
+        [HttpGet]
+        public IHttpActionResult ObtenerPorDescripcion(string id)
+        {
+            var conductores  = _conductorSevice.ObtenerPorDescripcion(id);
+            return Ok(conductores);
         }
         
         // POST: api/Conductores

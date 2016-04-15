@@ -30,8 +30,8 @@
 					var date = new Date();
 					var horas = date.getHours();
 
-					if(horas < 6){
-					  date.setDate(date.getDate() + 1);
+					if (horas < 6 ) {
+					  date.setDate(date.getDate() - 1);
 					}
 
 					var mes = (date.getMonth() + 1);
@@ -42,6 +42,7 @@
 					var fechaSiguienteDia =  (dia + '/' + mes + '/' + date.getFullYear()); 
 					return fechaSiguienteDia;
 				}
+
 
 			});
 })();

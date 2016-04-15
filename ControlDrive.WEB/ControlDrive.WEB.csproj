@@ -168,6 +168,7 @@
     <Content Include="gulpfile.js" />
     <Content Include="karma.conf.js" />
     <Content Include="protractor.conf.js" />
+    <Content Include="src\apple-touch-icon.png" />
     <Content Include="src\app\account\authInterceptorService.js" />
     <Content Include="src\app\account\authService.js" />
     <Content Include="src\app\account\login.controller.js" />
@@ -206,8 +207,9 @@
     <Content Include="src\app\content\img\no_user.jpg" />
     <Content Include="src\app\content\simple-line-icons\css\simple-line-icons.css" />
     <Content Include="src\app\content\simple-line-icons\fonts\Simple-Line-Icons.svg" />
+    <Content Include="src\app\facturacion\facturacion.controller.js" />
+    <Content Include="src\app\facturacion\facturacion.html" />
     <Content Include="src\app\index.config.js" />
-    <Content Include="src\app\index.constants.js" />
     <Content Include="src\app\index.css" />
     <Content Include="src\app\index.module.js" />
     <Content Include="src\app\index.route.js" />
@@ -222,6 +224,8 @@
     <Content Include="src\app\main\page_forgotpwd.html" />
     <Content Include="src\app\main\page_lockme.html" />
     <Content Include="src\app\servicios\aseguradoras.service.js" />
+    <Content Include="src\app\servicios\cierre.controller.js" />
+    <Content Include="src\app\servicios\cierre.html" />
     <Content Include="src\app\servicios\consultaServicios.controller.js" />
     <Content Include="src\app\servicios\consultaServicios.html" />
     <Content Include="src\app\servicios\editarServicio.controller.js" />

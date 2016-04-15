@@ -18,11 +18,11 @@
                     break;
                 }
                 case 404: {
-                    return ($q.reject("Error Presentado, Descripción: Servicio no encontrado."));
+                    return ($q.reject("Servicio no encontrado."));
                     break;
                 }
                 default: {
-                    return ($q.reject("Error Presentado, Descripción: " + rejection.data.ExceptionMessage));
+                    return ($q.reject("Error: " + rejection.data.ExceptionMessage));
                     break;
                 }
             }

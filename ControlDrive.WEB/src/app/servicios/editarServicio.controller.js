@@ -57,26 +57,32 @@
                     });
             }
 
-            $scope.ObtenerAseguradoras = function(){
+            $scope.ObtenerAseguradoras = function () {
                 AseguradoraSvc.Obtener()
-                    .then(function(response){
+                    .then(function (response) {
                         $scope.aseguradoras = response.data;
                     })
-            }();
+            };
+            $scope.ObtenerAseguradoras();
 
             $scope.ObtenerCiudades = function () {
                 CiudadSvc.Obtener()
                     .then(function (response) {
                         $scope.ciudades = response.data;
                     })
-            }()
+            }
+            $scope.ObtenerCiudades();
 
-            $scope.ObtenerConductores = function () {
-                ConductorSvc.Obtener()
-                    .then(function (response) {
-                        $scope.conductores = response.data;
-                    })
-            }()
+            $scope.ObtenerConductores = function (filtro) {
+                if (filtro) {
+                    ConductorSvc.ObtenerPorDescripcion(filtro)
+                        .then(function (response) {
+                            $scope.conductores = response.data;
+                        })
+                } else {
+                    $scope.conductores = [];
+                }
+            }
 
             $scope.Inicio()
         });

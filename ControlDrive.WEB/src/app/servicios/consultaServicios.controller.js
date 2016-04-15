@@ -2,7 +2,7 @@
 'use strict';
   angular
     .module('controldriveApp')
-        .controller('ConsultaServiciosController', function (ServicioSvc, $window, $filter, $state, $scope, FechaSvc) {
+        .controller('ConsultaServiciosController', function (ServicioSvc, $window, $filter, $state, $scope, FechaSvc, toastr) {
 
         var vm = this;
         vm.servicio = {};
@@ -19,15 +19,13 @@
                     vm.servicios = response.data;
 
                 }, function (response) {
-                   alert(response.data.ExceptionMessage);
+                    toastr.error(response.data.ExceptionMessage);
                 });
         }
-        vm.ObtenerServicios(),
         vm.Editar = function (servicio) {
-            var url = $state.href('app.editar', { id: servicio.Id })
-            $window.open(url,'_blank');
-
-            // $state.go('app.editar', { id: servicio.Id })
+            //var url = $state.href('app.editar', { id: servicio.Id })
+            //$window.open(url,'_blank');
+            $state.go('app.editar', { id: servicio.Id })
         }
 
     });

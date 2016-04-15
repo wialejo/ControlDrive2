@@ -16,6 +16,7 @@ using ControlDrive.CORE.Modelos;
 
 namespace ControlDrive.Core.Controllers
 {
+    [Authorize]
     public class SeguimientosController : ApiController
     {
         private readonly ICommonInterface<Seguimiento> _seguimientoService;

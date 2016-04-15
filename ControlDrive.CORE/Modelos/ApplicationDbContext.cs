@@ -63,6 +63,12 @@ namespace ControlDrive.Core.Modelos
             modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
             modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
 
+            modelBuilder.Entity<Servicio>()
+                .HasOptional(s => s.valores)
+                .WithRequired(s => s.servicio)
+                .WillCascadeOnDelete(false);
+
+
 
 
             //modelBuilder.Entity<Servicio>()
@@ -70,8 +76,8 @@ namespace ControlDrive.Core.Modelos
 
             //modelBuilder.Entity<Servicio>()
             //    .HasOptional(C => C.Conductor);
-            
-            
+
+
 
             //modelBuilder.Entity<Direccion>()
             //    .HasRequired(C => C.Ciudad)

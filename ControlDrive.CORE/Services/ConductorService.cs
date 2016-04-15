@@ -31,7 +31,10 @@ namespace ControlDrive.CORE.Services
 
         public List<Conductor> ObtenerPorDescripcion(string descripcion)
         {
-            var conductores = _conductorRepositorio.FindBy(c => c.Nombre.Contains(descripcion)).ToList();
+            var conductores = _conductorRepositorio.FindBy(c => c.Nombre.ToLower().Contains(descripcion.ToLower()))
+                .Where(c => c.Activo == true)
+                .Take(10)
+                .ToList();
             return conductores;
         }
 

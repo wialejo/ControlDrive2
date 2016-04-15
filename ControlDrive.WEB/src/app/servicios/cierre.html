@@ -1,0 +1,159 @@
+﻿
+<div ng-controller="CierreController">
+
+    <style>
+        .ciudadDiferente {
+            background-color: lightgreen;
+        }
+
+        .border-none {
+            border: none !important;
+            background-color: #fafafa;
+        }
+
+            .border-none td, .border-none th {
+                border: none !important;
+                background-color: #fafafa;
+            }
+
+        .table > thead > tr > th {
+            padding: 1px 15px;
+            margin: 0px;
+            height: 10px;
+        }
+
+        .radio, .checkbox {
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        .table > tr > td {
+            padding: 5px 5px;
+        }
+
+        .input-xs {
+            width: 100px !important;
+        }
+
+        @media screen and (max-width: 767px) {
+            .table > thead > tr > th {
+                padding: 1px 5px;
+                margin: 0;
+                height: 10px;
+            }
+
+            .col-xs-3, .col-xs-4, .col-xs-8, .col-xs-1 {
+                padding-left: 5px;
+                padding-right: 0;
+            }
+        }
+    </style>
+    <div class="panel panel-default">
+        <div class="panel-heading form-inline ">
+            <div class="row">
+                <div class="col-xs-3 col-sm-5 col-md-3 text-center-xs">
+                    <form class="form-inline inline" ng-submit="ObtenerServicios()">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input tabindex="1" ng-model="periodo" required type="text" class="form-control input-sm" id="TxtPeriodo" name="TxtPeriodo" placeholder="dd/mm/aaaa">
+                                <span class="input-group-btn hidden-xs">
+                                    <input type="submit" class="btn btn-info btn-sm" name="ObtenerServicios" value="Obtener" />
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-8 col-sm-6 col-md-4 text-center-xs text-right">
+                    <div class="col-xs-4 col-sm-4">
+                        <div class="form-group">
+                            <input placeholder="Filtar todo..." class="form-control input-sm" type="search"
+                                   ng-model="search.$" />
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4">
+                        <div class="form-group">
+                            <input ng-model="search.ConductorResumen" class="form-control input-sm" placeholder="Filtrar conductores" type="search" />
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4">
+                        <div class="form-group">
+                            <input ng-model="search.RutaResumen" class="form-control input-sm" placeholder="Filtar rutas" type="search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">Hora/fecha</th>
+                            <th class="col-md-1">Estado</th>
+                            <th class="hidden-xs">Consec.</th>
+                            <th>Origen/Destino</th>
+                            <th>Conductor/Ruta</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search) " ng-class=" { 'border-none' : active==servicio}">
+                        <tr>
+                            <td class="text-center">
+                                {{servicio.Fecha | date:'HH:mm'}}
+                                <br />
+                                {{servicio.Fecha | date:'dd/MM/yyyy'}}
+                            </td>
+                            <td>
+                                <strong class="estadoTexto">{{servicio.Estado.Descripcion}}</strong>
+                                <div class="hidden-sm hidden-md hidden-lg">
+                                    <br />
+                                    <strong>{{(servicio.Aseguradora.Nombre ? "Red: " :"")}}</strong>  {{servicio.Aseguradora.Nombre}} <br />
+                                    <strong> {{(servicio.Radicado ? "Consecutivo: " :"") }}</strong> {{ servicio.Radicado }}
+                                </div>
+                            </td>
+                            <td class="hidden-xs">
+                                {{servicio.Radicado}}
+                                <br />
+                                {{servicio.Aseguradora.Nombre}}
+                            </td>
+                            <td>
+                                <div ng-class="{ 'ciudadDiferente': !servicio.DireccionInicio.Ciudad.Principal && servicio.DireccionInicio.Ciudad.Id != servicio.DireccionDestino.Ciudad.Id }">
+                                    <strong>Origen: </strong> {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
+                                </div>
+                                <div ng-class="{ 'ciudadDiferente': !servicio.DireccionDestino.Ciudad.Principal && servicio.DireccionInicio.Ciudad.Id != servicio.DireccionDestino.Ciudad.Id }">
+                                    <strong>Destino: </strong> {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
+                                </div>
+                            </td>
+                            <td>
+                                <strong>Conductor: </strong> {{servicio.ConductorResumen}}<br />
+                                <strong>Ruta:</strong> {{servicio.RutaResumen}}
+                            </td>
+                            <td>
+                                <form name="form" class="form-inline" novalidate ng-submit="form.$valid && Cerrar(servicio)">
+                                    <div class="form-group">
+                                        $
+                                    </div>
+                                    <div class="form-group" ui-focus ng-class="{ 'has-error' : form.txtCierre.$invalid  && !form.txtCierre.$pristine}" >
+                                        <input type="number" ng-blur="GuardarValores(servicio)" required name="txtCierre" placeholder="Cierre" 
+                                               ng-model="servicio.valores.cierre" class="form-control input-sm input-xs"  />
+                                    </div>
+                                    <div class="form-group">
+                                    </div>
+                                    <div class="form-group" ng-class="{ 'has-error' : form.txtConductor.$invalid  && !form.txtConductor.$pristine}" >
+                                        <input type="number" ng-blur="GuardarValores(servicio)" required name="txtConductor" placeholder="Conductor" 
+                                               ng-model="servicio.valores.conductor" class="form-control input-sm input-xs" />
+                                    </div>
+                                    <div class="form-group" ng-class="{ 'has-error' : form.txtRuta.$invalid  && !form.txtRuta.$pristine}" >
+                                        <input type="number" ng-blur="GuardarValores(servicio)" required name="txtRuta" placeholder="Ruta" 
+                                               ng-model="servicio.valores.ruta" class="form-control input-sm input-xs" />
+                                    </div>
+                                    <button class="btn btn-info btn-sm" ng-disabled="isSaving" type="submit">Cerrar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

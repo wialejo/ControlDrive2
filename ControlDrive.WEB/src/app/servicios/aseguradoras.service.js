@@ -16,8 +16,8 @@
 					},
 					data: data
 				});
-				return request;
-			}
+				return (request.then(function (respuesta) { return respuesta }, ManejadorErrores.ResponseError));
+            }
 
 			function Guardar(servicio) {
 				var url = "Servicio/Guardar/";

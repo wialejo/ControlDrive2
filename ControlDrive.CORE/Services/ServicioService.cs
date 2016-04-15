@@ -1,15 +1,18 @@
 ﻿using ControlDrive.Core.Infraestructura;
 using ControlDrive.Core.Modelos;
+using ControlDrive.CORE.Infraestructura;
 using ControlDrive.CORE.Modelos;
 using ControlDrive.CORE.Repositorios;
 using FileHelpers;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using ControlDrive.CORE.Extensions;
 
 namespace ControlDrive.CORE.Services
 {
@@ -22,6 +25,7 @@ namespace ControlDrive.CORE.Services
         private readonly ICommonInterface<Asegurado> _aseguradoService;
         private readonly ICommonInterface<Vehiculo> _vehiculoService;
         private readonly ICorreoService _correoService;
+        //private readonly ICommonInterface<Seguimiento> _seguimientoService;
 
         public ServicioService(IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService,
             ICommonInterface<Asegurado> aseguradoService, ICommonInterface<Vehiculo> vehiculoService, ICorreoService correoService, IUnitOfWork unitOfWork)
@@ -32,22 +36,19 @@ namespace ControlDrive.CORE.Services
             _vehiculoService = vehiculoService;
             _correoService = correoService;
             _unitOfWork = unitOfWork;
+            //_seguimientoService = seguimientoService;
         }
 
         public Servicio Guardar(Servicio servicio)
         {
             var servicioRepo = new Servicio();
-
-
-
-
             if (servicio.Id == 0)
             {
-
                 if (_servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado).Count() > 0 && !string.IsNullOrEmpty(servicio.Radicado))
                 {
                     throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
                 }
+                servicioRepo.UsuarioRegistroId = servicio.UsuarioRegistroId;
                 servicioRepo.EstadoCodigo = "RG";
                 servicioRepo.Fecha = servicio.Fecha;
                 servicioRepo.Hora = servicio.Hora;
@@ -90,6 +91,7 @@ namespace ControlDrive.CORE.Services
                 }
 
                 servicioRepo = _servicioRepositorio.FindBy(s => s.Id == servicio.Id).FirstOrDefault();
+                servicioRepo.UsuarioModificacionId = servicio.UsuarioModificacionId;
                 servicioRepo.Fecha = servicio.Fecha;
                 servicioRepo.Hora = servicio.Hora;
                 servicioRepo.Radicado = servicio.Radicado;
@@ -151,41 +153,83 @@ namespace ControlDrive.CORE.Services
             throw new NotImplementedException();
         }
 
-        public List<Servicio> Obtener(Periodo periodo)
-        {
+        public List<ServicioDto> Obtener(Periodo periodo)
+        { 
+            if(periodo.Fin.Year == 1)
+                periodo = new PeriodoService().Obtener(periodo.Inicio);
+
             var servicios = _servicioRepositorio
-                .FindByIncluding(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin
-                    //,s => s.DireccionInicioa => a.Ruta, s => s.Conductor, s => s.DireccionInicio, s => s.DireccionDestino, s => s.Asegurado, s => s.Aseguradora, s => s.Vehiculo
-                    )
-                .OrderBy(s => s.Fecha).ToList();
+                .FindBy(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin)
+                .OrderBy(s => s.Fecha)
+                .Select(s => new ServicioDto { Id = s.Id,
+                    EstadoCodigo = s.EstadoCodigo,
+                    Estado = s.Estado,
+                    Fecha = s.Fecha,
+                    Hora = s.Hora,
+                    Radicado = s.Radicado,
+                    AsignadoPor = s.AsignadoPor,
+                    VehiculoId = s.VehiculoId,
+                    Vehiculo = s.Vehiculo,
+                    AseguradoraId = s.AseguradoraId,
+                    Aseguradora = s.Aseguradora,
+                    AseguradoId = s.AseguradoId,
+                    Asegurado = s.Asegurado,
+                    DireccionInicioId = s.DireccionInicioId,
+                    DireccionInicio = s.DireccionInicio,
+                    DireccionDestinoId = s.DireccionDestinoId,
+                    DireccionDestino = s.DireccionDestino,
+                    ConductorId = s.ConductorId,
+                    Conductor = s.Conductor,
+                    RutaId = s.RutaId,
+                    Ruta = s.Ruta,
+                    UsuarioRegistro = s.UsuarioRegistro,
+                    FechaRegistro = s.FechaRegistro,
+                    valores = s.valores,
+                    NoFactura = s.NoFactura
+                })
+                .OrderBy(s => s.Fecha)
+                .ToList();
+
+            servicios.ForEach(servicio => {
+                if (servicio.Conductor != null)
+                {
+                    servicio.ConductorResumen = servicio.Conductor.ToResumen();
+                }
+                else {
+                    servicio.ConductorResumen = string.Empty;
+                }
+
+                if (servicio.UsuarioRegistro != null)
+                servicio.UsuarioRegistro = new ApplicationUser { Nombre = servicio.UsuarioRegistro.Nombre };
+
+                if (servicio.Ruta != null)
+                {
+                    servicio.RutaResumen = servicio.Ruta.ToResumen();
+                }
+                else {
+                    servicio.RutaResumen = string.Empty;
+                }
+            });
+
             return servicios;
         }
 
-        public List<Servicio> ObtenerParaSeguimiento(Periodo periodo)
-        {
-            var periodoCompleto = new PeriodoService().Obtener(periodo.Inicio);
-            var servicios = _servicioRepositorio
-                .FindBy(s => s.Fecha > periodoCompleto.Inicio && s.Fecha < periodoCompleto.Fin && s.EstadoCodigo != "AN")
-                .OrderBy(s => s.Fecha).ToList();
-
-            return servicios;
-        }
-
-        public string ObtenerPorPeriodoCSV(Periodo periodo)
+        public MemoryStream GenerarExcelServiciosResumen(Periodo periodo)
         {
             var servicios = _servicioRepositorio.FindBy(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin && s.Estado.Codigo != "AN").OrderBy(s => s.Fecha).ToList();
-            var csv = ServiciosToCsvData(servicios);
-            return csv;
+            var serviciosResumen = GenerarServiciosResumen(servicios);
+            var memoryExcel = ExcelUtilities<ServicioResumen>.Export(serviciosResumen);
+            return memoryExcel;
         }
 
-        private string ServiciosToCsvData(List<Servicio> servicios)
+        private List<ServicioResumen> GenerarServiciosResumen(List<Servicio> servicios)
         {
-            var serviciosExport = new List<serviciosModeloToExport>();
+            var serviciosResumen = new List<ServicioResumen>();
             servicios.ForEach(f =>
             {
-                var servicio = new serviciosModeloToExport
+                var servicio = new ServicioResumen
                 {
-                    hora = f.Fecha.ToString("hh:mm"),
+                    hora = f.Fecha.ToString("HH:mm"),
                     fecha = f.Fecha.ToString("dd/MM/yyyy"),
                     codigo = f.Radicado,
                     aseguradora = f.Aseguradora.Nombre,
@@ -196,9 +240,7 @@ namespace ControlDrive.CORE.Services
 
                     vehiculo = 
                             f.Vehiculo.Placa +
-                            (!string.IsNullOrEmpty(f.Vehiculo.Marca) ? " " + f.Vehiculo.Marca : "") +
-                            (!string.IsNullOrEmpty(f.Vehiculo.Referencia) ? " " + f.Vehiculo.Referencia : "") +
-                            (!string.IsNullOrEmpty(f.Vehiculo.Observaciones) ? " " + f.Vehiculo.Observaciones : ""),
+                            (!string.IsNullOrEmpty(f.Vehiculo.Descripcion) ? " " + f.Vehiculo.Descripcion : ""),
 
                     origen = 
                             f.DireccionInicio.Descripcion +
@@ -221,14 +263,9 @@ namespace ControlDrive.CORE.Services
                     asignadoPor = f.AsignadoPor,
                     estado = f.Estado.Descripcion
                 };
-
-                serviciosExport.Add(servicio);
+                serviciosResumen.Add(servicio);
             });
-            var engine = new FileHelperEngine<serviciosModeloToExport>();
-
-            string strSeparadoPorComas = engine.WriteString(serviciosExport);
-
-            return strSeparadoPorComas;
+            return serviciosResumen;
         }
 
         public void CambioEstado(int idServicio, Estado nuevoEstado)
@@ -239,6 +276,34 @@ namespace ControlDrive.CORE.Services
             _unitOfWork.Commit();
         }
 
+        public void Cerrar(int servicioId, Valor valores)
+        {
+            GuardarValores(servicioId, valores);
+            CambioEstado(servicioId, new Estado { Codigo = "CR" });
+        }
+
+        public void GuardarValores(int servicioId, Valor valores)
+        {
+            var servicio = _servicioRepositorio.FindBy(s => s.Id == servicioId).FirstOrDefault();
+            if (servicio.valores == null)
+                servicio.valores = new Valor() { ServicioId = valores.ServicioId };
+
+            servicio.valores.cierre = valores.cierre;
+            servicio.valores.ruta = valores.ruta;
+            servicio.valores.conductor = valores.conductor;
+            _servicioRepositorio.Edit(servicio);
+            _unitOfWork.Commit();
+        }
+
+        public void Facturar(int servicioId, string noFactura)
+        {
+            var servicio = _servicioRepositorio.FindBy(s => s.Id == servicioId).FirstOrDefault();
+            servicio.NoFactura = noFactura;
+            servicio.EstadoCodigo = "FA";
+            _servicioRepositorio.Edit(servicio);
+            _unitOfWork.Commit();
+        }
+        #region Notificaiones
         public string NotificarServiciosARuta(ICollection<Servicio> servicios)
         {
             IEnumerable<Conductor> Rutas = servicios.DistinctBy(s => s.RutaId).Select(c => c.Ruta);
@@ -256,7 +321,7 @@ namespace ControlDrive.CORE.Services
             {
                 var correosDeServiciosPorRuta = CrearCorreosDeServiciosPorRuta(rutasValidos, servicios);
                 _correoService.Enviar(correosDeServiciosPorRuta);
-                respuesta = string.IsNullOrEmpty(respuesta) ? "" : ", " + "Notificacion enviada correctamente.";
+                respuesta = string.IsNullOrEmpty(respuesta) ? "Ruta notificada correctamente." : ", Ruta notificada correctamente.";
             }
 
             return respuesta;
@@ -276,7 +341,7 @@ namespace ControlDrive.CORE.Services
             {
                 var correosDeServiciosPorConductor = CrearCorreosDeServiciosPorConductor(conductoresValidos, servicios);
                 _correoService.Enviar(correosDeServiciosPorConductor);
-                respuesta = string.IsNullOrEmpty(respuesta) ? "" : ", " + "Notificacion enviada correctamente.";
+                respuesta = string.IsNullOrEmpty(respuesta) ? "Conductores notificados correctamente." : ", Conductores notificados correctamente.";
             }
             return respuesta;
         }
@@ -397,9 +462,7 @@ namespace ControlDrive.CORE.Services
 
 
                     servicio.Vehiculo.Placa +
-                    (!string.IsNullOrEmpty(servicio.Vehiculo.Marca) ? ", " + servicio.Vehiculo.Marca : "") +
-                    (!string.IsNullOrEmpty(servicio.Vehiculo.Referencia) ? ", " + servicio.Vehiculo.Referencia : "") +
-                    (!string.IsNullOrEmpty(servicio.Vehiculo.Observaciones) ? ", " + servicio.Vehiculo.Observaciones : ""),
+                    (!string.IsNullOrEmpty(servicio.Vehiculo.Descripcion) ? ", " + servicio.Vehiculo.Descripcion : ""),
 
 
                     servicio.DireccionInicio.Descripcion +
@@ -422,20 +485,52 @@ namespace ControlDrive.CORE.Services
             return mensaje + "</tbody></table>";
         }
 
+        public string ObtenerHtmlServiciosAConductor(ICollection<Servicio> servicios)
+        {
+            IEnumerable<Conductor> conductores = servicios.DistinctBy(s => s.ConductorId).Select(c => c.Conductor);
+            string html = string.Empty;
+            foreach (var conductor in conductores)
+            {
+                string mensaje = "<p>Servicios asignados a: " + conductor.Nombre + "</p>";
+                var Servicios = servicios.Where(s => s.ConductorId == conductor.Id);
+                mensaje += ConstruirHtmlServicios(Servicios);
+                html = html + mensaje;
+            }
+            return html;
+        }
+
+        public string ObtenerHtmlServiciosARuta(ICollection<Servicio> servicios)
+        {
+            IEnumerable<Conductor> Rutas = servicios.DistinctBy(s => s.RutaId).Select(c => c.Ruta);
+            string html = string.Empty;
+            foreach (var ruta in Rutas)
+            {
+                string mensaje = "<p>Servicios de la ruta: " + ruta.Nombre + "</p>";
+                var Servicios = servicios.Where(s => s.RutaId == ruta.Id);
+                mensaje += ConstruirHtmlServicios(Servicios);
+                html = html + mensaje;
+            }
+            return html;
+        }
+
+        #endregion
     }
 
     public partial interface IServicioService {
-        List<Servicio> ObtenerParaSeguimiento(Periodo periodo);
-        List<Servicio> Obtener(Periodo periodo);
+        List<ServicioDto> Obtener(Periodo periodo);
         void CambioEstado(int idServicio, Estado nuevoEstado);
         string NotificarServiciosAConductor(ICollection<Servicio> servicios);
+        string ObtenerHtmlServiciosAConductor(ICollection<Servicio> servicios);
+
         string NotificarServiciosARuta(ICollection<Servicio> servicios);
-        string ObtenerPorPeriodoCSV(Periodo periodo);
-        
+        string ObtenerHtmlServiciosARuta(ICollection<Servicio> servicios);
+        MemoryStream GenerarExcelServiciosResumen(Periodo periodo);
+        void Cerrar(int servicioId, Valor valores);
+        void GuardarValores(int servicioId, Valor valores);
+        void Facturar(int servicioId, string noFactura);
     }
 
-    [DelimitedRecord(";")]
-    public class serviciosModeloToExport
+    public class ServicioResumen
     {
         public string fecha { get; set; }
         public string hora { get; set; }

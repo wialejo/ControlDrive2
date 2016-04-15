@@ -17,48 +17,61 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Web;
+using Microsoft.AspNet.Identity;
 
 namespace ControlDrive.Core.Controllers
 {
+    [Authorize]
     public class ServicioController : ApiController
     {
         private readonly ICommonInterface<Servicio> _servicioService;
         private IServicioService _servicioServiceExt;
+        private ICommonInterface<Seguimiento> _seguimientoService;
 
-        public ServicioController(ICommonInterface<Servicio> servicioService, IServicioService servicioServiceExt)
+        public ServicioController(ICommonInterface<Servicio> servicioService, ICommonInterface<Seguimiento> seguimientoService, IServicioService servicioServiceExt)
         {
             _servicioService = servicioService;
             _servicioServiceExt = servicioServiceExt;
+            _seguimientoService = seguimientoService;
         }
 
         [HttpPost]
+        [Route("api/servicio")]
         public IHttpActionResult Obtener(Periodo periodo)
-        {   
-            var servicios =  _servicioServiceExt.Obtener(periodo).Where(s => s.Estado.Codigo != "AN").OrderBy(s => s.Fecha).ToList();
+        {
+            var servicios = _servicioServiceExt.Obtener(periodo);
+            return Ok(servicios);
+        }
+
+        [HttpPost]
+        [Route("api/servicio")]
+        public IHttpActionResult Obtener([FromUri] string estado, [FromBody]Periodo periodo)
+        {
+            var servicios = new List<ServicioDto>();
+
+            if (string.IsNullOrEmpty(estado))
+            {
+                servicios = _servicioServiceExt.Obtener(periodo);
+            }
+            else
+            {
+                servicios = _servicioServiceExt.Obtener(periodo).Where(e => e.EstadoCodigo == estado).ToList();
+            }
+
             return Ok(servicios);
         }
         
         [HttpPost]
-        public IHttpActionResult ObtenerParaSeguimiento(Periodo periodo)
-        {
-            var servicios = _servicioServiceExt.ObtenerParaSeguimiento(periodo);
-
-            return Ok(servicios);
-        }
-
-        #region exportar a SCV
-        [HttpPost]
+        [AllowAnonymous]
         public async Task<HttpResponseMessage> ObtenerPorPeriodoCSV(Periodo periodo)
         {
             var periodoCompleto = new PeriodoService().Obtener(periodo.Inicio);
-            var serviciosSeparadoPorComas = _servicioServiceExt.ObtenerPorPeriodoCSV(periodoCompleto);
 
             byte[] output = null;
             await Task.Run(() =>
             {
-                using (var stream = GenerateStreamFromString(serviciosSeparadoPorComas))
+                using (var stream = _servicioServiceExt.GenerarExcelServiciosResumen(periodoCompleto))
                 {
-                    //this.CreateFile(FileContents[guid], stream);
                     stream.Flush();
                     output = stream.ToArray();
                 }
@@ -70,26 +83,14 @@ namespace ControlDrive.Core.Controllers
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName =  "servicios.csv"
+                    FileName =  "servicios.xls"
                 };
-                result.Content.Headers.Add("x-filename", "servicios.csv");
+                result.Content.Headers.Add("x-filename", "servicios.xls");
                 return result;
             }
 
             return this.Request.CreateErrorResponse(HttpStatusCode.NoContent, "No hay datos.");
         }
-
-
-        public MemoryStream GenerateStreamFromString(string s)
-        {
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-        #endregion
         
         [HttpGet]
         public IHttpActionResult ObtenerPorId(int id)
@@ -105,6 +106,15 @@ namespace ControlDrive.Core.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            if (servicio.Id == 0) {
+                servicio.UsuarioRegistroId = HttpContext.Current.User.Identity.GetUserId();
+            }
+            else
+            {
+                servicio.UsuarioModificacionId = HttpContext.Current.User.Identity.GetUserId();
+            }
+
             var servicioModeloVista = _servicioService.Guardar(servicio);
 
             return Ok(servicioModeloVista);
@@ -115,6 +125,13 @@ namespace ControlDrive.Core.Controllers
         {
             var respuesta = _servicioServiceExt.NotificarServiciosAConductor(servicios);
             return Ok(respuesta);
+        }  
+
+        [HttpPost]
+        public IHttpActionResult ObtenerHtmlServiciosAConductor([FromBody]ICollection<Servicio> servicios)
+        {
+            var respuesta = _servicioServiceExt.ObtenerHtmlServiciosAConductor(servicios);
+            return Ok(respuesta);
         }
 
         [HttpPost]
@@ -122,6 +139,62 @@ namespace ControlDrive.Core.Controllers
         {
             var respuesta = _servicioServiceExt.NotificarServiciosARuta(servicios);
             return Ok(respuesta);
+        }
+
+
+        [HttpPost]
+        public IHttpActionResult ObtenerHtmlServiciosARuta([FromBody]ICollection<Servicio> servicios)
+        {
+            var respuesta = _servicioServiceExt.ObtenerHtmlServiciosARuta(servicios);
+            return Ok(respuesta);
+        }
+
+        [HttpPut]
+        [Route("api/servicio/{servicioId}/cerrar")]
+        public IHttpActionResult Cerrar(int servicioId, Valor valores)
+        {
+            var usuarioId = HttpContext.Current.User.Identity.GetUserId();
+            _servicioServiceExt.Cerrar(servicioId, valores);
+
+            var seguimiento = new Seguimiento
+            {
+                NuevoEstado = "CR",
+                Observacion = "Nuevos valores asignados: cierre: " + valores.ruta.ToString() + ", conductor: " + valores.conductor.ToString() + ", ruta: " + valores.ruta.ToString(),
+                Fecha = DateTime.Now,
+                ServicioId = servicioId,
+                UsuarioRegistroId = usuarioId
+            };
+            _seguimientoService.Guardar(seguimiento);
+
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/servicio/{servicioId}/valores")]
+        public IHttpActionResult Valores(int servicioId, Valor valores)
+        {
+            _servicioServiceExt.GuardarValores(servicioId, valores);
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/servicio/{servicioId:int}/facturar/{NoFactura}")]
+        public IHttpActionResult Facturar(int servicioId, string NoFactura) {
+
+            var usuarioId = HttpContext.Current.User.Identity.GetUserId();
+            _servicioServiceExt.Facturar(servicioId, NoFactura);
+
+            var seguimiento = new Seguimiento
+            {
+                NuevoEstado = "FA",
+                Observacion = "Factura asignada: " + NoFactura,
+                Fecha = DateTime.Now,
+                ServicioId = servicioId,
+                UsuarioRegistroId = usuarioId
+            };
+            _seguimientoService.Guardar(seguimiento);
+
+            return Ok();
         }
     }
 }

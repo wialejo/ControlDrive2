@@ -2,6 +2,9 @@
 <div ng-controller="SeguimientoController">
 
     <style>
+        .ciudadDiferente {
+            background-color:lightgreen;
+        }
         .border-none {
           border:none !important;
           background-color:#fafafa;  
@@ -27,7 +30,6 @@
         .fixedHeader{
             position: fixed;
             z-index: 200;
-            margin-top: 2px;
             left: 0;
             -webkit-box-shadow: -3px 13px 21px -19px rgba(0,0,0,0.75);
             -moz-box-shadow: -3px 13px 21px -19px rgba(0,0,0,0.75);
@@ -38,33 +40,53 @@
         }
 
         .staticBody{
-            margin-top:51px;
+            margin-top:45px;
+        }
+        .btnHerramientas {
+            display:none;
+            font-size:large;
         }
         @media screen and (max-width: 767px){
             .staticBody{
-                margin-top:170px;
+                margin-top:45px;
             }
             .fixedHeader{
-                left: 0px;
+                left: 0;
+            }
+            .mostrarHerramientas {
+                
+            }
+            .table > thead > tr > th{
+                padding: 1px 5px;
+                margin: 0;
+                height: 10px;
+            }
+
+            .col-xs-3, .col-xs-4, .col-xs-8, .col-xs-1 {
+                padding-left:5px;
+                padding-right:0;
+            }
+            .form-group {
+                margin-bottom:0;
             }
         }
     </style>
     <div class="panel panel-default">
         <div class="fixedHeader navbar-collapse  panel-heading form-inline ">
             <div class="row">
-                <div class="col-xs-12 col-sm-3 text-center-xs">
+                <div class="col-xs-3 col-sm-5 col-md-3 text-center-xs">
                     <form class="form-inline inline" ng-submit="ObtenerServicios()">
                         <div class="form-group">
                             <div class="input-group">
                                 <input tabindex="1" ng-model="periodo" required type="text" class="form-control input-sm" id="TxtPeriodo" name="TxtPeriodo" placeholder="dd/mm/aaaa">
-                                <span class="input-group-btn">
+                                <span class="input-group-btn hidden-xs">
                                     <input type="submit" class="btn btn-info btn-sm" name="ObtenerServicios" value="Obtener" />
                                 </span>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="col-xs-12 col-sm-5 text-center-xs text-right">
+                <div class="col-xs-8 col-sm-6 col-md-4 text-center-xs text-right">
                     <div class="col-xs-4 col-sm-4">
                         <div class="form-group">
                             <input placeholder="Filtar todo..." class="form-control input-sm" type="search"
@@ -73,29 +95,45 @@
                     </div>
                     <div class="col-xs-4 col-sm-4">
                         <div class="form-group">
-                            <input ng-model="search.Conductor.Nombre" class="form-control input-sm" placeholder="Filtrar conductores"  type="search" />
+                            <input ng-model="search.ConductorResumen" class="form-control input-sm" placeholder="Filtrar conductores"  type="search" />
                         </div>
                     </div>
                     <div class="col-xs-4 col-sm-4">
                         <div class="form-group">
-                            <input ng-model="search.Ruta.Nombre" class="form-control input-sm" placeholder="Filtar rutas"  type="search" />
+                            <input ng-model="search.RutaResumen" class="form-control input-sm" placeholder="Filtar rutas"  type="search" />
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-4 text-center-xs text-right inline">
-                        <button  ng-click="EnviarCorreoConductor()" class="btn btn-sm btn-info" tooltip="Notifica los servicios seleccionados a los respectivos conductores"><i class="fa fa-envelope-o"></i> Conductor</button>
-                        <button ng-click="EnviarCorreoRuta()"  class="btn btn-sm btn-info" tooltip="Notifica los servicios seleccionados a las respectivas rutas"><i class="fa fa-envelope-o"></i> Ruta</button>
-                        <button ng-click="ExportarCSV()"  class="btn btn-sm btn-info" tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> CSV</button>
+                <div class="col-xs-1 col-sm-1 col-md-5 text-center-xs text-right inline">
+                    <span class="glyphicon glyphicon-cog hidden-md hidden-lg" ng-click="MostrarHerramientas()"></span>
+                    <div class="hidden-xs hidden-sm">
+                        <button ng-click="EnviarCorreoConductor()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Notifica los servicios seleccionados a los respectivos conductores"><i class="fa fa-envelope-o"></i> Conductor</button>
+                        <button ng-click="EnviarCorreoConductor(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Conductor</button>
+                        <button ng-click="EnviarCorreoRuta()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Notifica los servicios seleccionados a las respectivas rutas"><i class="fa fa-envelope-o"></i> Ruta</button>
+                        <button ng-click="EnviarCorreoRuta(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Ruta</button>
+                        <button ng-click="ExportarCSV()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> Excel</button>
+                    </div>
+                </div>
+                <div class="col-xs-12  hidden-md hidden-lg"  ng-class=" {  'hidden-xs': verHerramientas, 'hidden-sm': verHerramientas }">
+                    <button ng-click="EnviarCorreoConductor()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Notifica los servicios seleccionados a los respectivos conductores"><i class="fa fa-envelope-o"></i> Conductor</button>
+                    <button ng-click="EnviarCorreoConductor(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Conductor</button>
+                    <button ng-click="EnviarCorreoRuta()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Notifica los servicios seleccionados a las respectivas rutas"><i class="fa fa-envelope-o"></i> Ruta</button>
+                    <button ng-click="EnviarCorreoRuta(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Ruta</button>
+                    <button ng-click="ExportarCSV()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> Excel</button>
                 </div>
             </div>           
         </div>
+
         <div class="staticBody panel-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-condensed">
                         <thead>
                             <tr>
                                 <td colspan="10">
-                                    <label><strong>Total servicios:</strong></label> <span>{{ serviciosActivos.length }}</span>
+
+                                    <label><strong>Total servicios: </strong></label> {{ serviciosActivos.length }}
+
+                                    <span style="margin-left:30px" ng-repeat="(key,val) in estadoServiciosActivos"><label><strong>{{key}}: </strong></label> {{ val }}</span>
                                 </td>
                             </tr>
                             <tr>
@@ -117,11 +155,12 @@
                         </thead>
                         <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search) " ng-class=" { 'border-none' : active==servicio}" >
                             <tr>
-                                <td class="text-center" style="background-color:#FDFDFD" ng-click="VerSeguimientos(servicio);">
+                                <td class="text-center" style="background-color:#edeaea" ng-click="VerSeguimientos(servicio);">
                                     <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn-link text-center" ng-click="MostrarDetalles(servicio,  $event)">
+                                    <span class="glyphicon glyphicon-pencil" ng-click="Editar(servicio)" uib-tooltip="Editar el servicio"></span>
+                                    <a class="btn btn-link text-center" ng-click="MostrarDetalles(servicio,  $event)"  uib-tooltip="Mostrar detalles el servicio">
                                         <u> {{servicio.Id}}</u>
                                     </a>
                                 </td>
@@ -145,41 +184,40 @@
                                     {{servicio.Aseguradora.Nombre}} 
                                     
                                 </td>
-                                <td>
+                                <td ng-class="{ 'ciudadDiferente': !servicio.DireccionInicio.Ciudad.Principal && servicio.DireccionInicio.Ciudad.Id != servicio.DireccionDestino.Ciudad.Id }">
                                     -{{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
 
                                 </td>
-                                <td>
+                                <td ng-class="{ 'ciudadDiferente': !servicio.DireccionDestino.Ciudad.Principal && servicio.DireccionInicio.Ciudad.Id != servicio.DireccionDestino.Ciudad.Id }">
                                     -{{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
                                 </td>
                                 <td>
-                                    {{servicio.Conductor.Nombre}} <br />
-                                    Tel1: <strong>{{servicio.Conductor.Telefono1}}</strong> <strong>{{servicio.Conductor.Telefono2}}</strong>
+                                    {{servicio.ConductorResumen}}
                                 </td>
                                 <td>
-                                    {{servicio.Ruta.Nombre}} <br />
-                                    Tel1: <strong>{{servicio.Ruta.Telefono1}}</strong> <strong>{{servicio.Ruta.Telefono2}}</strong>
+                                    {{servicio.RutaResumen}}
                                 </td>
                                 <td>
+                                    
                                         <label class="checkbox i-checks m-l-xs m-b-xs">
                                             <input type="checkbox" ng-model="servicio.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
                                         </label>
                                 </td>
                             </tr>
-                            <tr ng-show="active==servicio" ng-class=" { 'border-none' : active==servicio}" >
+                            <tr ng-if="active==servicio" ng-class=" { 'border-none' : active==servicio}"  >
                                 <td colspan="10">
                                     <div class="panel panel-default  border-none" >
                                         <ul class="list-group list-group-xs" >
                                             <li class="list-group-item border-none">
                                                 <div class="row">
                                                     <form name="formSeguimiento" class="form ng-pristine ng-valid" ng-submit="GuardarSeguimiento()">
-                                                        <div class="col-md-3 form-group">
+                                                        <div class="col-xs-3 form-group">
                                                             <select ng-model="servicio.EstadoCodigo" name="estado" ng-options="estado.Codigo as estado.Descripcion for estado in estados" class="form-control"></select>
                                                         </div>
-                                                        <div class="col-md-7 form-group">
+                                                        <div class="col-xs-7 form-group">
                                                             <input type="text" ng-model="seguimiento.Observacion" class="form-control" placeholder="Ingrese su observación" />
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-2 col-xs-12">
                                                             <button ng-disabled="isSaving" class="btn btn-info" type="submit">Guardar</button>
                                                         </div>
                                                     </form>
@@ -224,17 +262,16 @@
                 </li>
                 <br />
                 <li><strong>Asegurado: </strong><span> {{servicio.Asegurado.Nombre}} <strong>Tel:</strong> {{servicio.Asegurado.Telefono1}} - {{servicio.Asegurado.Telefono2}}</span></li>
-                <li><strong>Vehiculo: </strong><span> {{servicio.Vehiculo.Placa}} - {{servicio.Vehiculo.Marca}} - {{servicio.Vehiculo.Referencia}} - {{servicio.Vehiculo.Observaciones}}</span></li>
+                <li><strong>Vehiculo: </strong><span> {{servicio.Vehiculo.Placa}} - {{servicio.Vehiculo.Descripcion}}</span></li>
                 <br>
                 <li><strong>Dirección inicio: </strong><span> {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}</span></li>
                 <li><strong>Dirección destino: </strong><span> {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}</span></li>
                 <br>
                 <li>
-                <strong>Conductor: </strong>
-                    <span>{{servicio.Conductor.Nombre}} Tel1: <strong>{{servicio.Conductor.Telefono1}}</strong> <strong>{{servicio.Conductor.Telefono2}}</strong></span>
+                <strong>Conductor: </strong> {{servicio.ConductorResumen}} 
                 </li>
                 <li>
-                <strong>Ruta: </strong>{{servicio.Ruta.Nombre}} Tel1: <strong>{{servicio.Ruta.Telefono1}}</strong> <strong>{{servicio.Ruta.Telefono2}}</strong>
+                <strong>Ruta: </strong>{{servicio.RutaResumen}}
                 </li>
             </ul>
             <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Editar" ng-click="Editar(servicio)" />

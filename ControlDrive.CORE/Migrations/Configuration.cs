@@ -10,8 +10,8 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
+            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = false;
 
         }
 
@@ -30,19 +30,26 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 });
 
             context.Estados.AddOrUpdate(
-                new Estado() { Codigo = "RG", Descripcion = "Registrado", Orden = 1 },
-                new Estado() { Codigo = "ES", Descripcion = "En sitio", Orden = 2 },
-                new Estado() { Codigo = "EC", Descripcion = "En curso", Orden = 3 },
-                new Estado() { Codigo = "TE", Descripcion = "Terminado", Orden = 4 },
-                new Estado() { Codigo = "FL", Descripcion = "Fallido", Orden = 5 },
-                new Estado() { Codigo = "CN", Descripcion = "Cancelado", Orden = 6 },
-                new Estado() { Codigo = "AN", Descripcion = "Anulado", Orden = 7 }
+                new Estado() { Codigo = "RG", Descripcion = "Registrado", Orden = 2, EnOperacion = true },
+                new Estado() { Codigo = "EN", Descripcion = "Enviado", Orden = 4, EnOperacion = true },
+                new Estado() { Codigo = "RE", Descripcion = "Recibido", Orden = 6, EnOperacion = true },
+                new Estado() { Codigo = "ES", Descripcion = "En sitio", Orden = 8, EnOperacion = true },
+                new Estado() { Codigo = "EC", Descripcion = "En curso", Orden = 10, EnOperacion = true },
+                new Estado() { Codigo = "FL", Descripcion = "Fallido", Orden = 12, EnOperacion = true },
+                new Estado() { Codigo = "CN", Descripcion = "Cancelado", Orden = 12, EnOperacion = true },
+                new Estado() { Codigo = "AN", Descripcion = "Anulado", Orden = 14, EnOperacion = false },
+                new Estado() { Codigo = "TE", Descripcion = "Finalizado", Orden = 16, EnOperacion = true },
+                new Estado() { Codigo = "CR", Descripcion = "Cierre", Orden = 18, EnOperacion = true },
+                new Estado() { Codigo = "FA", Descripcion = "Facturado", Orden = 20, EnOperacion = false }
 
             );
             context.Aseguradoras.AddOrUpdate(
                 new Aseguradora() { Id = 1, Nombre = "Bolivar" },
                 new Aseguradora() { Id = 2, Nombre = "Mapfre" },
-                new Aseguradora() { Id = 3, Nombre = "Axa" }
+                new Aseguradora() { Id = 3, Nombre = "Axa" },
+                new Aseguradora() { Id = 4, Nombre = "Andi" },
+                new Aseguradora() { Id = 5, Nombre = "Particular" },
+                new Aseguradora() { Id = 6, Nombre = "ARH" }
             );
             //context.Conductores.AddOrUpdate(
             //    new Conductor()

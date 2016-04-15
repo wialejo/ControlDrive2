@@ -14,6 +14,7 @@ using ControlDrive.CORE.Services;
 
 namespace ControlDrive.Core.Controllers
 {
+    [Authorize]
     public class CiudadesController : ApiController
     {
         private readonly ICommonInterface<Ciudad> _ciudadSevice;

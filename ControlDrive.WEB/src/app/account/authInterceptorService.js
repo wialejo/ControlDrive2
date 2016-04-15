@@ -30,7 +30,7 @@
                     }
                 }
                 authService.logOut();
-                $location.path('/access/signin');
+                $location.path('/access/login');
             }
             return $q.reject(rejection);
         }

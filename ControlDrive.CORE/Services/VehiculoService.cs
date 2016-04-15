@@ -59,9 +59,7 @@ namespace ControlDrive.CORE.Services
             {
                 vehiculoRepo = _vehiculoRepositorio.FindBy(c => c.Id == vehiculo.Id).FirstOrDefault();
                 vehiculoRepo.Placa = vehiculo.Placa;
-                vehiculoRepo.Marca = vehiculo.Marca;
-                vehiculoRepo.Observaciones = vehiculo.Observaciones;
-                vehiculoRepo.Referencia = vehiculo.Referencia;
+                vehiculoRepo.Descripcion = vehiculo.Descripcion;
                 _vehiculoRepositorio.Edit(vehiculoRepo);
             }
             _unitOfWork.Commit();

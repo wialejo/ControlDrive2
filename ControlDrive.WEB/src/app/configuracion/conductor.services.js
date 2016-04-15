@@ -3,8 +3,9 @@
 	angular.module('controldriveApp')
 		.service('ConductorSvc', function ($http, $q, ManejadorErrores, ngAuthSettings) {
 			return {
-				Guardar: Guardar,
-				ObtenerPorId: ObtenerPorId,
+			    Guardar: Guardar,
+			    ObtenerPorId: ObtenerPorId,
+			    ObtenerPorDescripcion: ObtenerPorDescripcion,
 				Obtener: Obtener,
 				Eliminar: Eliminar
 			}
@@ -17,7 +18,7 @@
 					},
 					data: data
 				});
-				return request;
+				return (request.then(function (respuesta) { return respuesta }, ManejadorErrores.ResponseError));
 			}
 			function Guardar(conductor) {
 				var url = "Conductor/Guardar/";
@@ -26,6 +27,11 @@
 			}
 			function ObtenerPorId(id) {
 				var url = "Conductor/ObtenerPorId/" + id;
+				var obj = http("GET", url);
+				return obj
+			}
+			function ObtenerPorDescripcion(filtro) {
+			    var url = "Conductor/ObtenerPorDescripcion/" + filtro;
 				var obj = http("GET", url);
 				return obj
 			}

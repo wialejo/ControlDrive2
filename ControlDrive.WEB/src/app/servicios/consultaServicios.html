@@ -14,6 +14,7 @@
                         <input  tabindex="10" ng-model="vm.fechaFinal" required ui-mask="99/99/9999" model-view-value="true" type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
                     </div>
                         <button type="submit" class="btn btn-info btn-sm">Consultar</button>
+                    </form>
                 </div>
                 <div class="panel-body">
                     <div class="panel panel-default">
@@ -24,8 +25,8 @@
                                         <th>
                                             Id
                                         </th>
-                                        <th>
-                                            Fecha y Hora
+                                        <th  st-sort="Fecha">
+                                            Hora/Fecha
                                         </th>
                                         <th st-sort="Estado.Descripcion">
                                             Estado
@@ -37,28 +38,43 @@
                                             Aseguradora
                                         </th>
                                         <th>
-                                            Asignado por
-                                        </th>
-                                        <th>
                                             Vehiculo
                                         </th>
                                         <th>
                                             Asegurado
                                         </th>
                                         <th>
-                                            Ruta
+                                            Origen/Destino
                                         </th>
                                         <th>
-                                            Conductor
+                                            Conductor/Ruta
                                         </th>
                                         <th>
-                                            Ruta
+                                            Usuario registro
+                                        </th>
+                                        <th st-sort="FechaRegistro">
+                                            Fecha registro
+                                        </th>
+                                        <th>
+                                        </th>
+                                        <th>
+                                            Valores
+                                        </th>
+                                        <th>
+                                            Factura
                                         </th>
                                     </tr>
                                     <tr>
-                                        <td colspan="12">
+                                        <td colspan="9">
                                             <input type="text" class="form-control input-sm" placeholder="Buscar..." st-search />
                                         </td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm" placeholder="Buscar usuario" st-search="UsuarioRegistro" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm" placeholder="Buscar fecha" st-search="FechaRegistro" />
+                                        </td>
+                                        <td></td>
                                     </tr>
                                 </thead>
                                 <tbody ng-repeat="svr in displayedCollection">
@@ -77,13 +93,11 @@
                                             {{svr.Radicado }}
                                         </td>
                                         <td>
-                                            {{svr.Aseguradora.Nombre }}
+                                            {{svr.Aseguradora.Nombre }}<br />
+                                            Asignado por:{{svr.AsignadoPor }}
                                         </td>
                                         <td>
-                                            {{svr.AsignadoPor }}
-                                        </td>
-                                        <td>
-                                            {{svr.Vehiculo.Placa }} <br /> {{svr.Vehiculo.Marca }} {{svr.Vehiculo.Referencia }}
+                                            {{svr.Vehiculo.Placa }} <br /> {{svr.Vehiculo.Descripcion }}
                                         </td>
                                         <td>
                                             {{svr.Asegurado.Nombre }} <br /> {{ svr.Asegurado.Telefono1 }} - {{ svr.Asegurado.Telefono2 }}
@@ -93,20 +107,33 @@
                                             - {{svr.DireccionDestino.Descripcion}}, {{svr.DireccionDestino.Ciudad.Nombre}}, {{svr.DireccionDestino.Barrio}}
                                         </td>
                                         <td>
-                                            {{svr.Conductor.Nombre }}
+                                            <strong>Cond.</strong>{{svr.ConductorResumen }}<br />
+                                            <strong>Ruta.</strong>{{svr.RutaResumen }}
                                         </td>
                                         <td>
-                                            {{svr.Ruta.Nombre }}
+                                            {{svr.UsuarioRegistro.Nombre }}
                                         </td>
                                         <td>
-                                            <input type="button" ng-click="vm.Editar(svr);" value="Editar" class="btn btn-sm btn-info" />
+                                            {{svr.FechaRegistro | date:'HH:mm'}} <br />
+                                            {{svr.FechaRegistro | date:'dd/MM/yyyy'}}
+                                        </td>
+                                        <td>
+                                            <span class="glyphicon glyphicon-pencil"  uib-tooltip="Editar el servicio" ng-click="vm.Editar(svr)" uib-tooltip="Editar el servicio"></span>
+                                        </td>
+                                        <td>
+                                            <span ng-if="svr.valores">
+                                                <strong>Cierre:</strong>{{svr.valores.cierre | currency:"$":0 }} <strong>Ruta</strong>{{svr.valores.ruta | currency:"$":0}} <strong>Conductor</strong>:{{svr.valores.conductor | currency:"$":0 }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{svr.NoFactura}}
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="11" class="text-center">
-                                            <div st-pagination="" st-items-by-page="25" st-displayed-pages="7" st-template="/app/components/pagination.html" ></div>
+                                        <td colspan="13" class="text-center">
+                                            <div st-pagination="" st-items-by-page="25" st-displayed-pages="7" ></div>
                                         </td>
                                     </tr>
                                 </tfoot>
