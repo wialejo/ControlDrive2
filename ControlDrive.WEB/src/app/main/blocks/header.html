@@ -35,21 +35,19 @@
           <li class="hidden-xs">
             <a ui-fullscreen></a>
           </li>
-          <li class="dropdown" dropdown>
-            <a href class="dropdown-toggle clear" dropdown-toggle>
-              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-                <img src="app/content/img/no_user.jpg" alt="...">
-                <i class="on md b-white bottom"></i>
-              </span>
-              <span	>{{authentication.userName}}</span> <b class="caret"></b>
-            </a>
-            <!-- dropdown -->
-            <ul class="dropdown-menu">
-              <li>
-                <a ui-sref="access.login" ng-click="logOut()">Salir</a>
-              </li>
-            </ul>
-            <!-- / dropdown -->
+          <li class="dropdown"  uib-dropdown on-toggle="toggled(open)">
+              <a href id="simple-dropdown" uib-dropdown-toggle>
+                  <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                      <img src="app/content/img/no_user.jpg" alt="...">
+                      <i class="on md b-white bottom"></i>
+                  </span>
+                  <span>{{authentication.userName}}</span> <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+                  <li>
+                      <a ui-sref="access.login" ng-click="logOut()">Salir</a>
+                  </li>
+              </ul>
           </li>
         </ul>
         <!-- / navbar right -->

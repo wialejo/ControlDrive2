@@ -2,9 +2,6 @@
 <div ng-controller="CierreController">
 
     <style>
-        .ciudadDiferente {
-            background-color: lightgreen;
-        }
 
         .border-none {
             border: none !important;
@@ -117,10 +114,10 @@
                                 {{servicio.Aseguradora.Nombre}}
                             </td>
                             <td>
-                                <div ng-class="{ 'ciudadDiferente': !servicio.DireccionInicio.Ciudad.Principal && servicio.DireccionInicio.Ciudad.Id != servicio.DireccionDestino.Ciudad.Id }">
+                                <div ng-class="{ 'verde': !servicio.DireccionInicio.Ciudad.Principal }">
                                     <strong>Origen: </strong> {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
                                 </div>
-                                <div ng-class="{ 'ciudadDiferente': !servicio.DireccionDestino.Ciudad.Principal && servicio.DireccionInicio.Ciudad.Id != servicio.DireccionDestino.Ciudad.Id }">
+                                <div ng-class="{ 'verde': !servicio.DireccionDestino.Ciudad.Principal }">
                                     <strong>Destino: </strong> {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
                                 </div>
                             </td>

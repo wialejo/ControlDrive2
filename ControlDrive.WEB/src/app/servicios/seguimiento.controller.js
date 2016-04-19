@@ -10,6 +10,7 @@
             }
             $scope.isSaving = false;
             $scope.verHerramientas = true;
+            $scope.estados2 = [{ Codigo: "EN" }, { Codigo: "EC" }]
 
             $scope.MostrarHerramientas = function () {
                 if ($scope.verHerramientas) {
@@ -74,6 +75,7 @@
                 EstadoSvc.Obtener()
                     .then(function (response) {
                         $scope.estados = response.data.filter(function (estado) {
+                            estado.Mostrar = true;
                             if (estado.EnOperacion == true) {
                                 return estado;
                             }
@@ -84,17 +86,45 @@
                     });
             }
             $scope.ObtenerEstados();
+
+            $scope.filtrarServicios = function () {
+
+                var estadoServicios = {};
+                $scope.serviciosActivos = $scope.servicios.filter(function (servicio) {
+                    if (servicio.Estado.EnOperacion == true) {
+                        estadoServicios[servicio.Estado.Descripcion] = estadoServicios[servicio.Estado.Descripcion] ? estadoServicios[servicio.Estado.Descripcion] + 1 : 1
+
+                        var existe = 0;
+                        $scope.estados.filter(function (estado) {
+                            if(estado.Mostrar){
+                                if (estado.Codigo == servicio.Estado.Codigo) {
+                                    existe++;
+                                    return;
+                                }
+                            }
+                        })
+                        if(existe == 1)
+                            return servicio;
+                    }
+                });
+                    $scope.estadoServiciosActivos = estadoServicios;
+            }
+
             $scope.ObtenerServicios = function () {
                 ServicioSvc.ObtenerParaSeguimiento($scope.periodo)
                     .then(function (response) {
-                        var estadoServicios = {};
-                        $scope.servicios = response.data.filter(function (servicio) {
-                            if (servicio.Estado.EnOperacion == true) {
-                                estadoServicios[servicio.Estado.Descripcion] = estadoServicios[servicio.Estado.Descripcion] ? estadoServicios[servicio.Estado.Descripcion] + 1 : 1
-                                return servicio.EstadoCodigo;
-                            }
-                        });
-                        $scope.estadoServiciosActivos = estadoServicios;
+                        
+                        $scope.servicios = response.data;
+                        $scope.filtrarServicios();
+                        
+                        //var estadoServicios = {};
+                        //response.data.filter(function (servicio) {
+                        //    if (servicio.Estado.EnOperacion == true) {
+                        //        estadoServicios[servicio.Estado.Descripcion] = estadoServicios[servicio.Estado.Descripcion] ? estadoServicios[servicio.Estado.Descripcion] + 1 : 1
+                        //        return servicio.EstadoCodigo;
+                        //    }
+                        //});
+                        //$scope.estadoServiciosActivos = estadoServicios;
                     })
                     .catch(function (response){
                         toastr.error(response.data.ExceptionMessage);
