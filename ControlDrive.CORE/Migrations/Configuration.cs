@@ -37,7 +37,7 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 new Estado() { Codigo = "EC", Descripcion = "En curso", Orden = 10, EnOperacion = true },
                 new Estado() { Codigo = "FL", Descripcion = "Fallido", Orden = 12, EnOperacion = true },
                 new Estado() { Codigo = "CN", Descripcion = "Cancelado", Orden = 12, EnOperacion = true },
-                new Estado() { Codigo = "AN", Descripcion = "Anulado", Orden = 14, EnOperacion = false },
+                new Estado() { Codigo = "AN", Descripcion = "Anulado", Orden = 14, EnOperacion = true },
                 new Estado() { Codigo = "TE", Descripcion = "Finalizado", Orden = 16, EnOperacion = true },
                 new Estado() { Codigo = "CR", Descripcion = "Cierre", Orden = 18, EnOperacion = true },
                 new Estado() { Codigo = "FA", Descripcion = "Facturado", Orden = 20, EnOperacion = false }
