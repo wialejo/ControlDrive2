@@ -88,6 +88,44 @@ namespace ControlDrive.CORE.Repositorios
             DbEntityEntry dbEntityEntry = DbContext.Entry<T>(entity);
             dbEntityEntry.State = EntityState.Modified;
         }
+        public virtual void Update(T entity, params Expression<Func<T, object>>[] properties)
+        {
+            //dbEntityEntry.State = EntityState.Modified; --- I cannot do this.
+            DbContext.Set<T>().Attach(entity);
+            if (properties.Length > 0)
+            {
+                foreach (var propertyAccessor in properties)
+                {
+                    DbContext.Entry(entity).Property(propertyAccessor).IsModified = true;
+                }
+            }
+            else
+            {
+                DbContext.Entry(entity).State = EntityState.Modified;
+            }
+
+            //var dbEntityEntry = DbContext.Entry(entity);
+            //if (updatedProperties.Any())
+            //{
+            //    //update explicitly mentioned properties
+            //    foreach (var property in updatedProperties)
+            //    {
+            //        dbEntityEntry.Property(property).IsModified = true;
+            //    }
+            //}
+            //else
+            //{
+            //    //no items mentioned, so find out the updated entries
+            //    foreach (var property in dbEntityEntry.OriginalValues.PropertyNames)
+            //    {
+            //        var original = dbEntityEntry.OriginalValues.GetValue<object>(property);
+            //        var current = dbEntityEntry.CurrentValues.GetValue<object>(property);
+            //        if (original != null && !original.Equals(current))
+            //            dbEntityEntry.Property(property).IsModified = true;
+            //    }
+            //}
+        }
+
         public virtual void Delete(T entity)
         {
             DbEntityEntry dbEntityEntry = DbContext.Entry<T>(entity);
@@ -105,5 +143,6 @@ namespace ControlDrive.CORE.Repositorios
         T Add(T entity);
         void Delete(T entity);
         void Edit(T entity);
+        void Update(T entity, params Expression<Func<T, object>>[] updatedProperties);
     }
 }

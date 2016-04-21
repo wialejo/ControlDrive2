@@ -41,10 +41,10 @@
 				return obj
 			}
 
-			function ObtenerParaSeguimiento(periodo) {
-				var periodo = PeriodoSvc.FormatearParaApi(periodo)
-				var url = "servicio";
-				var obj = http("POST", url, periodo)
+			function ObtenerParaSeguimiento(inicio) {
+			    var inicio = PeriodoSvc.formatearFecha(inicio)
+			    var url = "seguimientos/servicios/rango?startDate=" + inicio;
+				var obj = http("GET", url)
 				return obj
 			}
 			function ObtenerStrCSV(periodo) {

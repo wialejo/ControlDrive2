@@ -39,7 +39,7 @@ namespace ControlDrive.Core.Controllers
         [Route("api/servicio")]
         public IHttpActionResult Obtener(Periodo periodo)
         {
-            var servicios = _servicioServiceExt.Obtener(periodo);
+            var servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin).ToList();
             return Ok(servicios);
         }
 
@@ -48,19 +48,11 @@ namespace ControlDrive.Core.Controllers
         public IHttpActionResult Obtener([FromUri] string estado, [FromBody]Periodo periodo)
         {
             var servicios = new List<ServicioDto>();
-
-            if (string.IsNullOrEmpty(estado))
-            {
-                servicios = _servicioServiceExt.Obtener(periodo);
-            }
-            else
-            {
-                servicios = _servicioServiceExt.Obtener(periodo).Where(e => e.EstadoCodigo == estado).ToList();
-            }
+            servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & (string.IsNullOrEmpty(estado) || s.EstadoCodigo == "AN")).ToList();
 
             return Ok(servicios);
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<HttpResponseMessage> ObtenerPorPeriodoCSV(Periodo periodo)
@@ -83,7 +75,7 @@ namespace ControlDrive.Core.Controllers
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName =  "servicios.xls"
+                    FileName = "servicios.xls"
                 };
                 result.Content.Headers.Add("x-filename", "servicios.xls");
                 return result;
@@ -91,23 +83,24 @@ namespace ControlDrive.Core.Controllers
 
             return this.Request.CreateErrorResponse(HttpStatusCode.NoContent, "No hay datos.");
         }
-        
+
         [HttpGet]
         public IHttpActionResult ObtenerPorId(int id)
         {
-            var servicio = _servicioService.ObtenerPorId(id);
+            var servicio = _servicioServiceExt.ObtenerPorId(id);
             return Ok(servicio);
         }
 
         [HttpPost]
         public IHttpActionResult Guardar(Servicio servicio)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
-            if (servicio.Id == 0) {
+            if (servicio.Id == 0)
+            {
                 servicio.UsuarioRegistroId = HttpContext.Current.User.Identity.GetUserId();
             }
             else
@@ -115,17 +108,18 @@ namespace ControlDrive.Core.Controllers
                 servicio.UsuarioModificacionId = HttpContext.Current.User.Identity.GetUserId();
             }
 
-            var servicioModeloVista = _servicioService.Guardar(servicio);
+            var servicioId = _servicioService.Guardar(servicio).Id;
+            var servicioRepo = _servicioServiceExt.ObtenerPorId(servicioId);
 
-            return Ok(servicioModeloVista);
+            return Ok(servicioRepo);
         }
-        
+
         [HttpPost]
         public IHttpActionResult NotificarServiciosAConductor([FromBody]ICollection<Servicio> servicios)
         {
             var respuesta = _servicioServiceExt.NotificarServiciosAConductor(servicios);
             return Ok(respuesta);
-        }  
+        }
 
         [HttpPost]
         public IHttpActionResult ObtenerHtmlServiciosAConductor([FromBody]ICollection<Servicio> servicios)
@@ -159,7 +153,7 @@ namespace ControlDrive.Core.Controllers
             var seguimiento = new Seguimiento
             {
                 NuevoEstado = "CR",
-                Observacion = "Nuevos valores asignados: cierre: " + valores.ruta.ToString() + ", conductor: " + valores.conductor.ToString() + ", ruta: " + valores.ruta.ToString(),
+                Observacion = "Valores asignados.",
                 Fecha = DateTime.Now,
                 ServicioId = servicioId,
                 UsuarioRegistroId = usuarioId
@@ -179,7 +173,8 @@ namespace ControlDrive.Core.Controllers
 
         [HttpPut]
         [Route("api/servicio/{servicioId:int}/facturar/{NoFactura}")]
-        public IHttpActionResult Facturar(int servicioId, string NoFactura) {
+        public IHttpActionResult Facturar(int servicioId, string NoFactura)
+        {
 
             var usuarioId = HttpContext.Current.User.Identity.GetUserId();
             _servicioServiceExt.Facturar(servicioId, NoFactura);

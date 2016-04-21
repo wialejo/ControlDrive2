@@ -21,13 +21,16 @@ namespace ControlDrive.Core.Controllers
     {
         private readonly ICommonInterface<Seguimiento> _seguimientoService;
         private readonly ISeguimientoService _seguimientoServiceExtend;
+        private readonly IServicioService _servicioServiceExt;
 
-        public SeguimientosController(ICommonInterface<Seguimiento> seguimientoService, ISeguimientoService seguimientoServiceExtend) {
+        public SeguimientosController(ICommonInterface<Seguimiento> seguimientoService, ISeguimientoService seguimientoServiceExtend, IServicioService servicioServiceExt)
+        {
             _seguimientoService = seguimientoService;
             _seguimientoServiceExtend = seguimientoServiceExtend;
+            _servicioServiceExt = servicioServiceExt;
         }
 
-        
+
         [HttpGet]
         public IHttpActionResult ObtenerPorServicio(int id)
         {
@@ -48,6 +51,16 @@ namespace ControlDrive.Core.Controllers
             var seguimientoRepo = _seguimientoService.Guardar(seguimiento);
 
             return Ok(seguimientoRepo);
+        }
+
+        [HttpGet]
+        [Route("api/seguimientos/servicios/rango")]
+        public IHttpActionResult ObtenerServicios([FromUri]DateTime startDate)
+        {
+            var servicios = new List<ServicioDto>();
+            var periodo = new PeriodoService().Obtener(startDate);
+            servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN").ToList();
+            return Ok(servicios);
         }
     }
 }

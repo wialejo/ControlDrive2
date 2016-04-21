@@ -4,7 +4,8 @@
 			.service('PeriodoSvc', function ($filter) {
 				return {
 					FormatearParaApi: FormatearParaApi,
-					ObtenerPeriodoActual : ObtenerPeriodoActual
+					ObtenerPeriodoActual: ObtenerPeriodoActual,
+					formatearFecha: formatearFecha
 				}
 
 				function formatearFecha(fechaStr){

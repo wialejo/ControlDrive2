@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ControlDrive.CORE.Extensions;
+using System.Linq.Expressions;
 
 namespace ControlDrive.CORE.Services
 {
@@ -25,7 +26,6 @@ namespace ControlDrive.CORE.Services
         private readonly ICommonInterface<Asegurado> _aseguradoService;
         private readonly ICommonInterface<Vehiculo> _vehiculoService;
         private readonly ICorreoService _correoService;
-        //private readonly ICommonInterface<Seguimiento> _seguimientoService;
 
         public ServicioService(IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService,
             ICommonInterface<Asegurado> aseguradoService, ICommonInterface<Vehiculo> vehiculoService, ICorreoService correoService, IUnitOfWork unitOfWork)
@@ -80,10 +80,11 @@ namespace ControlDrive.CORE.Services
                     servicioRepo.RutaId = null;
                 else
                     servicioRepo.RutaId = servicio.Ruta.Id;
-                
+
                 servicioRepo = _servicioRepositorio.Add(servicioRepo);
             }
-            else {
+            else
+            {
 
                 if (!string.IsNullOrEmpty(servicio.Radicado) && _servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado && s.Id != servicio.Id).Count() > 0)
                 {
@@ -112,7 +113,7 @@ namespace ControlDrive.CORE.Services
 
                 servicioRepo.FechaModificacion = DateTime.Now;
 
-                if(servicio.Conductor == null)
+                if (servicio.Conductor == null)
                     servicioRepo.ConductorId = null;
                 else
                     servicioRepo.ConductorId = servicio.Conductor.Id;
@@ -122,6 +123,7 @@ namespace ControlDrive.CORE.Services
                 else
                     servicioRepo.RutaId = servicio.Ruta.Id;
 
+                servicioRepo.Notificado = false;
 
                 _servicioRepositorio.Edit(servicioRepo);
             }
@@ -142,26 +144,20 @@ namespace ControlDrive.CORE.Services
             throw new NotImplementedException();
         }
 
-        public Servicio ObtenerPorId(int id)
+        public ServicioDto ObtenerPorId(int id)
         {
-            var servicio = _servicioRepositorio.FindBy(s => s.Id == id).FirstOrDefault();
+            var servicio = Obtener(s => s.Id == id).FirstOrDefault();
             return servicio;
         }
         
-        public void Eliminar(int id)
+        public List<ServicioDto> Obtener(Expression<Func<Servicio, bool>> predicate)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<ServicioDto> Obtener(Periodo periodo)
-        { 
-            if(periodo.Fin.Year == 1)
-                periodo = new PeriodoService().Obtener(periodo.Inicio);
-
             var servicios = _servicioRepositorio
-                .FindBy(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin)
+                .FindBy(predicate)
                 .OrderBy(s => s.Fecha)
-                .Select(s => new ServicioDto { Id = s.Id,
+                .Select(s => new ServicioDto
+                {
+                    Id = s.Id,
                     EstadoCodigo = s.EstadoCodigo,
                     Estado = s.Estado,
                     Fecha = s.Fecha,
@@ -184,34 +180,49 @@ namespace ControlDrive.CORE.Services
                     Ruta = s.Ruta,
                     UsuarioRegistro = s.UsuarioRegistro,
                     FechaRegistro = s.FechaRegistro,
-                    valores = s.valores,
-                    NoFactura = s.NoFactura
+                    valores = new ValorDto
+                    {
+                        cierre = s.valores == null ? "" : s.valores.cierre.ToString(),
+                        conductor = s.valores == null ? "" : s.valores.conductor.ToString(),
+                        ruta = s.valores == null ? "" : s.valores.ruta.ToString(),
+                        ServicioId = s.valores == null ? 0 : s.valores.ServicioId
+                    },
+                    NoFactura = s.NoFactura,
+                    Notificado = s.Notificado
                 })
                 .OrderBy(s => s.Fecha)
                 .ToList();
 
-            servicios.ForEach(servicio => {
+            servicios.ForEach(servicio =>
+            {
                 if (servicio.Conductor != null)
                 {
                     servicio.ConductorResumen = servicio.Conductor.ToResumen();
                 }
-                else {
+                else
+                {
                     servicio.ConductorResumen = string.Empty;
                 }
 
                 if (servicio.UsuarioRegistro != null)
-                servicio.UsuarioRegistro = new ApplicationUser { Nombre = servicio.UsuarioRegistro.Nombre };
+                    servicio.UsuarioRegistro = new ApplicationUser { Nombre = servicio.UsuarioRegistro.Nombre };
 
                 if (servicio.Ruta != null)
                 {
                     servicio.RutaResumen = servicio.Ruta.ToResumen();
                 }
-                else {
+                else
+                {
                     servicio.RutaResumen = string.Empty;
                 }
             });
 
             return servicios;
+        }
+
+        public void Eliminar(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public MemoryStream GenerarExcelServiciosResumen(Periodo periodo)
@@ -233,21 +244,21 @@ namespace ControlDrive.CORE.Services
                     fecha = f.Fecha.ToString("dd/MM/yyyy"),
                     codigo = f.Radicado,
                     aseguradora = f.Aseguradora.Nombre,
-                    asegurado = 
+                    asegurado =
                             f.Asegurado.Nombre +
                             (!string.IsNullOrEmpty(f.Asegurado.Telefono1) ? " " + f.Asegurado.Telefono1 : "") +
                             (!string.IsNullOrEmpty(f.Asegurado.Telefono2) ? " " + f.Asegurado.Telefono2 : ""),
 
-                    vehiculo = 
+                    vehiculo =
                             f.Vehiculo.Placa +
                             (!string.IsNullOrEmpty(f.Vehiculo.Descripcion) ? " " + f.Vehiculo.Descripcion : ""),
 
-                    origen = 
+                    origen =
                             f.DireccionInicio.Descripcion +
                             (!string.IsNullOrEmpty(f.DireccionInicio.Barrio) ? " " + f.DireccionInicio.Barrio : "") +
                             (!string.IsNullOrEmpty(f.DireccionInicio.Ciudad.Nombre) ? " " + f.DireccionInicio.Ciudad.Nombre : ""),
 
-                    destino = 
+                    destino =
                             f.DireccionDestino.Descripcion +
                             (!string.IsNullOrEmpty(f.DireccionDestino.Barrio) ? " " + f.DireccionDestino.Barrio : "") +
                             (!string.IsNullOrEmpty(f.DireccionDestino.Ciudad.Nombre) ? " " + f.DireccionDestino.Ciudad.Nombre : ""),
@@ -303,6 +314,7 @@ namespace ControlDrive.CORE.Services
             _servicioRepositorio.Edit(servicio);
             _unitOfWork.Commit();
         }
+
         #region Notificaiones
         public string NotificarServiciosARuta(ICollection<Servicio> servicios)
         {
@@ -332,7 +344,8 @@ namespace ControlDrive.CORE.Services
             IEnumerable<Conductor> Conductores = servicios.DistinctBy(s => s.ConductorId).Select(c => c.Conductor);
 
             string respuesta = string.Empty;
-            if (Conductores.Where(c => string.IsNullOrEmpty(c.Email)).Count()>0){
+            if (Conductores.Where(c => string.IsNullOrEmpty(c.Email)).Count() > 0)
+            {
                 respuesta = "Existen conductores sin un email asignado";
             }
 
@@ -342,6 +355,18 @@ namespace ControlDrive.CORE.Services
                 var correosDeServiciosPorConductor = CrearCorreosDeServiciosPorConductor(conductoresValidos, servicios);
                 _correoService.Enviar(correosDeServiciosPorConductor);
                 respuesta = string.IsNullOrEmpty(respuesta) ? "Conductores notificados correctamente." : ", Conductores notificados correctamente.";
+                servicios.ToList().ForEach(servicio =>
+                {
+
+                    _servicioRepositorio.Update(new Servicio { Id = servicio.Id, Notificado = true }, s => s.Notificado);
+
+                    //User u = new User { Id = id, LastActivity = DateTime.Now };
+                    //entities.Users.Attach(u);
+                    //entities.Entry(user).Property(u => u.LastActivity).IsModified = true;
+                    //entities.SaveChanges();
+
+                });
+                _unitOfWork.Commit();
             }
             return respuesta;
         }
@@ -473,13 +498,13 @@ namespace ControlDrive.CORE.Services
                     (!string.IsNullOrEmpty(servicio.DireccionDestino.Barrio) ? ", " + servicio.DireccionDestino.Barrio : "") +
                     (!string.IsNullOrEmpty(servicio.DireccionDestino.Ciudad.Nombre) ? ", " + servicio.DireccionDestino.Ciudad.Nombre : ""),
 
-                    (servicio.Conductor != null) ? 
+                    (servicio.Conductor != null) ?
                     (!string.IsNullOrEmpty(servicio.Conductor.Nombre) ? servicio.Conductor.Nombre : "") +
-                    (!string.IsNullOrEmpty(servicio.Conductor.Telefono1) ? ", " + servicio.Conductor.Telefono1 : ""):"",
+                    (!string.IsNullOrEmpty(servicio.Conductor.Telefono1) ? ", " + servicio.Conductor.Telefono1 : "") : "",
 
-                    (servicio.Ruta != null)?
+                    (servicio.Ruta != null) ?
                     (!string.IsNullOrEmpty(servicio.Ruta.Nombre) ? servicio.Ruta.Nombre : "") +
-                    (!string.IsNullOrEmpty(servicio.Ruta.Telefono1) ? ", " + servicio.Ruta.Telefono1 : ""):""
+                    (!string.IsNullOrEmpty(servicio.Ruta.Telefono1) ? ", " + servicio.Ruta.Telefono1 : "") : ""
                     );
             }
             return mensaje + "</tbody></table>";
@@ -513,11 +538,18 @@ namespace ControlDrive.CORE.Services
             return html;
         }
 
+        Servicio ICommonInterface<Servicio>.ObtenerPorId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 
-    public partial interface IServicioService {
-        List<ServicioDto> Obtener(Periodo periodo);
+    public partial interface IServicioService
+    {
+        ServicioDto ObtenerPorId(int id);
+        List<ServicioDto> Obtener(Expression<Func<Servicio, bool>> predicate);
         void CambioEstado(int idServicio, Estado nuevoEstado);
         string NotificarServiciosAConductor(ICollection<Servicio> servicios);
         string ObtenerHtmlServiciosAConductor(ICollection<Servicio> servicios);

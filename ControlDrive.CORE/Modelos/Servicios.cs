@@ -57,6 +57,7 @@ namespace ControlDrive.CORE.Modelos
         public virtual Valor valores { get; set; }
         
         public string NoFactura { get; set; }
+        public bool Notificado { get; set; }
     }
 
     public class Valor {

@@ -115,6 +115,10 @@
     <Compile Include="Migrations\201604080421542_addNoFactura.Designer.cs">
       <DependentUpon>201604080421542_addNoFactura.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604210319133_addServicioNotificacion.cs" />
+    <Compile Include="Migrations\201604210319133_addServicioNotificacion.Designer.cs">
+      <DependentUpon>201604210319133_addServicioNotificacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -151,6 +155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604080421542_addNoFactura.resx">
       <DependentUpon>201604080421542_addNoFactura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604210319133_addServicioNotificacion.resx">
+      <DependentUpon>201604210319133_addServicioNotificacion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

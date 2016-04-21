@@ -1,6 +1,5 @@
 ﻿
 <div ng-controller="SeguimientoController">
-
     <style>
         .border-none {
             border: none !important;
@@ -83,20 +82,20 @@
     <div class="panel panel-default">
         <div class="fixedHeader navbar-collapse  panel-heading form-inline ">
             <div class="row">
-                <div class="col-xs-3 col-sm-5 col-md-3 text-center-xs">
+                <div class="col-xs-6 col-sm-6 col-md-3 text-center-xs">
                     <form class="form-inline inline" ng-submit="ObtenerServicios()">
                         <div class="form-group">
                             <div class="input-group">
-                                <input tabindex="1" ng-model="periodo" required type="text" class="form-control input-sm" id="TxtPeriodo" name="TxtPeriodo" placeholder="dd/mm/aaaa">
-                                <span class="input-group-btn hidden-xs">
+                                <input tabindex="1" ng-model="periodo" required type="search" class="form-control input-sm" id="TxtPeriodo" name="TxtPeriodo" placeholder="dd/mm/aaaa">
+                                <span class="input-group-btn">
                                     <input type="submit" class="btn btn-info btn-sm" name="ObtenerServicios" value="Obtener" />
                                 </span>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="col-xs-8 col-sm-6 col-md-4 text-center-xs text-right">
-                    <div class="col-xs-4 col-sm-3">
+                <div class="col-xs-5 col-sm-5 col-md-4 text-center-xs text-right">
+                    <div class="col-md-3 hidden-xs hidden-sm">
                         <div class="btn-group" uib-dropdown is-open="status.isopen">
                             <button id="single-button" type="button" class="btn btn-default btn-sm" uib-dropdown-toggle ng-disabled="disabled">
                                 Estados <span class="caret"></span>
@@ -105,8 +104,8 @@
                                 <li ng-repeat="estado in estados">
                                     <a>
                                         <div class="checkbox" ng-click="filtrarServicios();$event.stopPropagation()">
-                                            <label >
-                                                <input type="checkbox"  ng-model="estado.Mostrar" >
+                                            <label>
+                                                <input type="checkbox" ng-model="estado.Mostrar">
                                                 {{estado.Descripcion}}
                                             </label>
                                         </div>
@@ -115,18 +114,18 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-xs-4 col-sm-3">
+                    <div class="col-xs-12 col-sm-12 col-md-3">
                         <div class="form-group">
                             <input placeholder="Filtar todo..." class="form-control input-sm" type="search"
                                    ng-model="search.$" />
                         </div>
                     </div>
-                    <div class="col-xs-4 col-sm-3">
+                    <div class="col-md-3 hidden-xs hidden-sm">
                         <div class="form-group">
                             <input ng-model="search.ConductorResumen" class="form-control input-sm" placeholder="Filtrar conductores" type="search" />
                         </div>
                     </div>
-                    <div class="col-xs-4 col-sm-3">
+                    <div class="col-md-3 hidden-xs hidden-sm">
                         <div class="form-group">
                             <input ng-model="search.RutaResumen" class="form-control input-sm" placeholder="Filtar rutas" type="search" />
                         </div>
@@ -142,26 +141,54 @@
                         <button ng-click="ExportarCSV()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> Excel</button>
                     </div>
                 </div>
-
-                <div class="col-xs-12  hidden-md hidden-lg" ng-class=" {  'hidden-xs': verHerramientas, 'hidden-sm': verHerramientas }">
-                    <button ng-click="EnviarCorreoConductor()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Notifica los servicios seleccionados a los respectivos conductores"><i class="fa fa-envelope-o"></i> Conductor</button>
-                    <button ng-click="EnviarCorreoConductor(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Conductor</button>
-                    <button ng-click="EnviarCorreoRuta()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Notifica los servicios seleccionados a las respectivas rutas"><i class="fa fa-envelope-o"></i> Ruta</button>
-                    <button ng-click="EnviarCorreoRuta(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Ruta</button>
-                    <button ng-click="ExportarCSV()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> Excel</button>
+                <div class="col-xs-12 hidden-md hidden-lg text-center" ng-class=" {  'hidden-xs': verHerramientas, 'hidden-sm': verHerramientas }">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button ng-click="EnviarCorreoConductor()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Notifica los servicios seleccionados a los respectivos conductores"><i class="fa fa-envelope-o"></i> Conductor</button>
+                            <button ng-click="EnviarCorreoConductor(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Conductor</button>
+                            <button ng-click="EnviarCorreoRuta()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Notifica los servicios seleccionados a las respectivas rutas"><i class="fa fa-envelope-o"></i> Ruta</button>
+                            <button ng-click="EnviarCorreoRuta(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Ruta</button>
+                            <button ng-click="ExportarCSV()" ng-disabled="isSaving" class="btn btn-sm btn-info" uib-tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> Excel</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="btn-group" uib-dropdown is-open="status.isopen">
+                                <button id="single-button" type="button" class="btn btn-default btn-sm" uib-dropdown-toggle ng-disabled="disabled">
+                                    Estados <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                    <li ng-repeat="estado in estados">
+                                        <a>
+                                            <div class="checkbox" ng-click="filtrarServicios();$event.stopPropagation()">
+                                                <label>
+                                                    <input type="checkbox" ng-model="estado.Mostrar">
+                                                    {{estado.Descripcion}}
+                                                </label>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <input ng-model="search.ConductorResumen" class="form-control input-sm" placeholder="Filtrar conductores" type="search" />
+                            </div>
+                            <div class="form-group">
+                                <input ng-model="search.RutaResumen" class="form-control input-sm" placeholder="Filtar rutas" type="search" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="staticBody panel-body">
+        <div class="staticBody">
             <div class="table-responsive">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
                             <td colspan="10">
-
-                                <label><strong>Total servicios: </strong></label> {{ serviciosActivos.length }}
-
+                                <label><strong>Total servicios: </strong></label> {{ servicios.length }}
                                 <span style="margin-left:30px" ng-repeat="(key,val) in estadoServiciosActivos"><label><strong>{{key}}: </strong></label> {{ val }}</span>
                             </td>
                         </tr>
@@ -189,6 +216,8 @@
                             </td>
                             <td class="text-center">
                                 <span class="glyphicon glyphicon-pencil" ng-click="Editar(servicio)" uib-tooltip="Editar el servicio"></span>
+                                <span ng-if="servicio.Notificado" class="glyphicon glyphicon-envelope" uib-tooltip="¡Servicio notificado!"></span>
+                                <br />
                                 <a class="btn btn-link text-center" ng-click="MostrarDetalles(servicio,  $event)" uib-tooltip="Mostrar detalles el servicio">
                                     <u> {{servicio.Id}}</u>
                                 </a>
@@ -306,4 +335,3 @@
         <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Editar" ng-click="Editar(servicio)" />
     </div>
 </script>
-</div>

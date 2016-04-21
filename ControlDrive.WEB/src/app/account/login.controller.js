@@ -12,6 +12,7 @@
             };
             vm.message = "";
             vm.login = function () {
+                //vm.loginData.useRefreshTokens = true;
                 authService.login(vm.loginData).then(function () {
                     $location.path('/app');
                 },

@@ -13,6 +13,9 @@ namespace ControlDrive.CORE.Modelos
 {
     public class ServicioDto
     {
+        public ServicioDto() {
+            valores = new ValorDto();
+        }
         public int Id { get; set; }
 
         public string EstadoCodigo { get; set; }
@@ -48,24 +51,21 @@ namespace ControlDrive.CORE.Modelos
 
         public int? UsuarioRegistroId { get; set; }
         public virtual ApplicationUser UsuarioRegistro { get; set; }
-
         public int? UsuarioModificacionId { get; set; }
         public virtual ApplicationUser UsuarioModificacion { get; set; }
-
         public ICollection<Seguimiento> Seguimientos { get; set; }
-
-        public Valor valores { get; set; }
-
+        public ValorDto valores { get; set; }
         public string NoFactura { get; set; }
+        public bool Notificado { get; set; }
 
     }
 
     public class ValorDto
     {
         public int ServicioId { get; set; }
-        public decimal cierre { get; set; }
-        public decimal ruta { get; set; }
-        public decimal conductor { get; set; }
+        public string cierre { get; set; }
+        public string ruta { get; set; }
+        public string conductor { get; set; }
     }
 
 
