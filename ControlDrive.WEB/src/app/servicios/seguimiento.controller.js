@@ -139,8 +139,7 @@
             }
 
             $scope.ExportarCSV = function () {
-                var periodo = PeriodoSvc.FormatearParaApi($scope.periodo)
-                ServicioSvc.ObtenerPorPeriodoCSV(periodo);
+                ServicioSvc.ObtenerPorPeriodoCSV($scope.periodo);
             }
 
             $scope.MostrarDetalles = function (servicio) {

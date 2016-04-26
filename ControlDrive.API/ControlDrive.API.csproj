@@ -208,6 +208,7 @@
     <Compile Include="Controllers\AseguradoraController.cs" />
     <Compile Include="Controllers\ConductorController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
+    <Compile Include="Controllers\PeriodoController.cs" />
     <Compile Include="Controllers\SeguimientosController.cs" />
     <Compile Include="Controllers\ServicioController.cs" />
     <Compile Include="Global.asax.cs">

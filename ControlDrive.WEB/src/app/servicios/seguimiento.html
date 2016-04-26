@@ -210,7 +210,6 @@
                         </tr>
                     </thead>
                     <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles ) " ng-class=" { 'border-none' : active==servicio}">
-<!--<tbody class="text-xs" ng-repeat="servicio in serviciosActivos | filter: search " ng-class=" { 'border-none' : active==servicio}">-->
                         <tr>
                             <td class="text-center" style="background-color:#edeaea" ng-click="VerSeguimientos(servicio);">
                                 <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>
@@ -218,6 +217,7 @@
                             <td class="text-center">
                                 <span class="glyphicon glyphicon-pencil" ng-click="Editar(servicio)" uib-tooltip="Editar el servicio"></span>
                                 <span ng-if="servicio.Notificado" class="glyphicon glyphicon-envelope" uib-tooltip="¡Servicio notificado!"></span>
+                                <span ng-if="!servicio.Asegurado.Telefono1 || servicio.Vehiculo.Placa.length != 6" class="glyphicon glyphicon-info-sign text-danger" uib-tooltip="Datos faltantes: {{ !servicio.Asegurado.Telefono1 ? 'Teléfono del asegurado, ' : '' }} {{ servicio.Vehiculo.Placa.length != 6 ? 'Placa del vehiculo' : ''}}"></span>
                                 <br />
                                 <a class="btn btn-link text-center" ng-click="MostrarDetalles(servicio,  $event)" uib-tooltip="Mostrar detalles el servicio">
                                     <u> {{servicio.Id}}</u>

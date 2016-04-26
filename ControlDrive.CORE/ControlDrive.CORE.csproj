@@ -119,6 +119,10 @@
     <Compile Include="Migrations\201604210319133_addServicioNotificacion.Designer.cs">
       <DependentUpon>201604210319133_addServicioNotificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604220335562_cambioTipoDatoVAlores.cs" />
+    <Compile Include="Migrations\201604220335562_cambioTipoDatoVAlores.Designer.cs">
+      <DependentUpon>201604220335562_cambioTipoDatoVAlores.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -158,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604210319133_addServicioNotificacion.resx">
       <DependentUpon>201604210319133_addServicioNotificacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604220335562_cambioTipoDatoVAlores.resx">
+      <DependentUpon>201604220335562_cambioTipoDatoVAlores.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

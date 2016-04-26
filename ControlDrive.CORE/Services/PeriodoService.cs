@@ -13,15 +13,24 @@ namespace ControlDrive.CORE.Services
 {
     public class PeriodoService
     {
-        public Periodo Obtener(DateTime Fecha)
+        public Periodo Obtener(DateTime fecha)
         {
             Periodo periodo = new Periodo();
-            TimeSpan ti = new TimeSpan(18, 0, 0);
-            periodo.Inicio = Fecha.Date + ti;
+            TimeSpan ti = new TimeSpan(14, 0, 0);
+            periodo.Inicio = fecha.Date + ti;
 
-            TimeSpan tf = new TimeSpan(17, 59, 0);
-            periodo.Fin = Fecha.Date.AddDays(1) + tf;
+            TimeSpan tf = new TimeSpan(13, 59, 0);
+            periodo.Fin = fecha.Date.AddDays(1) + tf;
             return periodo;
+        }
+
+        public bool FechaEnPeriodoActual(DateTime fecha)
+        {
+            var periodoActual = Obtener(DateTime.Now.Hour < 14 ? DateTime.Now.AddDays(-1) : DateTime.Now);
+            if (fecha >= periodoActual.Inicio && fecha <= periodoActual.Fin)
+                return true;
+            else
+                return false;
         }
     }
 }   

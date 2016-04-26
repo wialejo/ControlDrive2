@@ -65,9 +65,9 @@ namespace ControlDrive.CORE.Modelos
         [Key]
         public int ServicioId { get; set; }
 
-        public decimal cierre { get; set; }
-        public decimal ruta { get; set; }
-        public decimal conductor { get; set; }
+        public string cierre { get; set; }
+        public string ruta { get; set; }
+        public string conductor { get; set; }
 
         public Servicio servicio { get; set; }
     }

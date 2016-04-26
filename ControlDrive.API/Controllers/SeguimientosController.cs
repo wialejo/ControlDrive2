@@ -30,7 +30,6 @@ namespace ControlDrive.Core.Controllers
             _servicioServiceExt = servicioServiceExt;
         }
 
-
         [HttpGet]
         public IHttpActionResult ObtenerPorServicio(int id)
         {
@@ -53,14 +52,5 @@ namespace ControlDrive.Core.Controllers
             return Ok(seguimientoRepo);
         }
 
-        [HttpGet]
-        [Route("api/seguimientos/servicios/rango")]
-        public IHttpActionResult ObtenerServicios([FromUri]DateTime startDate)
-        {
-            var servicios = new List<ServicioDto>();
-            var periodo = new PeriodoService().Obtener(startDate);
-            servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN").ToList();
-            return Ok(servicios);
-        }
     }
 }

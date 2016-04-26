@@ -289,8 +289,31 @@ namespace ControlDrive.CORE.Services
 
         public void Cerrar(int servicioId, Valor valores)
         {
-            GuardarValores(servicioId, valores);
-            CambioEstado(servicioId, new Estado { Codigo = "CR" });
+            var servicio = _servicioRepositorio.FindBy(s => s.Id == servicioId).FirstOrDefault();
+            if (servicio.valores == null)
+                servicio.valores = new Valor() { ServicioId = valores.ServicioId };
+
+            servicio.valores.cierre = valores.cierre;
+            servicio.valores.ruta = valores.ruta;
+            servicio.valores.conductor = valores.conductor;
+
+            var nuevoEstado = string.Empty;
+            switch (servicio.EstadoCodigo)
+            {
+                case "TE":
+                    nuevoEstado = "CR";
+                    break;
+                case "CN":
+                    nuevoEstado = "CF";
+                    break;
+                case "FL":
+                    nuevoEstado = "CF";
+                    break;
+            }
+            servicio.EstadoCodigo = nuevoEstado;
+
+            _servicioRepositorio.Edit(servicio);
+            _unitOfWork.Commit();
         }
 
         public void GuardarValores(int servicioId, Valor valores)

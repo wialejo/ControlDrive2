@@ -1,11 +1,20 @@
 (function() {
 	'use strict';
 		angular.module('controldriveApp')
-			.service('PeriodoSvc', function ($filter) {
+			.service('PeriodoSvc', function ($filter, $http, ngAuthSettings) {
 				return {
 					FormatearParaApi: FormatearParaApi,
 					ObtenerPeriodoActual: ObtenerPeriodoActual,
-					formatearFecha: formatearFecha
+					formatearFecha: formatearFecha,
+					FechaEnPeriodoActual: FechaEnPeriodoActual
+				}
+				function http(method, urlMetodo, data) {
+				    var request = $http({
+				        method: method,
+				        url: ngAuthSettings.apiServiceBaseUri + 'api/' + urlMetodo,
+				        data: data
+				    });
+				    return request;
 				}
 
 				function formatearFecha(fechaStr){
@@ -30,7 +39,7 @@
 				function ObtenerPeriodoActual() {
 					var date = new Date();
 					var horas = date.getHours();
-
+                    //Si la hora actual es mejor a las 6am mantiene la fecha del dia anterior para conservar el periodo
 					if (horas < 6 ) {
 					  date.setDate(date.getDate() - 1);
 					}
@@ -44,6 +53,10 @@
 					return fechaSiguienteDia;
 				}
 
-
+				function FechaEnPeriodoActual(fecha) {
+				    var url = "periodo/FechaEnPeriodoActual?fecha=" + fecha;
+				    var obj = http("GET", url);
+				    return obj
+				}
 			});
 })();

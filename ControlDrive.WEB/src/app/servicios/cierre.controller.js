@@ -34,13 +34,9 @@
             }
 
             $scope.ObtenerServicios = function () {
-                ServicioSvc.ObtenerParaSeguimiento($scope.periodo)
+                ServicioSvc.ObtenerParaCierre($scope.periodo)
                     .then(function (response) {
-                        $scope.servicios = response.data.filter(function (servicio) {
-                            if (servicio.EstadoCodigo == "TE" || servicio.EstadoCodigo == "FL") {
-                                return servicio;
-                            }
-                        });
+                        $scope.servicios = response.data;
                     })
                     .catch(function (response) {
                         toastr.error(response.data.ExceptionMessage);

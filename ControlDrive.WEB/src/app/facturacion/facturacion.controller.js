@@ -27,7 +27,7 @@
             }
 
             $scope.ObtenerServicios = function () {
-                ServicioSvc.Obtener($scope.fechaInicial, $scope.fechaFinal, "CR")
+                ServicioSvc.ObtenerParaFacturacion($scope.fechaInicial, $scope.fechaFinal)
                     .then(function (response) {
                         $scope.servicios = response.data;
                     }, function (response) {

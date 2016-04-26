@@ -35,22 +35,55 @@ namespace ControlDrive.Core.Controllers
             _seguimientoService = seguimientoService;
         }
 
-        [HttpPost]
-        [Route("api/servicio")]
-        public IHttpActionResult Obtener(Periodo periodo)
+        [HttpGet]
+        [Route("api/servicios/rango")]
+        public IHttpActionResult Obtener([FromUri]DateTime inicio, [FromUri]DateTime fin)
         {
-            var servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin).ToList();
+            var servicios = _servicioServiceExt.Obtener(s => DbFunctions.TruncateTime(s.Fecha) >= DbFunctions.TruncateTime(inicio) && DbFunctions.TruncateTime(s.Fecha) <= DbFunctions.TruncateTime(fin)).ToList();
             return Ok(servicios);
         }
 
-        [HttpPost]
-        [Route("api/servicio")]
-        public IHttpActionResult Obtener([FromUri] string estado, [FromBody]Periodo periodo)
+        [HttpGet]
+        [Route("api/servicios/seguimiento")]
+        public IHttpActionResult ObtenerServicios([FromUri]DateTime inicioPeriodo)
         {
             var servicios = new List<ServicioDto>();
-            servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & (string.IsNullOrEmpty(estado) || s.EstadoCodigo == "AN")).ToList();
+            var periodo = new PeriodoService().Obtener(inicioPeriodo);
+            servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN").ToList();
+            return Ok(servicios);
+        }
+
+        [HttpGet]
+        [Route("api/servicios/cierre")]
+        public IHttpActionResult ObtenerCierre([FromUri]DateTime inicioPeriodo)
+        {
+            var servicios = new List<ServicioDto>();
+            var periodo = new PeriodoService().Obtener(inicioPeriodo);
+            servicios = _servicioServiceExt
+                .Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & (s.EstadoCodigo == "FL" || s.EstadoCodigo == "CN" || s.EstadoCodigo == "TE"))
+                .ToList();
+            return Ok(servicios);
+        }
+
+        [HttpGet]
+        [Route("api/servicios/facturacion/rango")]
+        public IHttpActionResult ObtenerFacturacion([FromUri]DateTime inicio, [FromUri]DateTime fin)
+        {
+            var servicios = new List<ServicioDto>();
+            servicios = _servicioServiceExt
+                            .Obtener(s => DbFunctions.TruncateTime(s.Fecha) >= DbFunctions.TruncateTime(inicio)
+                                    && DbFunctions.TruncateTime(s.Fecha) <= DbFunctions.TruncateTime(fin)
+                                    && (s.EstadoCodigo == "CR" || s.EstadoCodigo == "CF"))
+                             .ToList();
 
             return Ok(servicios);
+        }
+
+        [HttpGet]
+        public IHttpActionResult ObtenerPorId(int id)
+        {
+            var servicio = _servicioServiceExt.ObtenerPorId(id);
+            return Ok(servicio);
         }
 
         [HttpPost]
@@ -82,13 +115,6 @@ namespace ControlDrive.Core.Controllers
             }
 
             return this.Request.CreateErrorResponse(HttpStatusCode.NoContent, "No hay datos.");
-        }
-
-        [HttpGet]
-        public IHttpActionResult ObtenerPorId(int id)
-        {
-            var servicio = _servicioServiceExt.ObtenerPorId(id);
-            return Ok(servicio);
         }
 
         [HttpPost]
@@ -135,7 +161,6 @@ namespace ControlDrive.Core.Controllers
             return Ok(respuesta);
         }
 
-
         [HttpPost]
         public IHttpActionResult ObtenerHtmlServiciosARuta([FromBody]ICollection<Servicio> servicios)
         {
@@ -143,22 +168,13 @@ namespace ControlDrive.Core.Controllers
             return Ok(respuesta);
         }
 
+
         [HttpPut]
         [Route("api/servicio/{servicioId}/cerrar")]
         public IHttpActionResult Cerrar(int servicioId, Valor valores)
         {
             var usuarioId = HttpContext.Current.User.Identity.GetUserId();
             _servicioServiceExt.Cerrar(servicioId, valores);
-
-            var seguimiento = new Seguimiento
-            {
-                NuevoEstado = "CR",
-                Observacion = "Valores asignados.",
-                Fecha = DateTime.Now,
-                ServicioId = servicioId,
-                UsuarioRegistroId = usuarioId
-            };
-            _seguimientoService.Guardar(seguimiento);
 
             return Ok();
         }

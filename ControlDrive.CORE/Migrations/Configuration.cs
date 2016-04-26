@@ -39,9 +39,9 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 new Estado() { Codigo = "CN", Descripcion = "Cancelado", Orden = 12, EnOperacion = true },
                 new Estado() { Codigo = "AN", Descripcion = "Anulado", Orden = 14, EnOperacion = true },
                 new Estado() { Codigo = "TE", Descripcion = "Finalizado", Orden = 16, EnOperacion = true },
-                new Estado() { Codigo = "CR", Descripcion = "Cierre", Orden = 18, EnOperacion = true },
+                new Estado() { Codigo = "CR", Descripcion = "Cierre finalizado", Orden = 18, EnOperacion = true },
+                new Estado() { Codigo = "CF", Descripcion = "Cierre fallido", Orden = 19, EnOperacion = true },
                 new Estado() { Codigo = "FA", Descripcion = "Facturado", Orden = 20, EnOperacion = false }
-
             );
             context.Aseguradoras.AddOrUpdate(
                 new Aseguradora() { Id = 1, Nombre = "Bolivar" },
