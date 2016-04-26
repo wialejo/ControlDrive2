@@ -103,7 +103,7 @@
                             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
                                 <li ng-repeat="estado in estados">
                                     <a>
-                                        <div class="checkbox" ng-click="filtrarServicios();$event.stopPropagation()">
+                                        <div class="checkbox" ng-click="$event.stopPropagation()">
                                             <label>
                                                 <input type="checkbox" ng-model="estado.Mostrar">
                                                 {{estado.Descripcion}}
@@ -188,7 +188,7 @@
                     <thead>
                         <tr>
                             <td colspan="10">
-                                <label><strong>Total servicios: </strong></label> {{ servicios.length }}
+                                <label><strong>Total servicios: </strong></label> {{ serviciosActivos.length }}
                                 <span style="margin-left:30px" ng-repeat="(key,val) in estadoServiciosActivos"><label><strong>{{key}}: </strong></label> {{ val }}</span>
                             </td>
                         </tr>
@@ -209,7 +209,8 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="text-xs" ng-repeat="servicio in serviciosActivos | filter: search " ng-class=" { 'border-none' : active==servicio}">
+                    <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles ) " ng-class=" { 'border-none' : active==servicio}">
+<!--<tbody class="text-xs" ng-repeat="servicio in serviciosActivos | filter: search " ng-class=" { 'border-none' : active==servicio}">-->
                         <tr>
                             <td class="text-center" style="background-color:#edeaea" ng-click="VerSeguimientos(servicio);">
                                 <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>
