@@ -10,7 +10,6 @@
             }
             $scope.isSaving = false;
             $scope.verHerramientas = true;
-            $scope.estados2 = [{ Codigo: "EN" }, { Codigo: "EC" }]
 
             $scope.MostrarHerramientas = function () {
                 if ($scope.verHerramientas) {
@@ -87,35 +86,35 @@
             }
             $scope.ObtenerEstados();
 
-            $scope.filtrarServicios = function () {
-
-                var estadoServicios = {};
-                $scope.serviciosActivos = $scope.servicios.filter(function (servicio) {
-                    if (servicio.Estado.EnOperacion == true) {
-                        estadoServicios[servicio.Estado.Descripcion] = estadoServicios[servicio.Estado.Descripcion] ? estadoServicios[servicio.Estado.Descripcion] + 1 : 1
-
-                        var existe = 0;
-                        $scope.estados.filter(function (estado) {
-                            if(estado.Mostrar){
-                                if (estado.Codigo == servicio.Estado.Codigo) {
-                                    existe++;
-                                    return;
-                                }
+            $scope.EstadosVisibles = function (servicio) {
+                
+                    var existe = 0;
+                    $scope.estados.filter(function (estado) {
+                        if (estado.Mostrar) {
+                            if (estado.Codigo == servicio.Estado.Codigo) {
+                                existe++;
+                                return;
                             }
-                        })
-                        if(existe == 1)
-                            return servicio;
-                    }
-                });
-                    $scope.estadoServiciosActivos = estadoServicios;
+                        }
+                    })
+                    if (existe == 1)
+                        return servicio;
             }
 
             $scope.ObtenerServicios = function () {
                 ServicioSvc.ObtenerParaSeguimiento($scope.periodo)
                     .then(function (response) {
-                        
-                        $scope.servicios = response.data;
-                        $scope.filtrarServicios();
+                        var estadoServicios = {};
+                        $scope.servicios = response.data.filter(function (servicio) {
+                            if (servicio.Estado.EnOperacion == true) {
+                                estadoServicios[servicio.Estado.Descripcion] = estadoServicios[servicio.Estado.Descripcion] ? estadoServicios[servicio.Estado.Descripcion] + 1 : 1
+                                return servicio.EstadoCodigo;
+                            }
+                        });
+                        $scope.estadoServiciosActivos = estadoServicios;
+
+                        ////$scope.servicios = ;
+                        ////$scope.filtrarServicios(response.data);
                         
                         //var estadoServicios = {};
                         //response.data.filter(function (servicio) {
