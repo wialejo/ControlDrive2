@@ -27,7 +27,7 @@ namespace ControlDrive.CORE.Services
         private readonly ICommonInterface<Vehiculo> _vehiculoService;
         private readonly ICorreoService _correoService;
 
-        public ServicioService(IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService,
+        public ServicioService(IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService, 
             ICommonInterface<Asegurado> aseguradoService, ICommonInterface<Vehiculo> vehiculoService, ICorreoService correoService, IUnitOfWork unitOfWork)
         {
             _servicioRepositorio = servicioRepositorio;
@@ -36,7 +36,7 @@ namespace ControlDrive.CORE.Services
             _vehiculoService = vehiculoService;
             _correoService = correoService;
             _unitOfWork = unitOfWork;
-            //_seguimientoService = seguimientoService;
+
         }
 
         public Servicio Guardar(Servicio servicio)
@@ -149,7 +149,7 @@ namespace ControlDrive.CORE.Services
             var servicio = Obtener(s => s.Id == id).FirstOrDefault();
             return servicio;
         }
-        
+
         public List<ServicioDto> Obtener(Expression<Func<Servicio, bool>> predicate)
         {
             var servicios = _servicioRepositorio
@@ -180,15 +180,9 @@ namespace ControlDrive.CORE.Services
                     Ruta = s.Ruta,
                     UsuarioRegistro = s.UsuarioRegistro,
                     FechaRegistro = s.FechaRegistro,
-                    valores = new ValorDto
-                    {
-                        cierre = s.valores == null ? "" : s.valores.cierre.ToString(),
-                        conductor = s.valores == null ? "" : s.valores.conductor.ToString(),
-                        ruta = s.valores == null ? "" : s.valores.ruta.ToString(),
-                        ServicioId = s.valores == null ? 0 : s.valores.ServicioId
-                    },
-                    NoFactura = s.NoFactura,
-                    Notificado = s.Notificado
+                    Notificado = s.Notificado,
+                    //Movimientos =  s.Movimientos.Select(m => new MovimientoDto(m)).ToList()
+                    Movimientos = s.Movimientos
                 })
                 .OrderBy(s => s.Fecha)
                 .ToList();
@@ -218,6 +212,42 @@ namespace ControlDrive.CORE.Services
             });
 
             return servicios;
+        }
+
+        public void ActualizarConsecutivo(int idServicio, string nuevoConsecutivo)
+        {
+            _servicioRepositorio.Update(new Servicio { Id = idServicio, Radicado = nuevoConsecutivo }, s => s.Radicado);
+            _unitOfWork.Commit();
+        }
+
+        public void CambioEstado(int idServicio, Estado nuevoEstado)
+        {
+            var servicioRepo = _servicioRepositorio.FindBy(s => s.Id == idServicio).FirstOrDefault();
+            servicioRepo.EstadoCodigo = nuevoEstado.Codigo;
+            _servicioRepositorio.Edit(servicioRepo);
+            _unitOfWork.Commit();
+        }
+
+        public void Cerrar(List<Servicio> servicios)
+        {
+            servicios.ForEach(servicio => {
+                var nuevoEstado = string.Empty;
+                switch (servicio.EstadoCodigo)
+                {
+                    case "TE":
+                        nuevoEstado = "CR";
+                        break;
+                    case "CN":
+                        nuevoEstado = "CF";
+                        break;
+                    case "FL":
+                        nuevoEstado = "CF";
+                        break;
+                }
+                servicio.EstadoCodigo = nuevoEstado;
+                _servicioRepositorio.Update(servicio, s => s.EstadoCodigo);
+            });
+            _unitOfWork.Commit();
         }
 
         public void Eliminar(int id)
@@ -279,66 +309,7 @@ namespace ControlDrive.CORE.Services
             return serviciosResumen;
         }
 
-        public void CambioEstado(int idServicio, Estado nuevoEstado)
-        {
-            var servicioRepo = _servicioRepositorio.FindBy(s => s.Id == idServicio).FirstOrDefault();
-            servicioRepo.EstadoCodigo = nuevoEstado.Codigo;
-            _servicioRepositorio.Edit(servicioRepo);
-            _unitOfWork.Commit();
-        }
-
-        public void Cerrar(int servicioId, Valor valores)
-        {
-            var servicio = _servicioRepositorio.FindBy(s => s.Id == servicioId).FirstOrDefault();
-            if (servicio.valores == null)
-                servicio.valores = new Valor() { ServicioId = valores.ServicioId };
-
-            servicio.valores.cierre = valores.cierre;
-            servicio.valores.ruta = valores.ruta;
-            servicio.valores.conductor = valores.conductor;
-
-            var nuevoEstado = string.Empty;
-            switch (servicio.EstadoCodigo)
-            {
-                case "TE":
-                    nuevoEstado = "CR";
-                    break;
-                case "CN":
-                    nuevoEstado = "CF";
-                    break;
-                case "FL":
-                    nuevoEstado = "CF";
-                    break;
-            }
-            servicio.EstadoCodigo = nuevoEstado;
-
-            _servicioRepositorio.Edit(servicio);
-            _unitOfWork.Commit();
-        }
-
-        public void GuardarValores(int servicioId, Valor valores)
-        {
-            var servicio = _servicioRepositorio.FindBy(s => s.Id == servicioId).FirstOrDefault();
-            if (servicio.valores == null)
-                servicio.valores = new Valor() { ServicioId = valores.ServicioId };
-
-            servicio.valores.cierre = valores.cierre;
-            servicio.valores.ruta = valores.ruta;
-            servicio.valores.conductor = valores.conductor;
-            _servicioRepositorio.Edit(servicio);
-            _unitOfWork.Commit();
-        }
-
-        public void Facturar(int servicioId, string noFactura)
-        {
-            var servicio = _servicioRepositorio.FindBy(s => s.Id == servicioId).FirstOrDefault();
-            servicio.NoFactura = noFactura;
-            servicio.EstadoCodigo = "FA";
-            _servicioRepositorio.Edit(servicio);
-            _unitOfWork.Commit();
-        }
-
-        #region Notificaiones
+        #region Notificaciones
         public string NotificarServiciosARuta(ICollection<Servicio> servicios)
         {
             IEnumerable<Conductor> Rutas = servicios.DistinctBy(s => s.RutaId).Select(c => c.Ruta);
@@ -380,14 +351,7 @@ namespace ControlDrive.CORE.Services
                 respuesta = string.IsNullOrEmpty(respuesta) ? "Conductores notificados correctamente." : ", Conductores notificados correctamente.";
                 servicios.ToList().ForEach(servicio =>
                 {
-
-                    _servicioRepositorio.Update(new Servicio { Id = servicio.Id, Notificado = true }, s => s.Notificado);
-
-                    //User u = new User { Id = id, LastActivity = DateTime.Now };
-                    //entities.Users.Attach(u);
-                    //entities.Entry(user).Property(u => u.LastActivity).IsModified = true;
-                    //entities.SaveChanges();
-
+                    _servicioRepositorio.Update(new Servicio { Id = servicio.Id, Notificado = true}, s => s.Notificado);
                 });
                 _unitOfWork.Commit();
             }
@@ -574,15 +538,14 @@ namespace ControlDrive.CORE.Services
         ServicioDto ObtenerPorId(int id);
         List<ServicioDto> Obtener(Expression<Func<Servicio, bool>> predicate);
         void CambioEstado(int idServicio, Estado nuevoEstado);
+        void ActualizarConsecutivo(int idServicio, string nuevoConsecutivo);
         string NotificarServiciosAConductor(ICollection<Servicio> servicios);
         string ObtenerHtmlServiciosAConductor(ICollection<Servicio> servicios);
 
         string NotificarServiciosARuta(ICollection<Servicio> servicios);
         string ObtenerHtmlServiciosARuta(ICollection<Servicio> servicios);
         MemoryStream GenerarExcelServiciosResumen(Periodo periodo);
-        void Cerrar(int servicioId, Valor valores);
-        void GuardarValores(int servicioId, Valor valores);
-        void Facturar(int servicioId, string noFactura);
+        void Cerrar(List<Servicio> servicios);
     }
 
     public class ServicioResumen
@@ -599,5 +562,19 @@ namespace ControlDrive.CORE.Services
         public string conductor { get; set; }
         public string ruta { get; set; }
         public string estado { get; set; }
+    }
+
+    public class ServicioConcepto
+    {
+        public int Id { get; set; }
+        public Conductor Proveedor { get; set; }
+        public string Valor { get; set; }
+        public string Concepto { get; set; }
+        public Aseguradora Aseguradora { get; set; }
+        public Asegurado Cliente { get; set; }
+        public Direccion DireccionInicio { get; set; }
+        public Direccion DireccionDestino { get; set; }
+        public string Radicado { get; set; }
+        public DateTime Fecha { get; set; }
     }
 }

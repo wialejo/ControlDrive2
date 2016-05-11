@@ -15,15 +15,15 @@
             })
             .state('app.nuevo', {
                 url: '/servicio',
-                templateUrl: 'app/servicios/nuevoServicio.html'
+                templateUrl: 'app/operacion/nuevoServicio.html'
             })
             .state('app.editar', {
                 url: '/servicio/:id?',
-                templateUrl: 'app/servicios/editarServicio.html'
+                templateUrl: 'app/operacion/editarServicio.html'
             })
-            .state('app.servicios', {
-                url: '/servicios',
-                templateUrl: 'app/servicios/consultaServicios.html'
+            .state('app.serviciosHistorico', {
+                url: '/servicios/historico',
+                templateUrl: 'app/operacion/consultaServicios.html'
             })
             //.state('app.servicios', {
             //    url: '/servicios',
@@ -31,15 +31,27 @@
             //})
             .state('app.seguimiento', {
                 url: '/servicios/seguimiento',
-                templateUrl: 'app/servicios/seguimiento.html'
+                templateUrl: 'app/operacion/seguimiento.html'
             })
             .state('app.cierre', {
                 url: '/servicios/cierre',
-                templateUrl: 'app/servicios/cierre.html'
+                templateUrl: 'app/operacion/cierre.html'
             })
             .state('app.facturacion', {
-                url: '/servicios/facturacion',
-                templateUrl: 'app/facturacion/facturacion.html'
+                url: '/administracion/facturacion',
+                templateUrl: 'app/administracion/facturacion/facturacion.html'
+            })
+            .state('app.prefacturacion', {
+                url: '/administracion/prefacturacion',
+                templateUrl: 'app/administracion/facturacion/prefacturacion.html'
+            })
+            .state('app.cartera', {
+                url: '/administracion/cartera',
+                templateUrl: 'app/administracion/facturacion/cartera.html'
+            })
+            .state('app.pagoAProveedores', {
+                url: '/pagos/proveedores',
+                templateUrl: 'app/administracion/pagos//pagoAProveedores.html'
             })
             .state('app.conductores', {
                 url: '/configuracion/conductores',

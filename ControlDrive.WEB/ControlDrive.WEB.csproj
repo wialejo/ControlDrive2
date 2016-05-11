@@ -60,10 +60,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -100,6 +96,13 @@
     <Content Include="gulp\.eslintrc" />
     <Content Include="e2e\.eslintrc" />
     <None Include="Properties\PublishProfiles\ColombiarRedesWEB.pubxml" />
+    <Content Include="src\app\administracion\facturacion\cartera.html" />
+    <Content Include="src\app\administracion\facturacion\cartera.controller.js" />
+    <Content Include="src\app\administracion\facturacion\facturacion.html" />
+    <Content Include="src\app\administracion\facturacion\facturacion.controller.js" />
+    <Content Include="src\app\administracion\facturacion\prefacturacion.controller.js" />
+    <Content Include="src\app\administracion\facturacion\prefacturacion.html" />
+    <Content Include="src\app\administracion\documentos\documentos.service.js" />
     <Content Include="src\app\content\css\less\app.arrow.less" />
     <Content Include="src\app\content\css\less\app.butterbar.less" />
     <Content Include="src\app\content\css\less\app.buttons.less" />
@@ -150,6 +153,9 @@
     <Content Include="src\app\content\simple-line-icons\fonts\Simple-Line-Icons.eot" />
     <Content Include="src\app\content\simple-line-icons\fonts\Simple-Line-Icons.ttf" />
     <Content Include="src\app\content\simple-line-icons\fonts\Simple-Line-Icons.woff" />
+    <Content Include="src\app\administracion\movimientos\movimientos.service.js" />
+    <Content Include="src\app\administracion\pagos\pagoAProveedores.controller.js" />
+    <Content Include="src\app\administracion\pagos\pagoAProveedores.html" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.woff" />
@@ -207,8 +213,6 @@
     <Content Include="src\app\content\img\no_user.jpg" />
     <Content Include="src\app\content\simple-line-icons\css\simple-line-icons.css" />
     <Content Include="src\app\content\simple-line-icons\fonts\Simple-Line-Icons.svg" />
-    <Content Include="src\app\facturacion\facturacion.controller.js" />
-    <Content Include="src\app\facturacion\facturacion.html" />
     <Content Include="src\app\index.config.js" />
     <Content Include="src\app\index.css" />
     <Content Include="src\app\index.module.js" />
@@ -223,21 +227,21 @@
     <Content Include="src\app\main\page_404.html" />
     <Content Include="src\app\main\page_forgotpwd.html" />
     <Content Include="src\app\main\page_lockme.html" />
-    <Content Include="src\app\servicios\aseguradoras.service.js" />
-    <Content Include="src\app\servicios\cierre.controller.js" />
-    <Content Include="src\app\servicios\cierre.html" />
-    <Content Include="src\app\servicios\consultaServicios.controller.js" />
-    <Content Include="src\app\servicios\consultaServicios.html" />
-    <Content Include="src\app\servicios\editarServicio.controller.js" />
-    <Content Include="src\app\servicios\editarServicio.html" />
-    <Content Include="src\app\servicios\estado.service.js" />
-    <Content Include="src\app\servicios\nuevoServicio.controller.js" />
-    <Content Include="src\app\servicios\nuevoServicio.html" />
-    <Content Include="src\app\servicios\periodo.service.js" />
-    <Content Include="src\app\servicios\seguimiento.controller.js" />
-    <Content Include="src\app\servicios\seguimiento.html" />
-    <Content Include="src\app\servicios\seguimiento.service.js" />
-    <Content Include="src\app\servicios\servicios.service.js" />
+    <Content Include="src\app\operacion\aseguradoras.service.js" />
+    <Content Include="src\app\operacion\cierre.controller.js" />
+    <Content Include="src\app\operacion\cierre.html" />
+    <Content Include="src\app\operacion\consultaServicios.controller.js" />
+    <Content Include="src\app\operacion\consultaServicios.html" />
+    <Content Include="src\app\operacion\editarServicio.controller.js" />
+    <Content Include="src\app\operacion\editarServicio.html" />
+    <Content Include="src\app\operacion\estado.service.js" />
+    <Content Include="src\app\operacion\nuevoServicio.controller.js" />
+    <Content Include="src\app\operacion\nuevoServicio.html" />
+    <Content Include="src\app\operacion\periodo.service.js" />
+    <Content Include="src\app\operacion\seguimiento.controller.js" />
+    <Content Include="src\app\operacion\seguimiento.html" />
+    <Content Include="src\app\operacion\seguimiento.service.js" />
+    <Content Include="src\app\operacion\servicios.service.js" />
     <Content Include="src\app\utilidades\fecha.service.js" />
     <Content Include="src\app\utilidades\ManejadorErrores.js" />
     <Content Include="src\assets\animate.css\animate.css" />

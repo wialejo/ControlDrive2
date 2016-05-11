@@ -70,6 +70,10 @@ namespace ControlDrive.CORE.Repositorios
         {
             return DbContext.Set<T>().Where(predicate);
         }
+        public virtual IQueryable<T> FindByNotTracking(Expression<Func<T, bool>> predicate)
+        {
+            return DbContext.Set<T>().AsNoTracking().Where(predicate);
+        }
 
         public virtual T Add(T entity)
         {
@@ -140,6 +144,7 @@ namespace ControlDrive.CORE.Repositorios
         IQueryable<T> All { get; }
         IQueryable<T> GetAll();
         IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
+        IQueryable<T> FindByNotTracking(Expression<Func<T, bool>> predicate);
         T Add(T entity);
         void Delete(T entity);
         void Edit(T entity);

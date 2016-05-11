@@ -47,35 +47,19 @@ namespace ControlDrive.Core.Controllers
         [Route("api/servicios/seguimiento")]
         public IHttpActionResult ObtenerServicios([FromUri]DateTime inicioPeriodo)
         {
-            var servicios = new List<ServicioDto>();
             var periodo = new PeriodoService().Obtener(inicioPeriodo);
-            servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN").ToList();
+            var servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN").ToList();
             return Ok(servicios);
         }
 
         [HttpGet]
-        [Route("api/servicios/cierre")]
-        public IHttpActionResult ObtenerCierre([FromUri]DateTime inicioPeriodo)
+        [Route("api/servicios/terminados/periodo")]
+        public IHttpActionResult ObtenerTerminados([FromUri]DateTime inicio)
         {
-            var servicios = new List<ServicioDto>();
-            var periodo = new PeriodoService().Obtener(inicioPeriodo);
-            servicios = _servicioServiceExt
+            var periodo = new PeriodoService().Obtener(inicio);
+            var servicios = _servicioServiceExt
                 .Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & (s.EstadoCodigo == "FL" || s.EstadoCodigo == "CN" || s.EstadoCodigo == "TE"))
                 .ToList();
-            return Ok(servicios);
-        }
-
-        [HttpGet]
-        [Route("api/servicios/facturacion/rango")]
-        public IHttpActionResult ObtenerFacturacion([FromUri]DateTime inicio, [FromUri]DateTime fin)
-        {
-            var servicios = new List<ServicioDto>();
-            servicios = _servicioServiceExt
-                            .Obtener(s => DbFunctions.TruncateTime(s.Fecha) >= DbFunctions.TruncateTime(inicio)
-                                    && DbFunctions.TruncateTime(s.Fecha) <= DbFunctions.TruncateTime(fin)
-                                    && (s.EstadoCodigo == "CR" || s.EstadoCodigo == "CF"))
-                             .ToList();
-
             return Ok(servicios);
         }
 
@@ -135,7 +119,7 @@ namespace ControlDrive.Core.Controllers
             }
 
             var servicioId = _servicioService.Guardar(servicio).Id;
-            var servicioRepo = _servicioServiceExt.ObtenerPorId(servicioId);
+            var servicioRepo = new Servicio { Id = servicioId };
 
             return Ok(servicioRepo);
         }
@@ -170,42 +154,18 @@ namespace ControlDrive.Core.Controllers
 
 
         [HttpPut]
-        [Route("api/servicio/{servicioId}/cerrar")]
-        public IHttpActionResult Cerrar(int servicioId, Valor valores)
+        [Route("api/servicios/cerrar")]
+        public IHttpActionResult Cerrar(List<Servicio> servicios)
         {
-            var usuarioId = HttpContext.Current.User.Identity.GetUserId();
-            _servicioServiceExt.Cerrar(servicioId, valores);
-
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("api/servicio/{servicioId}/valores")]
-        public IHttpActionResult Valores(int servicioId, Valor valores)
-        {
-            _servicioServiceExt.GuardarValores(servicioId, valores);
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("api/servicio/{servicioId:int}/facturar/{NoFactura}")]
-        public IHttpActionResult Facturar(int servicioId, string NoFactura)
-        {
-
-            var usuarioId = HttpContext.Current.User.Identity.GetUserId();
-            _servicioServiceExt.Facturar(servicioId, NoFactura);
-
-            var seguimiento = new Seguimiento
+            try
             {
-                NuevoEstado = "FA",
-                Observacion = "Factura asignada: " + NoFactura,
-                Fecha = DateTime.Now,
-                ServicioId = servicioId,
-                UsuarioRegistroId = usuarioId
-            };
-            _seguimientoService.Guardar(seguimiento);
-
-            return Ok();
+                _servicioServiceExt.Cerrar(servicios);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
         }
     }
 }

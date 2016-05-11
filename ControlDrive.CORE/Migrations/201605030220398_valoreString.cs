@@ -3,7 +3,7 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class cambioTipoDatoVAlores : DbMigration
+    public partial class valoreString : DbMigration
     {
         public override void Up()
         {

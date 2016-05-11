@@ -206,6 +206,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CiudadController.cs" />
     <Compile Include="Controllers\AseguradoraController.cs" />
+    <Compile Include="Controllers\DocumentosController.cs" />
+    <Compile Include="Controllers\MovimientosController.cs" />
     <Compile Include="Controllers\ConductorController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
     <Compile Include="Controllers\PeriodoController.cs" />

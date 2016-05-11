@@ -1,7 +1,16 @@
-﻿
-<div ng-controller="FacturacionController">
-
+﻿<div ng-controller="GeneracionCuentasPorPagarController">
     <style>
+        .form-inline .ui-select-container .ui-select-toggle,
+        .form-inline .ui-select-container .ui-select-search {
+            width: 100%;
+        }
+
+        .form-inline .ui-select-container {
+            display: inline-block;
+            vertical-align: middle;
+            width: auto;
+        }
+
         .ciudadDiferente {
             background-color: lightgreen;
         }
@@ -49,9 +58,9 @@
         }
     </style>
     <div class="panel panel-default">
-        <div class="panel-heading form-inline ">
+        <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6 text-center-xs">
+                <div class="col-xs-12 text-center-xs">
                     <div class="form-inline">
                         <form name="formConsulta" class="form-inline" ng-submit="formConsulta.$valid && ObtenerServicios()">
                             <div class="form-group">
@@ -62,47 +71,67 @@
                                 <label for="TxtFechaFinal">Fecha final</label>
                                 <input tabindex="10" ng-model="fechaFinal" required ui-mask="99/99/9999" model-view-value="true" type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
                             </div>
-                            <button type="submit" class="btn btn-info btn-sm">Consultar</button>
+                            <div class="form-group">
+                                <label for="TxtFechaFinal">Proveedor</label>
+                                <ui-select tabindex="25" required ng-model="servicio.proveedor" theme="bootstrap" reset-search-input="false">
+                                    <ui-select-match placeholder="Consultar">{{$select.selected.Nombre}}</ui-select-match>
+                                    <ui-select-choices repeat="item in conductores" refresh="ObtenerProveedores($select.search)" refresh-delay="0">
+                                        <div ng-bind-html="item.Nombre | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <button type="submit"  tabindex="30" class="btn btn-info btn-sm" ng-disabled="formConsulta.$invalid">Consultar</button>
                         </form>
                     </div>
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-6 text-center-xs text-right">
-                    <div class="form-inline">
-                        <div class="col-xs-4 col-sm-4">
-                            <div class="form-group">
-                                <input placeholder="Filtar todo..." class="form-control input-sm" type="search"
-                                       ng-model="search.$" />
-                            </div>
-                        </div>
-                        <div class="col-xs-4 col-sm-4">
-                            <div class="form-group">
-                                <input ng-model="search.ConductorResumen" class="form-control input-sm" placeholder="Filtrar conductores" type="search" />
-                            </div>
-                        </div>
-                        <div class="col-xs-4 col-sm-4">
-                            <div class="form-group">
-                                <input ng-model="search.RutaResumen" class="form-control input-sm" placeholder="Filtar rutas" type="search" />
-                            </div>
-                        </div>
-                    </div>
-                    </div>
             </div>
         </div>
-
         <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <strong>Valor total a pagar: </strong><span> {{valorTotalAPagar | currency:"$":0}}</span>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button ng-click="GenerarCuentaPorPagar()" class="btn btn-info btn-sm">Generar cuenta CP</button>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
+                            <th>Proveedor</th>
+                            <th>Concepto</th>
+                            <th class="col-md-1">Valor a pagar</th>
+                            <th>Id</th>
                             <th class="col-md-1">Hora/fecha</th>
-                            <th class="hidden-xs">Consec.</th>
+                            <th>Cliente</th>
                             <th>Origen/Destino</th>
-                            <th>Conductor/Ruta</th>
-                            <th>Factura</th>
+                            <th>
+                                <label class="checkbox i-checks ">
+                                    <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td colspan="8">
+                                <input placeholder="Filtar todo..." class="form-control input-sm" type="search" ng-model="search.$" />
+                            </td>
                         </tr>
                     </thead>
                     <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search) " ng-class=" { 'border-none' : active==servicio}">
                         <tr>
+                            <td>
+                                {{servicio.Proveedor.Nombre}}
+                            </td>
+                            <td>
+                                {{servicio.Concepto}}
+                            </td>
+                            <td>
+                                {{servicio.Valor | currency:"$":0}}
+                            </td>
+                            <td>
+                                {{servicio.Id}}
+                            </td>
                             <td class="text-center">
                                 {{servicio.Fecha | date:'HH:mm'}}
                                 <br />
@@ -112,7 +141,6 @@
                                 {{servicio.Radicado}}
                                 <br />
                                 {{servicio.Aseguradora.Nombre}}
-
                             </td>
                             <td>
                                 <div>
@@ -123,16 +151,9 @@
                                 </div>
                             </td>
                             <td>
-                                <strong>Conductor: </strong> {{servicio.ConductorResumen}}<br />
-                                <strong>Ruta:</strong> {{servicio.RutaResumen}}
-                            </td>
-                            <td>
-                                <form name="form" class="form-inline" novalidate ng-submit="form.$valid && Guardar(servicio)">
-                                    <div class="form-group" ng-class="{ 'has-error' : form.txtFactura.$invalid  && !form.txtFactura.$pristine}" >
-                                        <input type="text" required name="txtFactura" class="form-control input-sm input-xs" placeholder="Nro factura" ng-model="servicio.NoFactura" />
-                                    </div>
-                                    <button class="btn btn-info btn-sm"  type="submit">Facturar</button>
-                                </form>
+                                <label class="checkbox i-checks m-l-xs m-b-xs">
+                                    <input type="checkbox" ng-model="servicio.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
                             </td>
                         </tr>
                     </tbody>

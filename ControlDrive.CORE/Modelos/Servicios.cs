@@ -38,7 +38,7 @@ namespace ControlDrive.CORE.Modelos
 
         public int? ConductorId { get; set; }
         public virtual Conductor Conductor { get; set; }
-        
+
         public int? RutaId { get; set; }
         public virtual Conductor Ruta { get; set; }
 
@@ -54,22 +54,67 @@ namespace ControlDrive.CORE.Modelos
         public ICollection<Seguimiento> Seguimientos { get; set; }
         public string AsignadoPor { get; set; }
 
-        public virtual Valor valores { get; set; }
-        
-        public string NoFactura { get; set; }
+        public ICollection<Movimiento> Movimientos { get; set; }
+
         public bool Notificado { get; set; }
     }
 
-    public class Valor {
-
+    public class Movimiento
+    {
         [Key]
+        public int Id { get; set; }
         public int ServicioId { get; set; }
+        public decimal Valor { get; set; }
+        public string ConceptoCodigo { get; set; }
+        public int? ProveedorId { get; set; }
+        public int? ClienteId { get; set; }
+        public int? DocumentoId { get; set; }
+        public DateTime? FechaRegistro { get; set; }
+        public string UsuarioRegistroId { get; set; }
+        public DateTime? FechaModificacion { get; set; }
+        public string UsuarioModificacionId { get; set; }
+        public bool Aprobado { get; set; }
 
-        public string cierre { get; set; }
-        public string ruta { get; set; }
-        public string conductor { get; set; }
+        public Servicio Servicio { get; set; }
+        public ServicioConcepto Concepto { get; set; }
+        public Conductor Proveedor { get; set; }
+        public Documento Documento { get; set; }
+        public Aseguradora Cliente { get; set; }
+        public ApplicationUser UsuarioRegistro { get; set; }
+        public ApplicationUser UsuarioModificacion { get; set; }
+    }
 
-        public Servicio servicio { get; set; }
+    public class Documento
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Tipo { get; set; }
+        public string Numero { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Concepto { get; set; }
+        public decimal Valor { get; set; }
+        public List<Movimiento> Movimientos { get; set; }
+        public string UsuarioRegistroId { get; set; }
+        public DateTime FechaRegistro { get; set; }
+        public int ClienteId { get; set; }
+
+        public Aseguradora Cliente { get; set; }
+        public ApplicationUser UsuarioRegistro { get; set; }
+    }
+
+    public class Empresa {
+        [Key]
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Nit { get; set; }
+        public string Ciudad { get; set; }
+    }
+
+    public class ServicioConcepto
+    {
+        [Key]
+        public string Codigo { get; set; }
+        public string Descripcion { get; set; }
     }
 
     public class Seguimiento
@@ -93,7 +138,8 @@ namespace ControlDrive.CORE.Modelos
 
     public class Estado
     {
-        public Estado() {
+        public Estado()
+        {
             EnOperacion = true;
         }
         [Key]
@@ -107,7 +153,8 @@ namespace ControlDrive.CORE.Modelos
 
     public class Conductor
     {
-        public Conductor() {
+        public Conductor()
+        {
             Activo = true;
         }
 
@@ -118,13 +165,13 @@ namespace ControlDrive.CORE.Modelos
         public string Nombre { get; set; }
         public string Email { get; set; }
         public string TipoIdentificacion { get; set; }
-        public int  Identificacion { get; set; }
+        public int Identificacion { get; set; }
 
         [Required]
         public string Telefono1 { get; set; }
         public string Telefono2 { get; set; }
         public string Direccion { get; set; }
-        
+
         public bool Activo { get; set; }
     }
 
@@ -138,10 +185,10 @@ namespace ControlDrive.CORE.Modelos
     {
         [Key]
         public int Id { get; set; }
-        
+
         public string Placa { get; set; }
 
-        public string Descripcion{ get; set; }
+        public string Descripcion { get; set; }
     }
 
     public class Direccion
@@ -150,7 +197,7 @@ namespace ControlDrive.CORE.Modelos
         public int Id { get; set; }
 
         public string Descripcion { get; set; }
-       
+
         public int CiudadId { get; set; }
 
         [ForeignKey("CiudadId")]
@@ -185,7 +232,7 @@ namespace ControlDrive.CORE.Modelos
         public int Id { get; set; }
 
         public string Nombre { get; set; }
-        
+
         public string Telefono1 { get; set; }
 
         public string Telefono2 { get; set; }

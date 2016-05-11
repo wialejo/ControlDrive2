@@ -7,13 +7,13 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class cambioTipoDatoVAlores : IMigrationMetadata
+    public sealed partial class movimientoAprobado : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(cambioTipoDatoVAlores));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(movimientoAprobado));
         
         string IMigrationMetadata.Id
         {
-            get { return "201604220335562_cambioTipoDatoVAlores"; }
+            get { return "201605110149592_movimientoAprobado."; }
         }
         
         string IMigrationMetadata.Source

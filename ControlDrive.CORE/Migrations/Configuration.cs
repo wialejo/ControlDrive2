@@ -46,11 +46,14 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
             context.Aseguradoras.AddOrUpdate(
                 new Aseguradora() { Id = 1, Nombre = "Bolivar" },
                 new Aseguradora() { Id = 2, Nombre = "Mapfre" },
-                new Aseguradora() { Id = 3, Nombre = "Axa" },
+                new Aseguradora() { Id = 3, Nombre = "Axa-colpatria" },
                 new Aseguradora() { Id = 4, Nombre = "Andi" },
                 new Aseguradora() { Id = 5, Nombre = "Particular" },
-                new Aseguradora() { Id = 6, Nombre = "ARH" }
+                new Aseguradora() { Id = 6, Nombre = "ARH" },
+                new Aseguradora() { Id = 7, Nombre = "Axa-previsora" },
+                new Aseguradora() { Id = 8, Nombre = "Axa-helm" }
             );
+
             //context.Conductores.AddOrUpdate(
             //    new Conductor()
             //    {

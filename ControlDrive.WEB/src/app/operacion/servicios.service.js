@@ -7,8 +7,8 @@
 		        ObtenerPorId: ObtenerPorId,
 		        Obtener: Obtener,
 		        ObtenerParaSeguimiento: ObtenerParaSeguimiento,
-		        ObtenerParaCierre: ObtenerParaCierre,
-		        ObtenerParaFacturacion: ObtenerParaFacturacion,
+		        ObtenerTerminados: ObtenerTerminados,
+		        ObtenerCerrados: ObtenerCerrados,
 		        ObtenerPorPeriodoCSV: ObtenerPorPeriodoCSV,
 		        NotificarServiciosARuta: NotificarServiciosARuta,
 		        NotificarServiciosAConductor: NotificarServiciosAConductor,
@@ -50,16 +50,16 @@
 		        return obj
 		    }
 
-		    function ObtenerParaCierre(inicioPeriodo) {
+		    function ObtenerTerminados(inicioPeriodo) {
 		        var inicio = PeriodoSvc.formatearFecha(inicioPeriodo)
-		        var url = "servicios/cierre?inicioPeriodo=" + inicio;
+		        var url = "servicios/terminados/periodo?inicio=" + inicio;
 		        var obj = http("GET", url)
 		        return obj
 		    }
 
-		    function ObtenerParaFacturacion(inicioPeriodo, finPeriodo) {
+		    function ObtenerCerrados(inicioPeriodo, finPeriodo) {
 		        var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
-		        var url = "servicios/facturacion/rango?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin;
+		        var url = "servicios/cerrados/periodo?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin;
 		        var obj = http("GET", url)
 		        return obj
 		    }
@@ -105,9 +105,9 @@
 		        open('POST', url, periodo, '_blank');
 		    }
 
-		    function Cerrar(servicioId, valores) {
-		        var url = "servicio/" + servicioId + "/cerrar";
-		        var obj = http('PUT', url, valores);
+		    function Cerrar(servicios) {
+		        var url = "servicios/cerrar";
+		        var obj = http('PUT', url, servicios);
 		        return obj;
 		    }
 

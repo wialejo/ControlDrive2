@@ -15,35 +15,52 @@ using ControlDrive.CORE.Services;
 namespace ControlDrive.Core.Controllers
 {
     [Authorize]
-    public class ConductorController : ApiController
+    public class ConductoresController : ApiController
     {
         private readonly ICommonInterface<Conductor> _conductorSevice;
+        private readonly IMovimientosService _movimientosService;
 
-        public ConductorController(ICommonInterface<Conductor> conductorSevice)
+        public ConductoresController(ICommonInterface<Conductor> conductorSevice, IMovimientosService movimientosService)
         {
+            _movimientosService = movimientosService;
             _conductorSevice = conductorSevice;
         }
 
         [HttpGet]
         public IHttpActionResult Obtener()
         {
-            var conductores  = _conductorSevice.Obtener();
+            var conductores = _conductorSevice.Obtener();
             return Ok(conductores);
+        }
+
+
+        [HttpGet]
+        [Route("api/conductores/movimientos")]
+        public IHttpActionResult ObtenerMovimientos([FromUri]DateTime inicio, [FromUri]DateTime fin, int proveedorId)
+        {
+            var servicios = _movimientosService
+                .Obtener(m => m.ProveedorId == proveedorId && 
+                                    DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio) 
+                                    && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
+                        );
+
+            return Ok(servicios);
         }
 
         [HttpGet]
         public IHttpActionResult Obtener(int id)
         {
-            var conductor  = _conductorSevice.ObtenerPorId(id);
+            var conductor = _conductorSevice.ObtenerPorId(id);
             return Ok(conductor);
         }
+
         [HttpGet]
         public IHttpActionResult ObtenerPorDescripcion(string id)
         {
-            var conductores  = _conductorSevice.ObtenerPorDescripcion(id);
+            var conductores = _conductorSevice.ObtenerPorDescripcion(id);
             return Ok(conductores);
         }
-        
+
         // POST: api/Conductores
         [HttpPost]
         public IHttpActionResult Guardar(Conductor conductor)

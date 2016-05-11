@@ -20,6 +20,7 @@
 
                 }, function (response) {
                     toastr.error(response.data.ExceptionMessage);
+
                 });
         }
         vm.Editar = function (servicio) {

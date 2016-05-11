@@ -119,9 +119,33 @@
     <Compile Include="Migrations\201604210319133_addServicioNotificacion.Designer.cs">
       <DependentUpon>201604210319133_addServicioNotificacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201604220335562_cambioTipoDatoVAlores.cs" />
-    <Compile Include="Migrations\201604220335562_cambioTipoDatoVAlores.Designer.cs">
-      <DependentUpon>201604220335562_cambioTipoDatoVAlores.cs</DependentUpon>
+    <Compile Include="Migrations\201605030220398_valoreString.cs" />
+    <Compile Include="Migrations\201605030220398_valoreString.Designer.cs">
+      <DependentUpon>201605030220398_valoreString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605050152368_contabilidad.cs" />
+    <Compile Include="Migrations\201605050152368_contabilidad.Designer.cs">
+      <DependentUpon>201605050152368_contabilidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605060448114_documentoContable.cs" />
+    <Compile Include="Migrations\201605060448114_documentoContable.Designer.cs">
+      <DependentUpon>201605060448114_documentoContable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605110149592_movimientoAprobado..cs" />
+    <Compile Include="Migrations\201605110149592_movimientoAprobado..Designer.cs">
+      <DependentUpon>201605110149592_movimientoAprobado..cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605110338552_valorDocumentos.cs" />
+    <Compile Include="Migrations\201605110338552_valorDocumentos.Designer.cs">
+      <DependentUpon>201605110338552_valorDocumentos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605110340532_valorDocumentos1.cs" />
+    <Compile Include="Migrations\201605110340532_valorDocumentos1.Designer.cs">
+      <DependentUpon>201605110340532_valorDocumentos1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605110417355_tipoDatoNumeroFac.cs" />
+    <Compile Include="Migrations\201605110417355_tipoDatoNumeroFac.Designer.cs">
+      <DependentUpon>201605110417355_tipoDatoNumeroFac.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
@@ -132,6 +156,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\EntityBaseRepository.cs" />
     <Compile Include="Modelos\Servicios.cs" />
+    <Compile Include="Services\DocumentosServices.cs" />
+    <Compile Include="Services\MovimientosService.cs" />
     <Compile Include="Services\CorreoService.cs" />
     <Compile Include="Services\VehiculoService.cs" />
     <Compile Include="Services\AseguradoService.cs" />
@@ -163,8 +189,26 @@
     <EmbeddedResource Include="Migrations\201604210319133_addServicioNotificacion.resx">
       <DependentUpon>201604210319133_addServicioNotificacion.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604220335562_cambioTipoDatoVAlores.resx">
-      <DependentUpon>201604220335562_cambioTipoDatoVAlores.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201605030220398_valoreString.resx">
+      <DependentUpon>201605030220398_valoreString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605050152368_contabilidad.resx">
+      <DependentUpon>201605050152368_contabilidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605060448114_documentoContable.resx">
+      <DependentUpon>201605060448114_documentoContable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605110149592_movimientoAprobado..resx">
+      <DependentUpon>201605110149592_movimientoAprobado..cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605110338552_valorDocumentos.resx">
+      <DependentUpon>201605110338552_valorDocumentos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605110340532_valorDocumentos1.resx">
+      <DependentUpon>201605110340532_valorDocumentos1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605110417355_tipoDatoNumeroFac.resx">
+      <DependentUpon>201605110417355_tipoDatoNumeroFac.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

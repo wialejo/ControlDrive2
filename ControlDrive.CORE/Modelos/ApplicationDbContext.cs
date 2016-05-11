@@ -19,7 +19,7 @@ namespace ControlDrive.Core.Modelos
         // automatically whenever you change your model schema, please use data migrations.
         // For more information refer to the documentation:
         // http://msdn.microsoft.com/en-us/data/jj591621.aspx
-    
+
         public ApplicationDbContext() : base("name=ControlDriveDBConnectionString")
         {
             Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
@@ -55,6 +55,14 @@ namespace ControlDrive.Core.Modelos
 
         public DbSet<Cuenta> Cuentas { get; set; }
 
+        public DbSet<Movimiento> Movimientos { get; set; }
+
+        public DbSet<Documento> Documentos { get; set; }
+
+        public DbSet<Empresa> Empresas { get; set; }
+
+        public DbSet<ServicioConcepto> ServicioConceptos { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -63,12 +71,10 @@ namespace ControlDrive.Core.Modelos
             modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
             modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
 
-            modelBuilder.Entity<Servicio>()
-                .HasOptional(s => s.valores)
-                .WithRequired(s => s.servicio)
-                .WillCascadeOnDelete(false);
-
-
+            //modelBuilder.Entity<Servicio>()
+            //    .HasOptional(s => s.Movimientos)
+            //    .WithRequired(s => s.servicio)
+            //    .WillCascadeOnDelete(false);
 
 
             //modelBuilder.Entity<Servicio>()

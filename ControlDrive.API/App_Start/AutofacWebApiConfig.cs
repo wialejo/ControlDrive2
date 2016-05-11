@@ -92,6 +92,14 @@ namespace ControlDrive.Core.App_Start
                 .As<ICorreoService>()
                 .InstancePerRequest();
 
+            builder.RegisterType<MovimientosService>()
+                .As<IMovimientosService>()
+                .InstancePerRequest();
+
+            builder.RegisterType<DocumentosService>()
+                .As<IDocumentosService>()
+                .InstancePerRequest();
+
             Container = builder.Build();
 
             return Container;

@@ -1,69 +1,103 @@
 <!-- list -->
 <ul class="nav">
-  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-    <span>Gestión</span>
-  </li>
-  <li ui-sref-active="active">
-    <a ui-sref="app.nuevo">
-      <i class="glyphicon glyphicon-edit icon text-success"></i>
-      <span class="font-bold">Nuevo servicio</span>
-    </a>
-  </li>
-  <li ui-sref-active="active">
-    <a ui-sref="app.servicios">
-      <i class="fa  fa-chain-broken icon"></i>
-      <span class="font-bold">Servicios</span>
-    </a>
-  </li>
-  <li ui-sref-active="active">
-    <a ui-sref="app.seguimiento">
-      <i class="glyphicon glyphicon-check icon text-info-dker"></i>
-      <span class="font-bold">Seguimiento</span>
-    </a>
-  </li>
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span>Operación</span>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="app.nuevo">
+            <i class="glyphicon glyphicon-edit icon text-success"></i>
+            <span class="font-bold">Nuevo servicio</span>
+        </a>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="app.seguimiento">
+            <i class="glyphicon glyphicon-check icon text-info-dker"></i>
+            <span class="font-bold">Seguimiento</span>
+        </a>
+    </li>
     <li ui-sref-active="active">
         <a ui-sref="app.cierre">
-            <i class="glyphicon glyphicon-briefcase icon text-warning-dk"></i>
+            <i class="fa fa-usd icon text-warning-dk"></i>
             <span class="font-bold">Cierre</span>
         </a>
     </li>
+    <li class="line dk"></li>
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span>Servicios</span>
+    </li>
     <li ui-sref-active="active">
-        <a ui-sref="app.facturacion">
-            <i class="fa fa-usd icon"></i>
-            <span class="font-bold">Facturación</span>
+        <a ui-sref="app.serviciosHistorico">
+            <i class="fa  fa-chain-broken icon"></i>
+            <span class="font-bold">Histórico</span>
         </a>
     </li>
-  <li class="line dk"></li>
-
-  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-    <span >Servicios</span>
-  </li>
-  <li>
-    <a href class="auto">      
-      <span class="pull-right text-muted">
-        <i class="fa fa-fw fa-angle-right text"></i>
-        <i class="fa fa-fw fa-angle-down text-active"></i>
-      </span>
-      <i class="fa fa-truck"></i>
-      <span>Configuración</span>
-    </a>
-    <ul class="nav nav-sub dk">
-      <li class="nav-sub-header">
-        <a href>
-          <span>Configuración</span>
+    <li class="line dk"></li>
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span>Opciones</span>
+    </li>
+    <li>
+        <a href class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="glyphicon glyphicon-briefcase icon"></i>
+            <span>Administración</span>
         </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="app.ciudades">
-          <span>Ciudades</span>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span>Administración</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.prefacturacion">
+                    <span>Prefacturación</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.facturacion">
+                    <span>Facturación</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.cartera">
+                    <span>Cartera</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.pagoAProveedores">
+                    <span>Pago a proveedores</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href class="auto">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-cog"></i>
+            <span>Configuración</span>
         </a>
-      </li>
-      <li ui-sref-active="active">
-        <a ui-sref="app.conductores">
-          <span>Conductores</span>
-        </a>
-      </li>    
-    </ul>
-  </li>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span>Configuración</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.ciudades">
+                    <span>Ciudades</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.conductores">
+                    <span>Conductores</span>
+                </a>
+            </li>
+        </ul>
+    </li>
 </ul>
 <!-- / list -->

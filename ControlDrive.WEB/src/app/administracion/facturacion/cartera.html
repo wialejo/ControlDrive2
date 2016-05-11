@@ -1,0 +1,156 @@
+﻿
+<div ng-controller="CarteraController">
+
+    <style>
+        .border-none {
+            border: none !important;
+            background-color: #fafafa;
+        }
+
+            .border-none td, .border-none th {
+                border: none !important;
+                background-color: #fafafa;
+            }
+
+        .table > thead > tr > th {
+            padding: 1px 15px;
+            margin: 0px;
+            height: 10px;
+        }
+
+        .radio, .checkbox {
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        .table > tr > td {
+            padding: 5px 5px;
+        }
+
+        .input-xs {
+            width: 150px !important;
+        }
+
+        @media screen and (max-width: 767px) {
+            .table > thead > tr > th {
+                padding: 1px 5px;
+                margin: 0;
+                height: 10px;
+            }
+
+            .col-xs-3, .col-xs-4, .col-xs-8, .col-xs-1 {
+                padding-left: 5px;
+                padding-right: 0;
+            }
+        }
+    </style>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-6 col-sm-8 text-center-xs">
+                    <div class="form-inline">
+                        <form name="formConsulta" class="form-inline" novalidate ng-submit="formConsulta.$valid && ObtenerDocumentos()">
+                            <div class="form-group">
+                                <label for="TxtFechaInicial">Fecha inicial</label>
+                                <input tabindex="5" ng-model="fechaInicial" required type="text" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label for="TxtFechaFinal">Fecha final</label>
+                                <input tabindex="10" ng-model="fechaFinal" required type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label for="SelCliente">Cliente</label>
+                                <select tabindex="20"
+                                        ng-model="cliente"
+                                        class="form-control"
+                                        id="SelCliente"
+                                        name="SelAseguradora"
+                                        required
+                                        ng-options="aseguradora.Nombre for aseguradora in aseguradoras track by aseguradora.Id">
+                                    <option value="">--Seleccione--</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-info btn-sm">Consultar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 text-center-xs text-right">
+                    <div class="form-group">
+                        <input placeholder="Filtrar..." class="form-control input-sm" type="search"
+                               ng-model="search.$" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <!--<strong>Valor factura: </strong><span> {{valorFactura | currency:"$":0}}</span>-->
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button ng-click="ImprimirRelacion()" class="btn btn-info btn-sm">Imprimir relación</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">Id</th>
+                            <th class="col-md-1">Fecha</th>
+                            <th>Cliente</th>
+                            <th>Número</th>
+                            <th>Valor</th>
+                            <th>Concepto</th>
+                            <th class="col-md-1">
+                                <label class="checkbox i-checks ">
+                                    <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-xs" ng-repeat="documento in documentos | filter: search">
+                        <tr>
+                            <td>
+                                {{documento.Id}}
+                            </td>
+                            <td>
+                                {{documento.Fecha | date:'dd/MM/yyyy'}}
+                            </td>
+                            <td>
+                                {{documento.Cliente.Nombre}}
+                            </td>
+                            <td>
+                                {{documento.Numero}}
+                            </td>
+                            <td>
+                                {{documento.Valor | currency:"$":0 }}
+                            </td>
+                            <td>
+                                {{documento.Concepto}}
+                            </td>
+                            <td>
+                                <label class="checkbox i-checks m-l-xs m-b-xs">
+                                    <input type="checkbox" ng-model="movimiento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="MostrarFacturacionMasiva.html">
+    <div class="modal-body wrapper-lg ">
+        <a class="close" data-dismiss="modal" ng-click="cancel()">×</a>
+        <h3 class="m-t-none m-b font-thin">Facturación masiva</h3>
+        <span>Total factura: </span> <span> {{valorFactura | currency:"$":0}}</span>
+        <br />
+        <div class="form-group">
+            <label>Número de factura:</label>
+            <input type="text" name="name" value="" ng-model="numeroFactura" />
+        </div>
+        <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Facturar" ng-click="FacturarMasivo()" />
+    </div>
+</script>

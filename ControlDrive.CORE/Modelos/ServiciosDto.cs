@@ -14,7 +14,7 @@ namespace ControlDrive.CORE.Modelos
     public class ServicioDto
     {
         public ServicioDto() {
-            valores = new ValorDto();
+            Movimientos = new List<Movimiento>();
         }
         public int Id { get; set; }
 
@@ -43,29 +43,51 @@ namespace ControlDrive.CORE.Modelos
         public string ConductorResumen { get; set; }
 
         public int? RutaId { get; set; }
-        public virtual Conductor Ruta { get; set; }
+        public Conductor Ruta { get; set; }
         public string RutaResumen { get; set; }
 
         public DateTime FechaRegistro { get; internal set; }
         public DateTime FechaModificacion { get; internal set; }
 
         public int? UsuarioRegistroId { get; set; }
-        public virtual ApplicationUser UsuarioRegistro { get; set; }
+        public ApplicationUser UsuarioRegistro { get; set; }
         public int? UsuarioModificacionId { get; set; }
-        public virtual ApplicationUser UsuarioModificacion { get; set; }
+        public ApplicationUser UsuarioModificacion { get; set; }
         public ICollection<Seguimiento> Seguimientos { get; set; }
-        public ValorDto valores { get; set; }
-        public string NoFactura { get; set; }
+        public ICollection<Movimiento> Movimientos { get; set; }
         public bool Notificado { get; set; }
 
     }
 
-    public class ValorDto
+    public class MovimientoDto
     {
+        public MovimientoDto(Movimiento movimiento)
+        {
+            Id = movimiento.Id;
+            ServicioId = movimiento.ServicioId;
+            Valor = movimiento.Valor;
+            ConceptoCodigo = movimiento.ConceptoCodigo;
+            ProveedorId = movimiento.ProveedorId;
+            ClienteId = movimiento.ClienteId;
+            DocumentoId = movimiento.DocumentoId;
+            FechaRegistro = movimiento.FechaRegistro;
+            UsuarioRegistroId = movimiento.UsuarioRegistroId;
+            FechaRegistro = movimiento.FechaRegistro;
+            FechaModificacion = movimiento.FechaModificacion;
+            UsuarioModificacionId = movimiento.UsuarioModificacionId;
+        }
+
+        public int Id { get; set; }
         public int ServicioId { get; set; }
-        public string cierre { get; set; }
-        public string ruta { get; set; }
-        public string conductor { get; set; }
+        public decimal Valor { get; set; }
+        public string ConceptoCodigo { get; set; }
+        public int? ProveedorId { get; set; }
+        public int? ClienteId { get; set; }
+        public int? DocumentoId { get; set; }
+        public DateTime? FechaRegistro { get; set; }
+        public string UsuarioRegistroId { get; set; }
+        public DateTime? FechaModificacion { get; set; }
+        public string UsuarioModificacionId { get; set; }
     }
 
 

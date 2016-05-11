@@ -30,6 +30,7 @@
                   servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');
                   servicio.FechaD = $filter('date')(servicio.Fecha, 'dd/MM/yyyy');
                   $scope.servicio = servicio;
+                  
               }
 
               $scope.isSaving = false;
@@ -66,7 +67,7 @@
                       .then(function (response) {
                           $scope.isSaving = false;
                           toastr.success('Servicio actualizado correctamente.');
-                          CargarServicio(response.data);
+                          $state.go('app.editar', { id: response.data.Id }, { reload: true })
                       })
                       .catch(function (response) {
                           $scope.isSaving = false;

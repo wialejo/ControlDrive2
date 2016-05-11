@@ -1,0 +1,165 @@
+﻿
+<div ng-controller="PrefacturacionController">
+
+    <style>
+        .border-none {
+            border: none !important;
+            background-color: #fafafa;
+        }
+
+            .border-none td, .border-none th {
+                border: none !important;
+                background-color: #fafafa;
+            }
+
+        .table > thead > tr > th {
+            padding: 1px 15px;
+            margin: 0px;
+            height: 10px;
+        }
+
+        .radio, .checkbox {
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        .table > tr > td {
+            padding: 5px 5px;
+        }
+
+        .input-xs {
+            width: 150px !important;
+        }
+
+        @media screen and (max-width: 767px) {
+            .table > thead > tr > th {
+                padding: 1px 5px;
+                margin: 0;
+                height: 10px;
+            }
+
+            .col-xs-3, .col-xs-4, .col-xs-8, .col-xs-1 {
+                padding-left: 5px;
+                padding-right: 0;
+            }
+        }
+    </style>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-6 col-sm-8 text-center-xs">
+                    <div class="form-inline">
+                        <form name="formConsulta" class="form-inline" ng-submit="formConsulta.$valid && ObtenerMovimientos()">
+                            <div class="form-group">
+                                <label for="TxtFechaInicial">Fecha inicial</label>
+                                <input tabindex="5" ng-model="fechaInicial" required type="text" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label for="TxtFechaFinal">Fecha final</label>
+                                <input tabindex="10" ng-model="fechaFinal" required type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
+                            </div>
+                            <div  class="form-group">
+                                <label for="SelCliente">Cliente</label>
+                                <select tabindex="20"
+                                        ng-model="cliente"
+                                        class="form-control"
+                                        id="SelCliente"
+                                        name="SelAseguradora"
+                                        required
+                                        ng-options="aseguradora.Nombre for aseguradora in aseguradoras track by aseguradora.Id">
+                                    <option value="">--Seleccione--</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-info btn-sm">Consultar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 text-center-xs text-right">
+                    <div class="form-group">
+                        <input placeholder="Filtrar..." class="form-control input-sm" type="search"
+                               ng-model="search.$" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th class="col-md-1">Hora/fecha</th>
+                            <th class="col-md-2">Cliente</th>
+                            <th>Asig.Por</th>
+                            <th class="col-md-3">
+                                Consecutivo
+                            </th>
+                            <th class="col-md-1">
+                                Vehiculo
+                            </th>
+                            <th class="col-md-1">
+                                Asegurado
+                            </th>
+                            <th class="col-md-2">Origen/Destino</th>
+                            <th class="col-md-2">Valor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-xs" ng-repeat="movimiento in movimientos | filter: search">
+                        <tr>
+                            <td>
+                                {{movimiento.Servicio.Id}}
+                            </td>
+                            <td class="text-center">
+                                {{
+movimiento.Servicio.Fecha | date:'HH:mm'
+                                }}
+                                <br />
+                                {{movimiento.Servicio.Fecha | date:'dd/MM/yyyy'}}
+                            </td>
+                            <td>
+                                <select tabindex="4"
+                                        ng-model="movimiento.Servicio.Aseguradora"
+                                        class="form-control"
+                                        id="SelAseguradora"
+                                        name="SelAseguradora"
+                                        required
+                                        ng-options="aseguradora.Nombre for aseguradora in aseguradoras track by aseguradora.Id"></select>
+                            </td>
+                            <td>
+                                {{movimiento.Servicio.AsignadoPor }}
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="movimiento.Servicio.Radicado" />
+                            </td>
+                            <td>
+                                {{movimiento.Servicio.Vehiculo.Placa }} <br /> {{movimiento.Servicio.Vehiculo.Descripcion }}
+                            </td>
+                            <td>
+                                {{movimiento.Servicio.Asegurado.Nombre }} <br /> {{ movimiento.Servicio.Asegurado.Telefono1 }} - {{ movimiento.Servicio.Asegurado.Telefono2 }}
+                            </td>
+                            <td>
+                                <div ng-class="{ 'verde': !movimiento.Servicio.DireccionInicio.Ciudad.Principal }">
+
+                                    <strong>Origen: </strong> {{movimiento.Servicio.DireccionInicio.Descripcion}}, {{movimiento.Servicio.DireccionInicio.Ciudad.Nombre}}, {{movimiento.Servicio.DireccionInicio.Barrio}}
+                                </div>
+                                <div ng-class="{ 'verde': !movimiento.Servicio.DireccionDestino.Ciudad.Principal }">
+                                    <strong>Destino: </strong> {{movimiento.Servicio.DireccionDestino.Descripcion}}, {{movimiento.Servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="movimiento.Valor" />
+                            </td>
+                            <td>
+                                <button class="btn btn-info" ng-disabled="isSaving" ng-click="ActualizarMovimiento($index)">
+                                    <span class="glyphicon glyphicon-ok" ng-if="movimiento.Aprobado"></span>
+                                    Aprobar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
