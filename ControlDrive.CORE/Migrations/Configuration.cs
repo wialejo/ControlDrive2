@@ -31,7 +31,6 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
 
             context.Estados.AddOrUpdate(
                 new Estado() { Codigo = "RG", Descripcion = "Registrado", Orden = 2, EnOperacion = true },
-                new Estado() { Codigo = "EN", Descripcion = "Enviado", Orden = 4, EnOperacion = true },
                 new Estado() { Codigo = "RE", Descripcion = "Recibido", Orden = 6, EnOperacion = true },
                 new Estado() { Codigo = "ES", Descripcion = "En sitio", Orden = 8, EnOperacion = true },
                 new Estado() { Codigo = "EC", Descripcion = "En curso", Orden = 10, EnOperacion = true },

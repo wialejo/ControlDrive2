@@ -1,49 +1,5 @@
 ﻿
 <div ng-controller="CarteraController">
-
-    <style>
-        .border-none {
-            border: none !important;
-            background-color: #fafafa;
-        }
-
-            .border-none td, .border-none th {
-                border: none !important;
-                background-color: #fafafa;
-            }
-
-        .table > thead > tr > th {
-            padding: 1px 15px;
-            margin: 0px;
-            height: 10px;
-        }
-
-        .radio, .checkbox {
-            margin-bottom: 5px;
-            margin-top: 5px;
-        }
-
-        .table > tr > td {
-            padding: 5px 5px;
-        }
-
-        .input-xs {
-            width: 150px !important;
-        }
-
-        @media screen and (max-width: 767px) {
-            .table > thead > tr > th {
-                padding: 1px 5px;
-                margin: 0;
-                height: 10px;
-            }
-
-            .col-xs-3, .col-xs-4, .col-xs-8, .col-xs-1 {
-                padding-left: 5px;
-                padding-right: 0;
-            }
-        }
-    </style>
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -83,17 +39,17 @@
             </div>
         </div>
         <div class="panel-body">
-            <div class="row">
-                <div class="col-sm-6">
-                    <!--<strong>Valor factura: </strong><span> {{valorFactura | currency:"$":0}}</span>-->
-                </div>
-                <div class="col-sm-6 text-right">
-                    <button ng-click="ImprimirRelacion()" class="btn btn-info btn-sm">Imprimir relación</button>
-                </div>
-            </div>
             <div class="table-responsive">
                 <table class="table table-hover table-condensed">
                     <thead>
+                        <tr>
+                            <td colspan="5">
+                                <label><strong>Total documentos: </strong></label> {{ documentos.length }}
+                            </td>
+                            <td colspan="3" class="text-right">
+                                <button ng-click="ImprimirRelacion()" class="btn btn-info btn-sm">Imprimir relación</button>
+                            </td>
+                        </tr>
                         <tr>
                             <th class="col-md-1">Id</th>
                             <th class="col-md-1">Fecha</th>
@@ -130,7 +86,7 @@
                             </td>
                             <td>
                                 <label class="checkbox i-checks m-l-xs m-b-xs">
-                                    <input type="checkbox" ng-model="movimiento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
+                                    <input type="checkbox" ng-model="documento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
                                 </label>
                             </td>
                         </tr>
@@ -138,6 +94,61 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    <div id="RelacionServicios" style="display:none">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        NUM_FRA
+                    </th>
+                    <th>
+                        FEC_FRA
+                    </th>
+                    <th>
+                        TIP_DOC
+                    </th>
+                    <th>
+                        COD_DOC
+                    </th>
+                    <th>
+                        VLR_BRUTO
+                    </th>
+                    <th>
+                        NUM_INCIDENTE
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="documentoRelacionServicio in documentosRelacionServicios">
+                    <td>
+                        {{$index+1}}
+                    </td>
+                    <td>
+                        {{documentoRelacionServicio.Numero}}
+                    </td>
+                    <td>
+                        {{documentoRelacionServicio.Fecha | date:'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                        {{documentoRelacionServicio.TipoDocEmpresa}}
+                    </td>
+                    <td>
+                        {{documentoRelacionServicio.NitEmpresa}}
+                    </td>
+                    <td>
+                        {{documentoRelacionServicio.Valor}}
+                    </td>
+                    <td>
+                        {{documentoRelacionServicio.ConsecutivoServicio}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -154,3 +165,4 @@
         <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Facturar" ng-click="FacturarMasivo()" />
     </div>
 </script>
+

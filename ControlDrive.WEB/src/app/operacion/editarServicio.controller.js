@@ -3,7 +3,7 @@
 
     angular
       .module('controldriveApp')
-          .controller('EditarServicioController', function ($scope, $filter, $state, $confirm, PeriodoSvc, $stateParams, toastr, ServicioSvc, AseguradoraSvc, ConductorSvc, CiudadSvc) {
+          .controller('EditarServicioController', function ($scope, $filter, $state, $confirm, PeriodoSvc,EstadoSvc, $stateParams, toastr, ServicioSvc, AseguradoraSvc, ConductorSvc, CiudadSvc) {
 
               $scope.servicio = {};
               $scope.conductores = [];
@@ -30,7 +30,6 @@
                   servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');
                   servicio.FechaD = $filter('date')(servicio.Fecha, 'dd/MM/yyyy');
                   $scope.servicio = servicio;
-                  
               }
 
               $scope.isSaving = false;
@@ -74,22 +73,19 @@
                           toastr.error(response.data.ExceptionMessage);
                       });
               }
+
               $scope.ObtenerAseguradoras = function () {
                   AseguradoraSvc.Obtener()
                       .then(function (response) {
                           $scope.aseguradoras = response.data;
                       })
               };
-              $scope.ObtenerAseguradoras();
-
               $scope.ObtenerCiudades = function () {
                   CiudadSvc.Obtener()
                       .then(function (response) {
                           $scope.ciudades = response.data;
                       })
               }
-              $scope.ObtenerCiudades();
-
               $scope.ObtenerConductores = function (filtro) {
                   if (filtro) {
                       ConductorSvc.ObtenerPorDescripcion(filtro)
@@ -100,7 +96,23 @@
                       $scope.conductores = [];
                   }
               }
+              $scope.ObtenerEstados = function () {
+                  EstadoSvc.Obtener()
+                      .then(function (response) {
+                          $scope.estadosParaRegistro = response.data.filter(function (estado) {
+                              if (estado.Codigo != "CR" && estado.Codigo != "CF" && estado.Codigo != "FA") {
+                                  return estado;
+                              }
+                          });
+                      })
+                      .catch(function (response) {
+                          toastr.error(response.data.ExceptionMessage);
+                      });
+              }
 
+              $scope.ObtenerAseguradoras();
+              $scope.ObtenerCiudades();
+              $scope.ObtenerEstados();
               $scope.Inicio()
           });
 })();

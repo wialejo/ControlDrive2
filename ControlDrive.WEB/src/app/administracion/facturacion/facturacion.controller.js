@@ -50,6 +50,7 @@
                     size: 'md',
                     controller: function ($scope, $uibModalInstance, scope) {
                         $scope.valorFactura = scope.valorFactura;
+                        $scope.movimientos = scope.movimientos;
 
                         $scope.cancel = function () {
                             $uibModalInstance.dismiss('cancel');

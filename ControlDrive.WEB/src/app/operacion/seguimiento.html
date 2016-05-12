@@ -86,7 +86,7 @@
                     <form class="form-inline inline" ng-submit="ObtenerServicios()">
                         <div class="form-group">
                             <div class="input-group">
-                                <input tabindex="1" ng-model="periodo" required type="search" class="form-control input-sm" id="TxtPeriodo" name="TxtPeriodo" placeholder="dd/mm/aaaa">
+                                <input tabindex="1" ng-model="periodo" required type="text" class="form-control input-sm" id="TxtPeriodo" name="TxtPeriodo" placeholder="dd/mm/aaaa">
                                 <span class="input-group-btn">
                                     <input type="submit" class="btn btn-info btn-sm" name="ObtenerServicios" value="Obtener" />
                                 </span>
@@ -214,7 +214,7 @@
                             <td class="text-center" style="background-color:#edeaea" ng-click="VerSeguimientos(servicio);">
                                 <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>
                             </td>
-                            <td class="text-center">{{$index}}
+                            <td class="text-center">{{$index+1}}
                                 <span class="glyphicon glyphicon-pencil" ng-click="Editar(servicio)" uib-tooltip="Editar el servicio"></span>
                                 <span ng-if="servicio.Notificado" class="glyphicon glyphicon-envelope" uib-tooltip="¡Servicio notificado!"></span>
                                 <span ng-if="!servicio.Asegurado.Telefono1 || servicio.Vehiculo.Placa.length != 6" class="glyphicon glyphicon-info-sign text-danger" uib-tooltip="Datos faltantes: {{ !servicio.Asegurado.Telefono1 ? 'Teléfono del asegurado, ' : '' }} {{ servicio.Vehiculo.Placa.length != 6 ? 'Placa del vehiculo' : ''}}"></span>
@@ -271,7 +271,7 @@
                                             <div class="row">
                                                 <form name="formSeguimiento" class="form ng-pristine ng-valid" ng-submit="GuardarSeguimiento()">
                                                     <div class="col-xs-3 form-group">
-                                                        <select ng-model="servicio.EstadoCodigo" name="estado" ng-options="estado.Codigo as estado.Descripcion for estado in estados" class="form-control"></select>
+                                                        <select ng-model="servicio.EstadoCodigo" name="estado" ng-options="estado.Codigo as estado.Descripcion for estado in estadosParaRegistro" class="form-control"></select>
                                                     </div>
                                                     <div class="col-xs-7 form-group">
                                                         <input type="text" ng-model="seguimiento.Observacion" class="form-control" placeholder="Ingrese su observación" />

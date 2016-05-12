@@ -4,6 +4,7 @@
         .service('DocumentosSvc', function ($http, $q, ManejadorErrores, ngAuthSettings, PeriodoSvc) {
             return {
                 ObtenerDocumentosCliente: ObtenerDocumentosCliente,
+                ObtenerDocumentosRelacionServicios: ObtenerDocumentosRelacionServicios,
                 Guardar: Guardar
             }
             function http(method, urlMetodo, data) {
@@ -19,6 +20,11 @@
                 var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
                 var url = "documentos/cliente?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin + "&clienteId=" + clienteId;
                 var obj = http("GET", url);
+                return obj
+            }
+            function ObtenerDocumentosRelacionServicios(documentosSeleccionados) {
+                var url = "documentos/relacionServicios";
+                var obj = http("POST", url, documentosSeleccionados);
                 return obj
             }
             function Guardar(documento) {

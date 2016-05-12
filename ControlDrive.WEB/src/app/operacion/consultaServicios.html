@@ -4,144 +4,122 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading form-inline">
-                <form name="formConsulta" class="form-inline" ng-submit="formConsulta.$valid && vm.ObtenerServicios()">
-                    <div class="form-group">
-                        <label for="TxtFechaInicial">Fecha inicial</label>
-                        <input  tabindex="5" ng-model="vm.fechaInicial" required ui-mask="99/99/9999" model-view-value="true" type="text" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
-                    </div>
-                    <div class="form-group">
-                        <label for="TxtFechaFinal">Fecha final</label>
-                        <input  tabindex="10" ng-model="vm.fechaFinal" required ui-mask="99/99/9999" model-view-value="true" type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
-                    </div>
+                    <form name="formConsulta" class="form-inline" ng-submit="formConsulta.$valid && vm.ObtenerServicios()">
+                        <div class="form-group">
+                            <label for="TxtFechaInicial">Fecha inicial</label>
+                            <input tabindex="5" ng-model="vm.fechaInicial" required type="date" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
+                        </div>
+                        <div class="form-group">
+                            <label for="TxtFechaFinal">Fecha final</label>
+                            <input tabindex="10" ng-model="vm.fechaFinal" required type="date" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
+                        </div>
                         <button type="submit" class="btn btn-info btn-sm">Consultar</button>
                     </form>
                 </div>
                 <div class="panel-body">
-                    <div class="panel panel-default">
-                        <div class="table-responsive">
-                            <table st-table="displayedCollection" st-safe-src="vm.servicios" class="table text-xs table-condesed">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Id
-                                        </th>
-                                        <th  st-sort="Fecha">
-                                            Hora/Fecha
-                                        </th>
-                                        <th st-sort="Estado.Descripcion">
-                                            Estado
-                                        </th>
-                                        <th>
-                                            Radicado
-                                        </th>
-                                        <th>
-                                            Aseguradora
-                                        </th>
-                                        <th>
-                                            Vehiculo
-                                        </th>
-                                        <th>
-                                            Asegurado
-                                        </th>
-                                        <th>
-                                            Origen/Destino
-                                        </th>
-                                        <th>
-                                            Conductor/Ruta
-                                        </th>
-                                        <th>
-                                            Usuario registro
-                                        </th>
-                                        <th st-sort="FechaRegistro">
-                                            Fecha registro
-                                        </th>
-                                        <th>
-                                        </th>
-                                        <th>
-                                            Valores
-                                        </th>
-                                        <th>
-                                            Factura
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="1">
-                                            <input type="text" class="form-control input-sm" placeholder="Id" st-search="Id" />
-                                        </td>
-                                        <td colspan="8">
-                                            <input type="text" class="form-control input-sm" placeholder="Buscar..." st-search />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-sm" placeholder="Buscar usuario" st-search="UsuarioRegistro" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control input-sm" placeholder="Buscar fecha" st-search="FechaRegistro" />
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                <tbody ng-repeat="svr in displayedCollection">
-                                    <tr>
-                                        <td>
-                                            {{svr.Id}}
-                                        </td>
-                                        <td>
-                                            {{svr.Fecha | date:'HH:mm'}} <br />
-                                            {{svr.Fecha | date:'dd/MM/yyyy'}}
-                                        </td>
-                                        <td>
-                                            {{svr.Estado.Descripcion }}
-                                        </td>
-                                        <td>
-                                            {{svr.Radicado }}
-                                        </td>
-                                        <td>
-                                            {{svr.Aseguradora.Nombre }}<br />
-                                            Asignado por:{{svr.AsignadoPor }}
-                                        </td>
-                                        <td>
-                                            {{svr.Vehiculo.Placa }} <br /> {{svr.Vehiculo.Descripcion }}
-                                        </td>
-                                        <td>
-                                            {{svr.Asegurado.Nombre }} <br /> {{ svr.Asegurado.Telefono1 }} - {{ svr.Asegurado.Telefono2 }}
-                                        </td>
-                                        <td>
-                                            - {{svr.DireccionInicio.Descripcion}}, {{svr.DireccionInicio.Ciudad.Nombre}}, {{svr.DireccionInicio.Barrio}} <br />
-                                            - {{svr.DireccionDestino.Descripcion}}, {{svr.DireccionDestino.Ciudad.Nombre}}, {{svr.DireccionDestino.Barrio}}
-                                        </td>
-                                        <td>
-                                            <strong>Cond.</strong>{{svr.ConductorResumen }}<br />
-                                            <strong>Ruta.</strong>{{svr.RutaResumen }}
-                                        </td>
-                                        <td>
-                                            {{svr.UsuarioRegistro.Nombre }}
-                                        </td>
-                                        <td>
-                                            {{svr.FechaRegistro | date:'HH:mm'}} <br />
-                                            {{svr.FechaRegistro | date:'dd/MM/yyyy'}}
-                                        </td>
-                                        <td>
-                                            <span class="glyphicon glyphicon-pencil"  uib-tooltip="Editar el servicio" ng-click="vm.Editar(svr)" uib-tooltip="Editar el servicio"></span>
-                                        </td>
-                                        <td>
-                                            <span ng-if="svr.valores">
-                                                <strong>Cierre:</strong>{{svr.valores.cierre | currency:"$":0 }} <strong>Ruta</strong>{{svr.valores.ruta | currency:"$":0}} <strong>Conductor</strong>:{{svr.valores.conductor | currency:"$":0 }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {{svr.NoFactura}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="13" class="text-center">
-                                            <div st-pagination="" st-items-by-page="25" st-displayed-pages="7" ></div>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table st-table="displayedCollection" st-safe-src="vm.servicios" class="table table-hover table-condensed text-xs">
+                            <thead>
+                                <tr>
+                                    <td colspan="12">
+                                        <label><strong>Total servicios: </strong></label> <span> <st-summary></st-summary></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Id</th>
+                                    <th st-sort="Fecha">Hora/Fecha</th>
+                                    <th st-sort="Estado.Descripcion">Estado</th>
+                                    <th>Radicado</th>
+                                    <th>Aseguradora</th>
+                                    <th>Vehiculo</th>
+                                    <th>Asegurado</th>
+                                    <th>Origen/Destino</th>
+                                    <th>Conductor/Ruta</th>
+                                    <th>Usuario registro</th>
+                                    <th st-sort="FechaRegistro">Fecha registro</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">
+                                        <input type="text" class="form-control input-sm" placeholder="Id" st-search="Id" />
+                                    </td>
+                                    <td colspan="1">
+                                        <input type="date" class="form-control input-sm" placeholder="Fecha" st-search="Fecha" />
+                                    </td>
+                                    <td colspan="1">
+                                        <input type="text" class="form-control input-sm" placeholder="Estado" st-search="Estado.Descripcion" />
+                                    </td>
+                                    <td colspan="1">
+                                        <input type="text" class="form-control input-sm" placeholder="Consecutivo" st-search="Radicado" />
+                                    </td>
+                                    <td colspan="1">
+                                        <input type="text" class="form-control input-sm" placeholder="Cliente" st-search="Aseguradora.Nombre" />
+                                    </td>
+                                    <td colspan="4">
+                                        <input type="text" class="form-control input-sm" placeholder="Buscar..." st-search />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" placeholder="Buscar usuario" st-search="UsuarioRegistro" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" placeholder="Buscar fecha" st-search="FechaRegistro" />
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody ng-repeat="svr in displayedCollection">
+                                <tr>
+                                    <td>
+                                        {{svr.Id}}
+                                    </td>
+                                    <td>
+                                        {{svr.Fecha | date:'HH:mm'}} <br />
+                                        {{svr.Fecha | date:'dd/MM/yyyy'}}
+                                    </td>
+                                    <td>
+                                        {{svr.Estado.Descripcion }}
+                                    </td>
+                                    <td>
+                                        {{svr.Radicado }}
+                                    </td>
+                                    <td>
+                                        {{svr.Aseguradora.Nombre }}<br />
+                                        Asignado por:{{svr.AsignadoPor }}
+                                    </td>
+                                    <td>
+                                        {{svr.Vehiculo.Placa }} <br /> {{svr.Vehiculo.Descripcion }}
+                                    </td>
+                                    <td>
+                                        {{svr.Asegurado.Nombre }} <br /> {{ svr.Asegurado.Telefono1 }} - {{ svr.Asegurado.Telefono2 }}
+                                    </td>
+                                    <td>
+                                        - {{svr.DireccionInicio.Descripcion}}, {{svr.DireccionInicio.Ciudad.Nombre}}, {{svr.DireccionInicio.Barrio}} <br />
+                                        - {{svr.DireccionDestino.Descripcion}}, {{svr.DireccionDestino.Ciudad.Nombre}}, {{svr.DireccionDestino.Barrio}}
+                                    </td>
+                                    <td>
+                                        <strong>Cond.</strong>{{svr.ConductorResumen }}<br />
+                                        <strong>Ruta.</strong>{{svr.RutaResumen }}
+                                    </td>
+                                    <td>
+                                        {{svr.UsuarioRegistro.Nombre }}
+                                    </td>
+                                    <td>
+                                        {{svr.FechaRegistro | date:'HH:mm'}} <br />
+                                        {{svr.FechaRegistro | date:'dd/MM/yyyy'}}
+                                    </td>
+                                    <td>
+                                        <span class="glyphicon glyphicon-pencil" uib-tooltip="Editar el servicio" ng-click="vm.Editar(svr)" uib-tooltip="Editar el servicio"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="13" class="text-center">
+                                        <div st-pagination="" st-items-by-page="25" st-displayed-pages="7"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>

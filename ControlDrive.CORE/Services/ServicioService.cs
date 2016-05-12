@@ -27,7 +27,7 @@ namespace ControlDrive.CORE.Services
         private readonly ICommonInterface<Vehiculo> _vehiculoService;
         private readonly ICorreoService _correoService;
 
-        public ServicioService(IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService, 
+        public ServicioService(IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService,
             ICommonInterface<Asegurado> aseguradoService, ICommonInterface<Vehiculo> vehiculoService, ICorreoService correoService, IUnitOfWork unitOfWork)
         {
             _servicioRepositorio = servicioRepositorio;
@@ -96,6 +96,7 @@ namespace ControlDrive.CORE.Services
                 servicioRepo.Fecha = servicio.Fecha;
                 servicioRepo.Hora = servicio.Hora;
                 servicioRepo.Radicado = servicio.Radicado;
+                servicioRepo.EstadoCodigo = servicio.EstadoCodigo;
                 servicioRepo.AsignadoPor = servicio.AsignadoPor;
                 servicioRepo.AseguradoraId = servicio.Aseguradora.Id;
 
@@ -178,11 +179,9 @@ namespace ControlDrive.CORE.Services
                     Conductor = s.Conductor,
                     RutaId = s.RutaId,
                     Ruta = s.Ruta,
-                    UsuarioRegistro = s.UsuarioRegistro,
+                    UsuarioRegistro = new ApplicationUserDto { Nombre = s.UsuarioRegistro.Nombre },
                     FechaRegistro = s.FechaRegistro,
-                    Notificado = s.Notificado,
-                    //Movimientos =  s.Movimientos.Select(m => new MovimientoDto(m)).ToList()
-                    Movimientos = s.Movimientos
+                    Notificado = s.Notificado
                 })
                 .OrderBy(s => s.Fecha)
                 .ToList();
@@ -198,8 +197,8 @@ namespace ControlDrive.CORE.Services
                     servicio.ConductorResumen = string.Empty;
                 }
 
-                if (servicio.UsuarioRegistro != null)
-                    servicio.UsuarioRegistro = new ApplicationUser { Nombre = servicio.UsuarioRegistro.Nombre };
+                //if (servicio.UsuarioRegistro != null)
+                //    servicio.UsuarioRegistro = new ApplicationUser { Nombre = servicio.UsuarioRegistro.Nombre };
 
                 if (servicio.Ruta != null)
                 {
@@ -230,7 +229,8 @@ namespace ControlDrive.CORE.Services
 
         public void Cerrar(List<Servicio> servicios)
         {
-            servicios.ForEach(servicio => {
+            servicios.ForEach(servicio =>
+            {
                 var nuevoEstado = string.Empty;
                 switch (servicio.EstadoCodigo)
                 {
@@ -351,7 +351,7 @@ namespace ControlDrive.CORE.Services
                 respuesta = string.IsNullOrEmpty(respuesta) ? "Conductores notificados correctamente." : ", Conductores notificados correctamente.";
                 servicios.ToList().ForEach(servicio =>
                 {
-                    _servicioRepositorio.Update(new Servicio { Id = servicio.Id, Notificado = true}, s => s.Notificado);
+                    _servicioRepositorio.Update(new Servicio { Id = servicio.Id, Notificado = true }, s => s.Notificado);
                 });
                 _unitOfWork.Commit();
             }

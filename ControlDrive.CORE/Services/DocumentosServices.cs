@@ -20,7 +20,7 @@ namespace ControlDrive.CORE.Services
         private IEntityBaseRepository<Empresa> _empresaRepositorio;
         private IMovimientosService _movimientoService;
 
-        public DocumentosService(IEntityBaseRepository<Documento> documentoRepositorio, IMovimientosService movimientoService, IEntityBaseRepository<Empresa> empresaRepositorio,  IEntityBaseRepository<Servicio> servicioRepositorio, IUnitOfWork unitOfWork)
+        public DocumentosService(IEntityBaseRepository<Documento> documentoRepositorio, IMovimientosService movimientoService, IEntityBaseRepository<Empresa> empresaRepositorio, IEntityBaseRepository<Servicio> servicioRepositorio, IUnitOfWork unitOfWork)
         {
             _documentoRepositorio = documentoRepositorio;
             _empresaRepositorio = empresaRepositorio;
@@ -81,6 +81,43 @@ namespace ControlDrive.CORE.Services
             }
             _unitOfWork.Commit();
         }
+
+        public List<DocumentoRelacionServicio> ObtenerRelacionServicios(List<Documento> documentos)
+        {
+            var documentosRelacionServicios = new List<DocumentoRelacionServicio>();
+            documentos.ForEach(documento =>
+            {
+                var docRepo = _documentoRepositorio.FindByIncluding(d => d.Id == documento.Id, d => d.Movimientos)
+                                .Select(s => new DocumentoDto
+                                {
+                                    Numero = s.Numero,
+                                    Fecha = s.Fecha,
+                                    Valor = s.Valor,
+                                    Movimientos = s.Movimientos.Select(m => new MovimientoDto
+                                    {
+                                        Valor = m.Valor,
+                                        Servicio = new ServicioDto { Radicado = m.Servicio.Radicado }
+                                    }).ToList()
+                                })
+                                .AsQueryable()
+                                .FirstOrDefault();
+
+                docRepo.Movimientos.ForEach(mov =>
+                {
+                    documentosRelacionServicios.Add(new DocumentoRelacionServicio
+                    {
+                        Numero = docRepo.Numero,
+                        Fecha = docRepo.Fecha,
+                        TipoDocEmpresa = "NIT",
+                        NitEmpresa = "9004970290",
+                        Valor = mov.Valor,
+                        ConsecutivoServicio = mov.Servicio.Radicado
+                    });
+                });
+            });
+
+            return documentosRelacionServicios;
+        }
     }
 
     public interface IDocumentosService
@@ -88,5 +125,16 @@ namespace ControlDrive.CORE.Services
         void Guardar(Documento documento);
         List<Documento> Obtener(Expression<Func<Documento, bool>> predicate);
         List<Documento> Obtener();
+        List<DocumentoRelacionServicio> ObtenerRelacionServicios(List<Documento> documentos);
+    }
+
+    public class DocumentoRelacionServicio
+    {
+        public string Numero { get; set; }
+        public DateTime Fecha { get; set; }
+        public string TipoDocEmpresa { get; set; }
+        public string NitEmpresa { get; set; }
+        public decimal Valor { get; set; }
+        public string ConsecutivoServicio { get; set; }
     }
 }

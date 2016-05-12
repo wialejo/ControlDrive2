@@ -163,7 +163,7 @@
                             <hr />
                             <fieldset>
                                 <div class="row">
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="SelConductores">Conductor</label>
                                             <ui-select tabindex="24" ng-model="servicio.Conductor" theme="bootstrap" reset-search-input="false">
@@ -174,7 +174,7 @@
                                             </ui-select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-4">
                                         <div class="form-group">
                                             <label for="SelRuta">Ruta</label>
                                             <ui-select tabindex="25" ng-model="servicio.Ruta" theme="bootstrap" reset-search-input="false">
@@ -185,6 +185,13 @@
                                             </ui-select>
                                         </div>
                                     </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="estado">Estado</label>
+                                            <select ng-model="servicio.EstadoCodigo" name="estado" ng-options="estado.Codigo as estado.Descripcion for estado in estadosParaRegistro" class="form-control"></select>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </fieldset>
                             <fieldset>

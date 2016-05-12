@@ -73,9 +73,16 @@
             $scope.ObtenerEstados = function () {
                 EstadoSvc.Obtener()
                     .then(function (response) {
+
                         $scope.estados = response.data.filter(function (estado) {
                             estado.Mostrar = true;
                             if (estado.EnOperacion == true) {
+                                return estado;
+                            }
+
+                        });
+                        $scope.estadosParaRegistro = response.data.filter(function (estado) {
+                            if (estado.Codigo != "CR" && estado.Codigo != "CF" && estado.Codigo != "FA") {
                                 return estado;
                             }
                         });
@@ -102,6 +109,7 @@
             }
 
             $scope.ObtenerServicios = function () {
+
                 ServicioSvc.ObtenerParaSeguimiento($scope.periodo)
                     .then(function (response) {
                         var estadoServicios = {};

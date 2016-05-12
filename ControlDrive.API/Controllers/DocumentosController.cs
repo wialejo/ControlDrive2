@@ -42,6 +42,20 @@ namespace ControlDrive.Core.Controllers
         }
 
         [HttpPost]
+        [Route("api/documentos/relacionServicios")]
+        public IHttpActionResult ObtenerDocumentosServicios([FromBody]List<Documento> documentos)
+        {
+            try
+            {
+                var documentosRelacionServicios = _documentosService.ObtenerRelacionServicios(documentos).ToList();
+                return Ok(documentosRelacionServicios);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+        [HttpPost]
         [Route("api/documentos")]
         public IHttpActionResult Guardar([FromBody]Documento documento)
         {

@@ -14,7 +14,7 @@ namespace ControlDrive.CORE.Modelos
     public class ServicioDto
     {
         public ServicioDto() {
-            Movimientos = new List<Movimiento>();
+            Movimientos = new List<MovimientoDto>();
         }
         public int Id { get; set; }
 
@@ -50,34 +50,35 @@ namespace ControlDrive.CORE.Modelos
         public DateTime FechaModificacion { get; internal set; }
 
         public int? UsuarioRegistroId { get; set; }
-        public ApplicationUser UsuarioRegistro { get; set; }
+        public ApplicationUserDto UsuarioRegistro { get; set; }
         public int? UsuarioModificacionId { get; set; }
-        public ApplicationUser UsuarioModificacion { get; set; }
+        public ApplicationUserDto UsuarioModificacion { get; set; }
         public ICollection<Seguimiento> Seguimientos { get; set; }
-        public ICollection<Movimiento> Movimientos { get; set; }
+        public ICollection<MovimientoDto> Movimientos { get; set; }
         public bool Notificado { get; set; }
 
     }
 
+    public class DocumentoDto
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Tipo { get; set; }
+        public string Numero { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Concepto { get; set; }
+        public decimal Valor { get; set; }
+        public List<MovimientoDto> Movimientos { get; set; }
+        public string UsuarioRegistroId { get; set; }
+        public DateTime FechaRegistro { get; set; }
+        public int ClienteId { get; set; }
+    }
+
     public class MovimientoDto
     {
-        public MovimientoDto(Movimiento movimiento)
-        {
-            Id = movimiento.Id;
-            ServicioId = movimiento.ServicioId;
-            Valor = movimiento.Valor;
-            ConceptoCodigo = movimiento.ConceptoCodigo;
-            ProveedorId = movimiento.ProveedorId;
-            ClienteId = movimiento.ClienteId;
-            DocumentoId = movimiento.DocumentoId;
-            FechaRegistro = movimiento.FechaRegistro;
-            UsuarioRegistroId = movimiento.UsuarioRegistroId;
-            FechaRegistro = movimiento.FechaRegistro;
-            FechaModificacion = movimiento.FechaModificacion;
-            UsuarioModificacionId = movimiento.UsuarioModificacionId;
-        }
-
         public int Id { get; set; }
+        public ServicioDto Servicio { get; set; }
+        public DocumentoDto Documento { get; set; }
         public int ServicioId { get; set; }
         public decimal Valor { get; set; }
         public string ConceptoCodigo { get; set; }
@@ -88,6 +89,8 @@ namespace ControlDrive.CORE.Modelos
         public string UsuarioRegistroId { get; set; }
         public DateTime? FechaModificacion { get; set; }
         public string UsuarioModificacionId { get; set; }
+        public bool Aprobado { get; set; }
+
     }
 
 
@@ -177,5 +180,9 @@ namespace ControlDrive.CORE.Modelos
         public string Telefono1 { get; set; }
         public string Telefono2 { get; set; }
 
+    }
+
+    public class ApplicationUserDto {
+        public string Nombre { get; set; }
     }
 }
