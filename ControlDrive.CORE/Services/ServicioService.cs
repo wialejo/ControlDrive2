@@ -181,7 +181,22 @@ namespace ControlDrive.CORE.Services
                     Ruta = s.Ruta,
                     UsuarioRegistro = new ApplicationUserDto { Nombre = s.UsuarioRegistro.Nombre },
                     FechaRegistro = s.FechaRegistro,
-                    Notificado = s.Notificado
+                    Notificado = s.Notificado,
+                    Movimientos = s.Movimientos.Select(m => new MovimientoDto
+                    {
+                        Id = m.Id,
+                        ServicioId = m.ServicioId,
+                        Valor = m.Valor,
+                        ConceptoCodigo = m.ConceptoCodigo,
+                        ProveedorId = m.ProveedorId,
+                        ClienteId = m.ClienteId,
+                        DocumentoId = m.DocumentoId,
+                        FechaRegistro = m.FechaRegistro,
+                        UsuarioRegistroId = m.UsuarioRegistroId,
+                        FechaModificacion = m.FechaModificacion,
+                        UsuarioModificacionId = m.UsuarioModificacionId,
+                        Aprobado = m.Aprobado,
+                    }).ToList()
                 })
                 .OrderBy(s => s.Fecha)
                 .ToList();

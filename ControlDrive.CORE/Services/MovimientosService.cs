@@ -52,19 +52,19 @@ namespace ControlDrive.CORE.Services
             var movimiento = _movimientoRepositorio.FindBy(m => m.Id == id).FirstOrDefault();
             return movimiento;
         }
+
         public void Guardar(Movimiento movimiento)
         {
-            //movimientos.ForEach(movimiento =>
-            //{
-            if (movimiento.Id != 0)
+            var movimientoRepo = _movimientoRepositorio.FindBy(m => m.ConceptoCodigo == movimiento.ConceptoCodigo && m.ServicioId == movimiento.ServicioId).FirstOrDefault();
+            if (movimientoRepo != null)
             {
-                _movimientoRepositorio.Update(movimiento, m => m.Valor);
+                movimientoRepo.Valor = movimiento.Valor;
+                _movimientoRepositorio.Edit(movimientoRepo);
             }
             else
             {
                 _movimientoRepositorio.Add(movimiento);
             }
-            // });
             _unitOfWork.Commit();
         }
 

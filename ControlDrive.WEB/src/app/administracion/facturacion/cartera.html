@@ -47,7 +47,7 @@
                                 <label><strong>Total documentos: </strong></label> {{ documentos.length }}
                             </td>
                             <td colspan="3" class="text-right">
-                                <button ng-click="ImprimirRelacion()" class="btn btn-info btn-sm">Imprimir relación</button>
+                                <button ng-click="ImprimirRelacion()" class="btn btn-info btn-sm">Ver relación servicios</button>
                             </td>
                         </tr>
                         <tr>
@@ -57,6 +57,7 @@
                             <th>Número</th>
                             <th>Valor</th>
                             <th>Concepto</th>
+                            <th></th>
                             <th class="col-md-1">
                                 <label class="checkbox i-checks ">
                                     <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
@@ -85,6 +86,9 @@
                                 {{documento.Concepto}}
                             </td>
                             <td>
+                                <input type="button" value="Anexo" ng-click="MostrarServicios(documento)" class="btn btn-info btn-sm" />
+                            </td>
+                            <td>
                                 <label class="checkbox i-checks m-l-xs m-b-xs">
                                     <input type="checkbox" ng-model="documento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
                                 </label>
@@ -97,58 +101,128 @@
     </div>
 
     <div id="RelacionServicios" style="display:none">
-        <table>
+        <style>
+            .tbl {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 10pt;
+            }
+
+            .celda {
+                border: 1px solid #a1a1a1;
+                padding: 8px;
+                font-size: 11px;
+            }
+        </style>
+        <table class="tbl">
             <thead>
                 <tr>
-                    <th>
+                    <th class="celda">
                         Total
                     </th>
-                    <th>
+                    <th class="celda">
                         NUM_FRA
                     </th>
-                    <th>
+                    <th class="celda">
                         FEC_FRA
                     </th>
-                    <th>
+                    <th class="celda">
                         TIP_DOC
                     </th>
-                    <th>
+                    <th class="celda">
                         COD_DOC
                     </th>
-                    <th>
+                    <th class="celda">
                         VLR_BRUTO
                     </th>
-                    <th>
+                    <th class="celda">
                         NUM_INCIDENTE
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="documentoRelacionServicio in documentosRelacionServicios">
-                    <td>
+                    <td class="celda">
                         {{$index+1}}
                     </td>
-                    <td>
+                    <td class="celda">
                         {{documentoRelacionServicio.Numero}}
                     </td>
-                    <td>
-                        {{documentoRelacionServicio.Fecha | date:'dd/MM/yyyy'}}
+                    <td class="celda">
+                        {{documentoRelacionServicio.FechaDoc | date:'dd/MM/yyyy'}}
                     </td>
-                    <td>
-                        {{documentoRelacionServicio.TipoDocEmpresa}}
+                    <td class="celda">
+                        NIT
                     </td>
-                    <td>
-                        {{documentoRelacionServicio.NitEmpresa}}
+                    <td class="celda">
+                        9004970290
                     </td>
-                    <td>
-                        {{documentoRelacionServicio.Valor}}
+                    <td class="celda">
+                        {{documentoRelacionServicio.ValorDoc | currency:"$":0 }}
                     </td>
-                    <td>
+                    <td class="celda">
                         {{documentoRelacionServicio.ConsecutivoServicio}}
                     </td>
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div id="ResumenServicios" style="display:none">
+        <style>
+            .tbl {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 10pt;
+            }
+
+            .celda {
+                border: 1px solid #a1a1a1;
+                padding: 8px;
+                font-size: 11px;
+            }
+        </style>
+        <p>Anexo de factura número: {{documentoServicios[0].Numero}}</p>
+        <div>
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th class="celda">Fecha</th>
+                        <th class="celda">Tipo</th>
+                        <th class="celda">Consecutivo</th>
+                        <th class="celda">Vehiculo</th>
+                        <th class="celda">Origen</th>
+                        <th class="celda">Destino</th>
+                        <th class="celda">Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="documentoServicio in documentoServicios">
+                        <td class="celda">
+                            {{documentoServicio.FechaServicio | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td class="celda">
+                            Conductor elegido
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.ConsecutivoServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.VehiculoServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.OrigenServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.DestinoServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.ValorMov | currency:"$":0}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

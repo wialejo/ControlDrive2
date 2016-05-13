@@ -5,6 +5,7 @@
             return {
                 ObtenerDocumentosCliente: ObtenerDocumentosCliente,
                 ObtenerDocumentosRelacionServicios: ObtenerDocumentosRelacionServicios,
+                ObtenerServicios: ObtenerServicios,
                 Guardar: Guardar
             }
             function http(method, urlMetodo, data) {
@@ -25,6 +26,11 @@
             function ObtenerDocumentosRelacionServicios(documentosSeleccionados) {
                 var url = "documentos/relacionServicios";
                 var obj = http("POST", url, documentosSeleccionados);
+                return obj
+            }
+            function ObtenerServicios(documentoId) {
+                var url = "documentos/resumenServicios?documentoId=" + documentoId;
+                var obj = http("GET", url);
                 return obj
             }
             function Guardar(documento) {

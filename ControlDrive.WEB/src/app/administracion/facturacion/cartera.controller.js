@@ -28,6 +28,21 @@
                 });
             }
 
+            $scope.MostrarServicios = function (documento) {
+                var documentos = [];
+                documentos.push(documento);
+
+                DocumentosSvc.ObtenerDocumentosRelacionServicios(documentos)
+                    .then(function (response) {
+                        toastr.success("Generado correctamente.")
+                        $scope.documentoServicios = response.data;
+                        AbrirNuevaVentanaHtmlElemento('ResumenServicios');
+                    }, function (response) {
+                        toastr.error(response.data.ExceptionMessage);
+                    });
+                
+            }
+
             $scope.ImprimirRelacion = function () {
                 var documentosSeleccionados = [];
                 angular.forEach($scope.documentos, function (documento) {
@@ -42,24 +57,23 @@
                 DocumentosSvc.ObtenerDocumentosRelacionServicios(documentosSeleccionados)
                   .then(function (response) {
                       toastr.success("Generado correctamente.")
-                      MostrarRelacionServicios(response.data);
+                      $scope.documentosRelacionServicios = response.data;
+                      AbrirNuevaVentanaHtmlElemento('RelacionServicios');
                   }, function (response) {
                       toastr.error(response.data.ExceptionMessage);
                   });
             }
 
-            var MostrarRelacionServicios = function (documentosRelacionServicios) {
-                $scope.documentosRelacionServicios = documentosRelacionServicios;
-
+            var AbrirNuevaVentanaHtmlElemento = function (elemento) {
                 setTimeout(function () {
-                    var innerContents = document.getElementById('RelacionServicios').innerHTML;
-                    var popupWinindow = window.open('', '_blank', 'width=600,height=500,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+                    var innerContents = document.getElementById(elemento).innerHTML;
+                    var popupWinindow = window.open('Relacion', '_blank', 'width=800,height=500,scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
                     popupWinindow.document.open();
                     popupWinindow.document.write('<html><body onload="window.print()">' + innerContents + '</html>');
                     popupWinindow.document.close();
 
-                },500)
-                
+                }, 500)
+
             }
         });
 })();

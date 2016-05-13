@@ -1,5 +1,6 @@
 ﻿using ControlDrive.Core.Infraestructura;
 using ControlDrive.Core.Modelos;
+using ControlDrive.CORE.Extensions;
 using ControlDrive.CORE.Modelos;
 using ControlDrive.CORE.Repositorios;
 using Microsoft.AspNet.Identity;
@@ -96,7 +97,14 @@ namespace ControlDrive.CORE.Services
                                     Movimientos = s.Movimientos.Select(m => new MovimientoDto
                                     {
                                         Valor = m.Valor,
-                                        Servicio = new ServicioDto { Radicado = m.Servicio.Radicado }
+                                        Servicio = new ServicioDto
+                                        {
+                                            Radicado = m.Servicio.Radicado,
+                                            Fecha = m.Servicio.Fecha,
+                                            Vehiculo = m.Servicio.Vehiculo,
+                                            DireccionInicio = m.Servicio.DireccionInicio,
+                                            DireccionDestino = m.Servicio.DireccionDestino
+                                        }
                                     }).ToList()
                                 })
                                 .AsQueryable()
@@ -107,11 +115,16 @@ namespace ControlDrive.CORE.Services
                     documentosRelacionServicios.Add(new DocumentoRelacionServicio
                     {
                         Numero = docRepo.Numero,
-                        Fecha = docRepo.Fecha,
-                        TipoDocEmpresa = "NIT",
-                        NitEmpresa = "9004970290",
-                        Valor = mov.Valor,
-                        ConsecutivoServicio = mov.Servicio.Radicado
+                        FechaDoc = docRepo.Fecha,
+                        ValorDoc = docRepo.Valor,
+                        ValorMov = mov.Valor,
+                        ConsecutivoServicio = mov.Servicio.Radicado,
+                        FechaServicio = mov.Servicio.Fecha,
+                        VehiculoServicio = mov.Servicio.Vehiculo.Placa + " " + mov.Servicio.Vehiculo.Descripcion,
+                        OrigenServicio = mov.Servicio.DireccionInicio.ToResumen(),
+                        DestinoServicio = mov.Servicio.DireccionDestino.ToResumen(),
+
+
                     });
                 });
             });
@@ -131,10 +144,15 @@ namespace ControlDrive.CORE.Services
     public class DocumentoRelacionServicio
     {
         public string Numero { get; set; }
-        public DateTime Fecha { get; set; }
-        public string TipoDocEmpresa { get; set; }
-        public string NitEmpresa { get; set; }
-        public decimal Valor { get; set; }
+        public DateTime FechaDoc { get; set; }
+        public decimal ValorDoc { get; set; }
+
+        public decimal ValorMov { get; set; }
+
         public string ConsecutivoServicio { get; set; }
+        public DateTime FechaServicio { get; set; }
+        public string VehiculoServicio { get; set; }
+        public string OrigenServicio { get; set; }
+        public string DestinoServicio { get; set; }
     }
 }
