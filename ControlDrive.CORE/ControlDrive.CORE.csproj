@@ -147,6 +147,10 @@
     <Compile Include="Migrations\201605110417355_tipoDatoNumeroFac.Designer.cs">
       <DependentUpon>201605110417355_tipoDatoNumeroFac.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605170416198_addproveedordocumentos.cs" />
+    <Compile Include="Migrations\201605170416198_addproveedordocumentos.Designer.cs">
+      <DependentUpon>201605170416198_addproveedordocumentos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -209,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605110417355_tipoDatoNumeroFac.resx">
       <DependentUpon>201605110417355_tipoDatoNumeroFac.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605170416198_addproveedordocumentos.resx">
+      <DependentUpon>201605170416198_addproveedordocumentos.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

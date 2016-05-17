@@ -1,5 +1,5 @@
 ﻿
-<div ng-controller="PrefacturacionController">
+<div ng-controller="FacturacionController">
 
     <style>
         .border-none {
@@ -84,8 +84,11 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-12">
-                    <label><strong>Número total: </strong></label> {{ movimientos.length }}
+                <div class="col-sm-6">
+                    <label><strong>Número total: </strong></label> {{ movimientos.length }} <strong style="margin-left:10px"> Valor total: </strong><span> {{valorFactura | currency:"$":0}}</span>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button ng-click="MostrarFacturacionMasiva()" class="btn btn-info btn-sm">Facturación masiva</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -94,20 +97,18 @@
                         <tr>
                             <th>Id</th>
                             <th class="col-md-1">Hora/fecha</th>
-                            <th class="col-md-2">Cliente</th>
-                            <th>Asig.Por</th>
-                            <th class="col-md-3">
-                                Consecutivo
-                            </th>
-                            <th class="col-md-1">
-                                Vehiculo
-                            </th>
-                            <th class="col-md-1">
-                                Asegurado
-                            </th>
-                            <th class="col-md-2">Origen/Destino</th>
-                            <th class="col-md-2">Valor</th>
+                            <th class="col-md-1">Cliente</th>
+                            <th>Consecutivo</th>
+                            <th class="col-md-1">Vehiculo</th>
+                            <th>Origen/Destino</th>
+                            <th>Valor</th>
+                            <th  class="col-md-2">No. factura</th>
                             <th></th>
+                            <th>
+                                <label class="checkbox i-checks ">
+                                    <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="text-xs" ng-repeat="movimiento in movimientos | filter: search">
@@ -116,48 +117,44 @@
                                 {{movimiento.Servicio.Id}}
                             </td>
                             <td class="text-center">
-                                {{movimiento.Servicio.Fecha | date:'HH:mm'}}
+                                {{movimiento.Servicio.Fecha | date:'HH:mm'
+                                }}
                                 <br />
                                 {{movimiento.Servicio.Fecha | date:'dd/MM/yyyy'}}
                             </td>
                             <td>
-                                <select tabindex="4"
-                                        ng-model="movimiento.Servicio.Aseguradora"
-                                        class="form-control"
-                                        id="SelAseguradora"
-                                        name="SelAseguradora"
-                                        required
-                                        ng-options="aseguradora.Nombre for aseguradora in aseguradoras track by aseguradora.Id"></select>
+                                {{movimiento.Servicio.Aseguradora.Nombre }}<br />
+                                <strong>Asig.Por:</strong> {{movimiento.Servicio.AsignadoPor }}
                             </td>
                             <td>
-                                {{movimiento.Servicio.AsignadoPor }}
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" ng-model="movimiento.Servicio.Radicado" />
+                                {{movimiento.Servicio.Radicado}}
                             </td>
                             <td>
                                 {{movimiento.Servicio.Vehiculo.Placa }} <br /> {{movimiento.Servicio.Vehiculo.Descripcion }}
                             </td>
                             <td>
-                                {{movimiento.Servicio.Asegurado.Nombre }} <br /> {{ movimiento.Servicio.Asegurado.Telefono1 }} - {{ movimiento.Servicio.Asegurado.Telefono2 }}
-                            </td>
-                            <td>
-                                <div ng-class="{ 'verde': !movimiento.Servicio.DireccionInicio.Ciudad.Principal }">
+                                <div  ng-class="{ 'verde': !movimiento.Servicio.DireccionInicio.Ciudad.Principal }">
 
                                     <strong>Origen: </strong> {{movimiento.Servicio.DireccionInicio.Descripcion}}, {{movimiento.Servicio.DireccionInicio.Ciudad.Nombre}}, {{movimiento.Servicio.DireccionInicio.Barrio}}
                                 </div>
-                                <div ng-class="{ 'verde': !movimiento.Servicio.DireccionDestino.Ciudad.Principal }">
+                                <div  ng-class="{ 'verde': !movimiento.Servicio.DireccionDestino.Ciudad.Principal }">
                                     <strong>Destino: </strong> {{movimiento.Servicio.DireccionDestino.Descripcion}}, {{movimiento.Servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
                                 </div>
                             </td>
                             <td>
-                                <input type="text" class="form-control" ng-model="movimiento.Valor" />
+                                {{movimiento.Valor | currency:"$":0 }} <br />
+                                <strong>Iva:</strong> {{movimiento.Valor*0.16 | currency:"$":0 }}
                             </td>
                             <td>
-                                <button class="btn btn-info" ng-disabled="isSaving" ng-click="ActualizarMovimiento($index)">
-                                    <span class="glyphicon glyphicon-ok" ng-if="movimiento.Aprobado"></span>
-                                    Aprobar
-                                </button>
+                                <input type="text" class="form-control" ng-model="movimiento.NumeroDocumento" />
+                            </td>
+                            <td>
+                                <button ng-click="Facturar(movimiento)" class="btn btn-info btn-sm">Facturar</button>
+                            </td>
+                            <td>
+                                <label class="checkbox i-checks m-l-xs m-b-xs">
+                                    <input type="checkbox" ng-model="movimiento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
                             </td>
                         </tr>
                     </tbody>
@@ -166,3 +163,19 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="MostrarFacturacionMasiva.html">
+    <div class="modal-body wrapper-lg ">
+        <a class="close" data-dismiss="modal" ng-click="cancel()">×</a>
+        <h3 class="m-t-none m-b font-thin">Facturación masiva</h3>
+        <span>Número total servicios: </span> <strong> {{ movimientos.length }}</strong>
+        <br />
+        <span>Valor factura: </span> <strong> {{valorFactura | currency:"$":0}}</strong>
+        <br />
+        <div class="form-group">
+            <label>Número de factura:</label>
+            <input type="text" name="name" value="" ng-model="numeroFactura" />
+        </div>
+        <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Facturar" ng-click="FacturarMasivo()" />
+    </div>
+</script>

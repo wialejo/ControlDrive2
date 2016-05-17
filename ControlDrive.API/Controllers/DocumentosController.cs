@@ -41,6 +41,21 @@ namespace ControlDrive.Core.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/documentos/proveedor")]
+        public IHttpActionResult ObtenerDocumentosproveedor([FromUri]DateTime inicio, [FromUri]DateTime fin, [FromUri] int proveedorId)
+        {
+            try
+            {
+                var documentos = _documentosService.Obtener(d => d.ProveedorId == proveedorId).ToList();
+                return Ok(documentos);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
         [HttpPost]
         [Route("api/documentos/relacionServicios")]
         public IHttpActionResult ObtenerDocumentosServicios([FromBody]List<Documento> documentos)

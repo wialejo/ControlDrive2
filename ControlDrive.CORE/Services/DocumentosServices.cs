@@ -32,7 +32,7 @@ namespace ControlDrive.CORE.Services
 
         public List<Documento> Obtener(Expression<Func<Documento, bool>> predicate)
         {
-            var documentos = _documentoRepositorio.FindByIncluding(predicate, d => d.Cliente).ToList();
+            var documentos = _documentoRepositorio.FindByIncluding(predicate, d => d.Cliente, d => d.Proveedor).ToList();
             return documentos;
         }
 
@@ -51,29 +51,43 @@ namespace ControlDrive.CORE.Services
             else
             {
                 var documentoRepo = new Documento();
-                documentoRepo.Tipo = "FA";
+                documentoRepo.Tipo = documento.Tipo;
                 documentoRepo.Numero = documento.Numero;
                 documentoRepo.Fecha = DateTime.Now;
 
-                var empresa = _empresaRepositorio.GetAll().FirstOrDefault();
-                if (empresa == null)
+                if (documento.Tipo == "FA")
                 {
-                    throw new Exception("No se ha registrado una empresa.");
+                    var empresa = _empresaRepositorio.GetAll().FirstOrDefault();
+                    if (empresa == null)
+                    {
+                        throw new Exception("No se ha registrado una empresa.");
+                    }
+
+                    documentoRepo.Concepto = "Servicios de conductor elegido de la ciudad de " + empresa.Ciudad;
+                    documentoRepo.ClienteId = documento.ClienteId;
+                }
+                else
+                {
+                    var numero = _documentoRepositorio.FindBy(d => d.Tipo == "CP").Select(d => d.Numero).FirstOrDefault();
+                    int nuevoNumero = 0;
+                    int.TryParse(numero, out nuevoNumero);
+                    nuevoNumero = nuevoNumero + 1;
+
+                    documentoRepo.Numero = nuevoNumero.ToString();
+                    documentoRepo.Concepto = "Servicios de conductor elegido y/o ruta";
+                    documentoRepo.ProveedorId = documento.ProveedorId;
                 }
 
-                documentoRepo.Concepto = "Servicios de conductor elegido de la ciudad de " + empresa.Ciudad;
-                documentoRepo.ClienteId = documento.ClienteId;
-
                 var nuevosMovimientos = new List<Movimiento>();
-                decimal valorFactura = 0;
+                decimal valorDocumento = 0;
                 documento.Movimientos.ForEach(movimiento =>
                 {
                     var movimientoGuardado = _movimientoService.ObtenerPorId(movimiento.Id);
-                    valorFactura = valorFactura + movimientoGuardado.Valor;
+                    valorDocumento = valorDocumento + movimientoGuardado.Valor;
                     nuevosMovimientos.Add(movimientoGuardado);
                 });
 
-                documentoRepo.Valor = valorFactura;
+                documentoRepo.Valor = valorDocumento;
                 documentoRepo.Movimientos = nuevosMovimientos;
                 documentoRepo.FechaRegistro = DateTime.Now;
                 documentoRepo.UsuarioRegistroId = documento.UsuarioRegistroId;
@@ -104,7 +118,8 @@ namespace ControlDrive.CORE.Services
                                             Vehiculo = m.Servicio.Vehiculo,
                                             DireccionInicio = m.Servicio.DireccionInicio,
                                             DireccionDestino = m.Servicio.DireccionDestino
-                                        }
+                                        },
+                                        Concepto = m.Concepto
                                     }).ToList()
                                 })
                                 .AsQueryable()
@@ -118,13 +133,12 @@ namespace ControlDrive.CORE.Services
                         FechaDoc = docRepo.Fecha,
                         ValorDoc = docRepo.Valor,
                         ValorMov = mov.Valor,
+                        Concepto = mov.Concepto.Descripcion,
                         ConsecutivoServicio = mov.Servicio.Radicado,
                         FechaServicio = mov.Servicio.Fecha,
                         VehiculoServicio = mov.Servicio.Vehiculo.Placa + " " + mov.Servicio.Vehiculo.Descripcion,
                         OrigenServicio = mov.Servicio.DireccionInicio.ToResumen(),
                         DestinoServicio = mov.Servicio.DireccionDestino.ToResumen(),
-
-
                     });
                 });
             });
@@ -154,5 +168,6 @@ namespace ControlDrive.CORE.Services
         public string VehiculoServicio { get; set; }
         public string OrigenServicio { get; set; }
         public string DestinoServicio { get; set; }
+        public string Concepto { get; internal set; }
     }
 }

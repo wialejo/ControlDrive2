@@ -74,7 +74,7 @@
                     toastr.warning("Debe asignar un número de factura");
                     return;
                 }
-
+                documento.Tipo = "FA";
                 documento.Numero = movimiento.NumeroDocumento;
                 documento.ClienteId = $scope.cliente.Id;
                 documento.movimientos = [];
@@ -105,6 +105,7 @@
                     return;
                 }
 
+                documento.Tipo = "FA";
                 documento.Numero = numeroDocumento;
                 documento.ClienteId = $scope.cliente.Id;
                 documento.movimientos = movimientosSeleccionados;

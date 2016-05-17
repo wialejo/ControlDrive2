@@ -11,65 +11,20 @@
             width: auto;
         }
 
-        .ciudadDiferente {
-            background-color: lightgreen;
-        }
-
-        .border-none {
-            border: none !important;
-            background-color: #fafafa;
-        }
-
-            .border-none td, .border-none th {
-                border: none !important;
-                background-color: #fafafa;
-            }
-
-        .table > thead > tr > th {
-            padding: 1px 15px;
-            margin: 0px;
-            height: 10px;
-        }
-
-        .radio, .checkbox {
-            margin-bottom: 5px;
-            margin-top: 5px;
-        }
-
-        .table > tr > td {
-            padding: 5px 5px;
-        }
-
-        .input-xs {
-            width: 150px !important;
-        }
-
-        @media screen and (max-width: 767px) {
-            .table > thead > tr > th {
-                padding: 1px 5px;
-                margin: 0;
-                height: 10px;
-            }
-
-            .col-xs-3, .col-xs-4, .col-xs-8, .col-xs-1 {
-                padding-left: 5px;
-                padding-right: 0;
-            }
-        }
     </style>
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-12 text-center-xs">
+                <div class="col-xs-6 col-sm-8 text-center-xs">
                     <div class="form-inline">
-                        <form name="formConsulta" class="form-inline" ng-submit="formConsulta.$valid && ObtenerServicios()">
+                        <form name="formConsulta" class="form-inline" novalidate ng-submit="formConsulta.$valid && ObtenerMovimientos()">
                             <div class="form-group">
                                 <label for="TxtFechaInicial">Fecha inicial</label>
-                                <input tabindex="5" ng-model="fechaInicial" required ui-mask="99/99/9999" model-view-value="true" type="text" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
+                                <input tabindex="5" ng-model="fechaInicial" required type="text" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
                             </div>
                             <div class="form-group">
                                 <label for="TxtFechaFinal">Fecha final</label>
-                                <input tabindex="10" ng-model="fechaFinal" required ui-mask="99/99/9999" model-view-value="true" type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
+                                <input tabindex="10" ng-model="fechaFinal" required type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
                             </div>
                             <div class="form-group">
                                 <label for="TxtFechaFinal">Proveedor</label>
@@ -80,8 +35,14 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
-                            <button type="submit"  tabindex="30" class="btn btn-info btn-sm" ng-disabled="formConsulta.$invalid">Consultar</button>
+                            <button type="submit" class="btn btn-info btn-sm">Consultar</button>
                         </form>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 text-center-xs text-right">
+                    <div class="form-group">
+                        <input placeholder="Filtrar..." class="form-control input-sm" type="search"
+                               ng-model="search.$" />
                     </div>
                 </div>
             </div>
@@ -89,10 +50,10 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-6">
-                    <strong>Valor total a pagar: </strong><span> {{valorTotalAPagar | currency:"$":0}}</span>
+                    <strong>Valor total: </strong><span> {{valorTotalAPagar | currency:"$":0}}</span>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <button ng-click="GenerarCuentaPorPagar()" class="btn btn-info btn-sm">Generar cuenta CP</button>
+                    <button ng-click="GenerarCuentaPorPagar()" class="btn btn-info btn-sm">Generar CXP</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -112,47 +73,42 @@
                                 </label>
                             </th>
                         </tr>
-                        <tr>
-                            <td colspan="8">
-                                <input placeholder="Filtar todo..." class="form-control input-sm" type="search" ng-model="search.$" />
-                            </td>
-                        </tr>
                     </thead>
-                    <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search) " ng-class=" { 'border-none' : active==servicio}">
+                    <tbody class="text-xs" ng-repeat="movimiento in movimientos | filter: search">
                         <tr>
                             <td>
-                                {{servicio.Proveedor.Nombre}}
+                                {{movimiento.Proveedor.Nombre}}
                             </td>
                             <td>
-                                {{servicio.Concepto}}
+                                {{movimiento.Concepto.Descripcion}}
                             </td>
                             <td>
-                                {{servicio.Valor | currency:"$":0}}
+                                {{movimiento.Valor | currency:"$":0}}
                             </td>
                             <td>
-                                {{servicio.Id}}
+                                {{movimiento.Servicio.Id}}
                             </td>
                             <td class="text-center">
-                                {{servicio.Fecha | date:'HH:mm'}}
+                                {{movimiento.Servicio.Fecha | date:'HH:mm'}}
                                 <br />
-                                {{servicio.Fecha | date:'dd/MM/yyyy'}}
+                                {{movimiento.Servicio.Fecha | date:'dd/MM/yyyy'}}
                             </td>
                             <td class="hidden-xs">
-                                {{servicio.Radicado}}
+                                {{movimiento.Servicio.Radicado}}
                                 <br />
-                                {{servicio.Aseguradora.Nombre}}
+                                {{movimiento.Servicio.Aseguradora.Nombre}}
                             </td>
                             <td>
-                                <div>
-                                    <strong>Origen: </strong> {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
+                                <div ng-class="{ 'verde': !movimiento.Servicio.DireccionInicio.Ciudad.Principal }">
+                                    <strong>Origen: </strong> {{movimiento.Servicio.DireccionInicio.Descripcion}}, {{movimiento.Servicio.DireccionInicio.Ciudad.Nombre}}, {{movimiento.Servicio.DireccionInicio.Barrio}}
                                 </div>
-                                <div>
-                                    <strong>Destino: </strong> {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
+                                <div ng-class="{ 'verde': !movimiento.Servicio.DireccionDestino.Ciudad.Principal }">
+                                    <strong>Destino: </strong> {{movimiento.Servicio.DireccionDestino.Descripcion}}, {{movimiento.Servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
                                 </div>
                             </td>
                             <td>
                                 <label class="checkbox i-checks m-l-xs m-b-xs">
-                                    <input type="checkbox" ng-model="servicio.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
+                                    <input type="checkbox" ng-model="movimiento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
                                 </label>
                             </td>
                         </tr>

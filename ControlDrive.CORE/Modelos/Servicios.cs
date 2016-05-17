@@ -96,9 +96,10 @@ namespace ControlDrive.CORE.Modelos
         public List<Movimiento> Movimientos { get; set; }
         public string UsuarioRegistroId { get; set; }
         public DateTime FechaRegistro { get; set; }
-        public int ClienteId { get; set; }
-
+        public int? ClienteId { get; set; }
         public Aseguradora Cliente { get; set; }
+        public int? ProveedorId { get; set; }
+        public Conductor Proveedor { get; set; }
         public ApplicationUser UsuarioRegistro { get; set; }
     }
 

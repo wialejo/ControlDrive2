@@ -26,23 +26,50 @@ namespace ControlDrive.CORE.Services
             _unitOfWork = unitOfWork;
         }
 
-        public List<Movimiento> Obtener(Expression<Func<Movimiento, bool>> predicate)
+        public List<MovimientoDto> Obtener(Expression<Func<Movimiento, bool>> predicate)
         {
-            var movimientos = _movimientoRepositorio.FindByIncluding(predicate, s => s.Servicio).OrderBy(m => m.Servicio.Fecha).ToList();
-
-            movimientos.ForEach(movimiento =>
-            {
-                movimiento.Documento = null;
-                movimiento.Servicio.Movimientos = null;
-                movimiento.Cliente = null;
-                movimiento.Proveedor = null;
-                movimiento.UsuarioModificacion = null;
-                movimiento.UsuarioRegistro = null;
-                movimiento.Servicio.Conductor = null;
-                movimiento.Servicio.Ruta = null;
-                movimiento.Servicio.UsuarioModificacion = null;
-                movimiento.Servicio.UsuarioRegistro = null;
-            });
+            var movimientos = _movimientoRepositorio.FindByIncluding(predicate, s => s.Servicio)
+                .OrderBy(m => m.Servicio.Fecha)
+                .Select(m => new MovimientoDto
+                {
+                    Id = m.Id,
+                    ServicioId = m.ServicioId,
+                    Valor = m.Valor,
+                    Concepto = m.Concepto,
+                    ConceptoCodigo = m.ConceptoCodigo,
+                    ProveedorId = m.ProveedorId,
+                    Proveedor = m.Proveedor,
+                    ClienteId = m.ClienteId,
+                    DocumentoId = m.DocumentoId,
+                    FechaRegistro = m.FechaRegistro,
+                    UsuarioRegistroId = m.UsuarioRegistroId,
+                    FechaModificacion = m.FechaModificacion,
+                    UsuarioModificacionId = m.UsuarioModificacionId,
+                    Aprobado = m.Aprobado,
+                    Servicio = new ServicioDto
+                    {
+                        Id = m.Servicio.Id,
+                        EstadoCodigo = m.Servicio.EstadoCodigo,
+                        Estado = m.Servicio.Estado,
+                        Fecha = m.Servicio.Fecha,
+                        Hora = m.Servicio.Hora,
+                        Radicado = m.Servicio.Radicado,
+                        AsignadoPor = m.Servicio.AsignadoPor,
+                        VehiculoId = m.Servicio.VehiculoId,
+                        Vehiculo = m.Servicio.Vehiculo,
+                        AseguradoraId = m.Servicio.AseguradoraId,
+                        Aseguradora = m.Servicio.Aseguradora,
+                        AseguradoId = m.Servicio.AseguradoId,
+                        Asegurado = m.Servicio.Asegurado,
+                        DireccionInicioId = m.Servicio.DireccionInicioId,
+                        DireccionInicio = m.Servicio.DireccionInicio,
+                        DireccionDestinoId = m.Servicio.DireccionDestinoId,
+                        DireccionDestino = m.Servicio.DireccionDestino,
+                        UsuarioRegistro = new ApplicationUserDto { Nombre = m.Servicio.UsuarioRegistro.Nombre },
+                        FechaRegistro = m.Servicio.FechaRegistro
+                    }
+                })
+                .ToList();
 
             return movimientos;
         }
@@ -92,7 +119,7 @@ namespace ControlDrive.CORE.Services
     public interface IMovimientosService
     {
         void Guardar(Movimiento movimiento);
-        List<Movimiento> Obtener(Expression<Func<Movimiento, bool>> predicate);
+        List<MovimientoDto> Obtener(Expression<Func<Movimiento, bool>> predicate);
         void ActualizarParaCierreFacuracion(Movimiento movimiento);
         Movimiento ObtenerPorId(int id);
     }

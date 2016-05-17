@@ -72,6 +72,28 @@ namespace ControlDrive.Core.Controllers
         }
 
         [HttpGet]
+        [Route("api/movimientos/proveedor")]
+        public IHttpActionResult ObtenerMovimientosProveedores([FromUri]DateTime inicio, [FromUri]DateTime fin, int proveedorId)
+        {
+            try
+            {
+                var movimientos = _movimientosService
+                    .Obtener(
+                        m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
+                        && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
+                        && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
+                        && m.ProveedorId == proveedorId
+                        && m.DocumentoId == null)
+                    .ToList();
+                return Ok(movimientos);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpGet]
         [Route("api/movimientos/{id}")]
         public IHttpActionResult ObtenerPorId([FromUri] int id)
         {

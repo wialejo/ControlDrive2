@@ -4,6 +4,7 @@
         .service('DocumentosSvc', function ($http, $q, ManejadorErrores, ngAuthSettings, PeriodoSvc) {
             return {
                 ObtenerDocumentosCliente: ObtenerDocumentosCliente,
+                ObtenerDocumentosProveedor:ObtenerDocumentosProveedor,
                 ObtenerDocumentosRelacionServicios: ObtenerDocumentosRelacionServicios,
                 ObtenerServicios: ObtenerServicios,
                 Guardar: Guardar
@@ -20,6 +21,12 @@
             function ObtenerDocumentosCliente(inicioPeriodo, finPeriodo, clienteId) {
                 var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
                 var url = "documentos/cliente?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin + "&clienteId=" + clienteId;
+                var obj = http("GET", url);
+                return obj
+            }
+            function ObtenerDocumentosProveedor(inicioPeriodo, finPeriodo, proveedorId) {
+                var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
+                var url = "documentos/proveedor?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin + "&proveedorId=" + proveedorId;
                 var obj = http("GET", url);
                 return obj
             }

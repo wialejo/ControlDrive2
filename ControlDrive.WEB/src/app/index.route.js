@@ -51,7 +51,11 @@
             })
             .state('app.pagoAProveedores', {
                 url: '/pagos/proveedores',
-                templateUrl: 'app/administracion/pagos//pagoAProveedores.html'
+                templateUrl: 'app/administracion/pagos/pagoAProveedores.html'
+            })
+            .state('app.cuentasPorPagar', {
+                url: '/administracion/cuentasPorPagar',
+                templateUrl: 'app/administracion/pagos/CuentasPorPagar.html'
             })
             .state('app.conductores', {
                 url: '/configuracion/conductores',

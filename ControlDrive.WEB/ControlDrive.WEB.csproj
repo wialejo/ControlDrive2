@@ -103,6 +103,8 @@
     <Content Include="src\app\administracion\facturacion\prefacturacion.controller.js" />
     <Content Include="src\app\administracion\facturacion\prefacturacion.html" />
     <Content Include="src\app\administracion\documentos\documentos.service.js" />
+    <Content Include="src\app\administracion\pagos\CuentasPorPagar.controller.js" />
+    <Content Include="src\app\administracion\pagos\CuentasPorPagar.html" />
     <Content Include="src\app\content\css\less\app.arrow.less" />
     <Content Include="src\app\content\css\less\app.butterbar.less" />
     <Content Include="src\app\content\css\less\app.buttons.less" />

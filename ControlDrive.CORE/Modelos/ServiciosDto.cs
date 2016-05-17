@@ -26,17 +26,19 @@ namespace ControlDrive.CORE.Modelos
         public string Radicado { get; set; }
         public string AsignadoPor { get; set; }
         public int? VehiculoId { get; set; }
-        public virtual Vehiculo Vehiculo { get; set; }
+        public Vehiculo Vehiculo { get; set; }
         public int AseguradoraId { get; set; }
-        public virtual Aseguradora Aseguradora { get; set; }
+        public Aseguradora Aseguradora { get; set; }
         public int? AseguradoId { get; set; }
-        public virtual Asegurado Asegurado { get; set; }
+        public Asegurado Asegurado { get; set; }
 
         public int? DireccionInicioId { get; set; }
-        public virtual Direccion DireccionInicio { get; set; }
+        public Direccion DireccionInicio { get; set; }
+        public string DireccionInicioStr { get; set; }
 
         public int? DireccionDestinoId { get; set; }
-        public virtual Direccion DireccionDestino { get; set; }
+        public Direccion DireccionDestino { get; set; }
+        public string DireccionDestinoStr { get; set; }
 
         public int? ConductorId { get; set; }
         public virtual Conductor Conductor { get; set; }
@@ -78,6 +80,7 @@ namespace ControlDrive.CORE.Modelos
     {
         public int Id { get; set; }
         public ServicioDto Servicio { get; set; }
+        public Conductor Proveedor { get; set; }
         public DocumentoDto Documento { get; set; }
         public int ServicioId { get; set; }
         public decimal Valor { get; set; }
@@ -90,7 +93,7 @@ namespace ControlDrive.CORE.Modelos
         public DateTime? FechaModificacion { get; set; }
         public string UsuarioModificacionId { get; set; }
         public bool Aprobado { get; set; }
-
+        public ServicioConcepto Concepto { get; internal set; }
     }
 
 

@@ -1,0 +1,167 @@
+﻿<style>
+    .form-inline .ui-select-container .ui-select-toggle,
+    .form-inline .ui-select-container .ui-select-search {
+        width: 100%;
+    }
+
+    .form-inline .ui-select-container {
+        display: inline-block;
+        vertical-align: middle;
+        width: auto;
+    }
+</style>
+
+<div ng-controller="CuentasPorPagarController">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-6 col-sm-8 text-center-xs">
+                    <div class="form-inline">
+                        <form name="formConsulta" class="form-inline" novalidate ng-submit="formConsulta.$valid && ObtenerDocumentos()">
+                            <div class="form-group">
+                                <label for="TxtFechaInicial">Fecha inicial</label>
+                                <input tabindex="5" ng-model="fechaInicial" required type="text" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label for="TxtFechaFinal">Fecha final</label>
+                                <input tabindex="10" ng-model="fechaFinal" required type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label for="TxtFechaFinal">Proveedor</label>
+                                <ui-select tabindex="25" required ng-model="servicio.proveedor" theme="bootstrap" reset-search-input="false">
+                                    <ui-select-match placeholder="Consultar">{{$select.selected.Nombre}}</ui-select-match>
+                                    <ui-select-choices repeat="item in conductores" refresh="ObtenerProveedores($select.search)" refresh-delay="0">
+                                        <div ng-bind-html="item.Nombre | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <button type="submit" class="btn btn-info btn-sm">Consultar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 text-center-xs text-right">
+                    <div class="form-group">
+                        <input placeholder="Filtrar..." class="form-control input-sm" type="search"
+                               ng-model="search.$" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <td colspan="5">
+                                <label><strong>Total documentos: </strong></label> {{ documentos.length }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="col-md-1">Id</th>
+                            <th class="col-md-1">Fecha</th>
+                            <th>Proveedor</th>
+                            <th>Número</th>
+                            <th>Valor</th>
+                            <th>Concepto</th>
+                            <th></th>
+                            <th class="col-md-1">
+                                <label class="checkbox i-checks ">
+                                    <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-xs" ng-repeat="documento in documentos | filter: search">
+                        <tr>
+                            <td>
+                                {{documento.Id}}
+                            </td>
+                            <td>
+                                {{documento.Fecha | date:'dd/MM/yyyy'}}
+                            </td>
+                            <td>
+                                {{documento.Proveedor.Nombre}}
+                            </td>
+                            <td>
+                                {{documento.Numero}}
+                            </td>
+                            <td>
+                                {{documento.Valor | currency:"$":0 }}
+                            </td>
+                            <td>
+                                {{documento.Concepto}}
+                            </td>
+                            <td>
+                                <input type="button" value="Anexo" ng-click="MostrarServicios(documento)" class="btn btn-info btn-sm" />
+                            </td>
+                            <td>
+                                <label class="checkbox i-checks m-l-xs m-b-xs">
+                                    <input type="checkbox" ng-model="documento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="ResumenServicios" style="display:none">
+        <style>
+            .tbl {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 10pt;
+            }
+
+            .celda {
+                border: 1px solid #a1a1a1;
+                padding: 8px;
+                font-size: 11px;
+            }
+        </style>
+        <p>Anexo de cuenta por pagar número: {{documentoServicios[0].Numero}}</p>
+        <div>
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th class="celda">Fecha</th>
+                        <th class="celda">Tipo</th>
+                        <th class="celda">Consecutivo</th>
+                        <th class="celda">Vehiculo</th>
+                        <th class="celda">Origen</th>
+                        <th class="celda">Destino</th>
+                        <th class="celda">Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="documentoServicio in documentoServicios">
+                        <td class="celda">
+                            {{documentoServicio.FechaServicio | date:'HH:mm'}}
+                            <br />
+                            {{documentoServicio.FechaServicio | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.Concepto}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.ConsecutivoServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.VehiculoServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.OrigenServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.DestinoServicio}}
+                        </td>
+                        <td class="celda">
+                            {{documentoServicio.ValorMov | currency:"$":0}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

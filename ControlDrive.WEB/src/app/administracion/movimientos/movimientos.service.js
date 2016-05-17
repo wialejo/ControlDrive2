@@ -4,6 +4,7 @@
         .service('MovimientosSvc', function ($http, $q, ManejadorErrores, ngAuthSettings, PeriodoSvc) {
             return {
                 ObtenerMovimientosCliente: ObtenerMovimientosCliente,
+                ObtenerMovimientosProveedor: ObtenerMovimientosProveedor,
                 ObtenerMovimientosClienteAprobados: ObtenerMovimientosClienteAprobados,
                 ObtenerPorId: ObtenerPorId,
                 Guardar: Guardar,
@@ -21,6 +22,13 @@
             function ObtenerMovimientosCliente(inicioPeriodo, finPeriodo, clienteId) {
                 var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
                 var url = "movimientos/cliente?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin + "&clienteId=" + clienteId;
+                var obj = http("GET", url);
+                return obj
+            }
+
+            function ObtenerMovimientosProveedor(inicioPeriodo, finPeriodo, proveedorId) {
+                var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
+                var url = "movimientos/proveedor?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin + "&proveedorId=" + proveedorId;
                 var obj = http("GET", url);
                 return obj
             }
