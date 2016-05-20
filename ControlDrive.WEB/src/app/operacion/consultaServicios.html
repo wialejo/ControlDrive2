@@ -70,7 +70,9 @@
                             <tbody ng-repeat="svr in displayedCollection">
                                 <tr>
                                     <td>
-                                        {{svr.Id}}
+                                        <a class="btn btn-link text-center" ng-click="vm.MostrarDetalles(svr);" uib-tooltip="Mostrar detalles el servicio">
+                                            <u> {{svr.Id}}</u>
+                                        </a>
                                     </td>
                                     <td>
                                         {{svr.Fecha | date:'HH:mm'}} <br />

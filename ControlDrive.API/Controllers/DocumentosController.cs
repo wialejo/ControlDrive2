@@ -32,7 +32,10 @@ namespace ControlDrive.Core.Controllers
         {
             try
             {
-                var documentos = _documentosService.Obtener(d => d.ClienteId == clienteId).ToList();
+                var documentos = _documentosService.Obtener(d => d.ClienteId == clienteId 
+                    && DbFunctions.TruncateTime(d.Fecha) >= DbFunctions.TruncateTime(inicio)
+                    && DbFunctions.TruncateTime(d.Fecha) <= DbFunctions.TruncateTime(fin)
+                ).ToList();
                 return Ok(documentos);
             }
             catch (Exception ex)
@@ -47,7 +50,9 @@ namespace ControlDrive.Core.Controllers
         {
             try
             {
-                var documentos = _documentosService.Obtener(d => d.ProveedorId == proveedorId).ToList();
+                var documentos = _documentosService.Obtener(d => d.ProveedorId == proveedorId
+                    && DbFunctions.TruncateTime(d.Fecha) >= DbFunctions.TruncateTime(inicio)
+                    && DbFunctions.TruncateTime(d.Fecha) <= DbFunctions.TruncateTime(fin)).ToList();
                 return Ok(documentos);
             }
             catch (Exception ex)

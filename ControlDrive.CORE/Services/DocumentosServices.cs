@@ -119,7 +119,7 @@ namespace ControlDrive.CORE.Services
                                             DireccionInicio = m.Servicio.DireccionInicio,
                                             DireccionDestino = m.Servicio.DireccionDestino
                                         },
-                                        Concepto = m.Concepto
+                                        Concepto = new ServicioConceptoDto { Codigo = m.Concepto.Codigo , Descripcion = m.Concepto.Descripcion }
                                     }).ToList()
                                 })
                                 .AsQueryable()

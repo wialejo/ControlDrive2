@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\TipoDestinatario.cs" />
+    <Compile Include="Enums\TipoConcepto.cs" />
     <Compile Include="Extensions\DataTable.cs" />
     <Compile Include="Extensions\ExtendModels.cs" />
     <Compile Include="Infraestructura\DbFactory.cs" />
@@ -150,6 +151,10 @@
     <Compile Include="Migrations\201605170416198_addproveedordocumentos.cs" />
     <Compile Include="Migrations\201605170416198_addproveedordocumentos.Designer.cs">
       <DependentUpon>201605170416198_addproveedordocumentos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605200110269_cambioMovimiento.cs" />
+    <Compile Include="Migrations\201605200110269_cambioMovimiento.Designer.cs">
+      <DependentUpon>201605200110269_cambioMovimiento.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
@@ -216,6 +221,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605170416198_addproveedordocumentos.resx">
       <DependentUpon>201605170416198_addproveedordocumentos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605200110269_cambioMovimiento.resx">
+      <DependentUpon>201605200110269_cambioMovimiento.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

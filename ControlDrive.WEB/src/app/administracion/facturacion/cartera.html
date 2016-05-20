@@ -1,4 +1,4 @@
-﻿
+﻿s
 <div ng-controller="CarteraController">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -26,7 +26,7 @@
                                     <option value="">--Seleccione--</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-info btn-sm">Consultar</button>
+                            <button tabindex="20" type="submit" class="btn btn-info btn-sm">Consultar</button>
                         </form>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                     <thead>
                         <tr>
                             <td colspan="5">
-                                <label><strong>Total documentos: </strong></label> {{ documentos.length }}
+                                <label><strong>Total documentos: </strong></label> {{ documentos.length }} <strong style="margin-left:10px"> Suma valor documentos: </strong><span> {{valorDocumentos | currency:"$":0}}</span>
                             </td>
                             <td colspan="3" class="text-right">
                                 <button ng-click="ImprimirRelacion()" class="btn btn-info btn-sm">Ver relación servicios</button>

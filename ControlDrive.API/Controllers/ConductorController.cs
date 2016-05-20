@@ -39,7 +39,7 @@ namespace ControlDrive.Core.Controllers
         public IHttpActionResult ObtenerMovimientos([FromUri]DateTime inicio, [FromUri]DateTime fin, int proveedorId)
         {
             var servicios = _movimientosService
-                .Obtener(m => m.ProveedorId == proveedorId && 
+                .Obtener(m => m.Servicio.ConductorId == proveedorId && 
                                     DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio) 
                                     && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
                         );

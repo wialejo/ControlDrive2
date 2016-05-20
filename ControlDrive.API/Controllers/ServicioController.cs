@@ -21,7 +21,7 @@ using Microsoft.AspNet.Identity;
 
 namespace ControlDrive.Core.Controllers
 {
-    [Authorize]
+    
     public class ServicioController : ApiController
     {
         private readonly ICommonInterface<Servicio> _servicioService;

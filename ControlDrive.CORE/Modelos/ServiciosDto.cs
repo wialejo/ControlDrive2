@@ -93,9 +93,14 @@ namespace ControlDrive.CORE.Modelos
         public DateTime? FechaModificacion { get; set; }
         public string UsuarioModificacionId { get; set; }
         public bool Aprobado { get; set; }
-        public ServicioConcepto Concepto { get; internal set; }
+        public ServicioConceptoDto Concepto { get; internal set; }
     }
 
+    public class ServicioConceptoDto
+    {
+        public string Codigo { get; set; }
+        public string Descripcion { get; set; }
+    }
 
     public class SeguimientoDto
     {

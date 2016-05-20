@@ -188,8 +188,10 @@ namespace ControlDrive.CORE.Services
                         ServicioId = m.ServicioId,
                         Valor = m.Valor,
                         ConceptoCodigo = m.ConceptoCodigo,
-                        ProveedorId = m.ProveedorId,
-                        ClienteId = m.ClienteId,
+                        Documento = new DocumentoDto { Numero = m.Documento.Numero, Tipo = m.Documento.Tipo },
+                        Concepto = new ServicioConceptoDto { Codigo = m.Concepto.Codigo, Descripcion = m.Concepto.Descripcion },
+                        //ProveedorId = m.ProveedorId,
+                        //ClienteId = m.ClienteId,
                         DocumentoId = m.DocumentoId,
                         FechaRegistro = m.FechaRegistro,
                         UsuarioRegistroId = m.UsuarioRegistroId,
@@ -579,17 +581,17 @@ namespace ControlDrive.CORE.Services
         public string estado { get; set; }
     }
 
-    public class ServicioConcepto
-    {
-        public int Id { get; set; }
-        public Conductor Proveedor { get; set; }
-        public string Valor { get; set; }
-        public string Concepto { get; set; }
-        public Aseguradora Aseguradora { get; set; }
-        public Asegurado Cliente { get; set; }
-        public Direccion DireccionInicio { get; set; }
-        public Direccion DireccionDestino { get; set; }
-        public string Radicado { get; set; }
-        public DateTime Fecha { get; set; }
-    }
+    //public class ServicioConcepto
+    //{
+    //    public int Id { get; set; }
+    //    public Conductor Proveedor { get; set; }
+    //    public string Valor { get; set; }
+    //    public string Concepto { get; set; }
+    //    public Aseguradora Aseguradora { get; set; }
+    //    public Asegurado Cliente { get; set; }
+    //    public Direccion DireccionInicio { get; set; }
+    //    public Direccion DireccionDestino { get; set; }
+    //    public string Radicado { get; set; }
+    //    public DateTime Fecha { get; set; }
+    //}
 }

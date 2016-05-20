@@ -28,6 +28,21 @@
                 });
             }
 
+
+            $scope.$watch('documentos', function () {
+                $scope.Calcular();
+            }, true);
+
+            $scope.Calcular = function () {
+                var valorDocumentos = 0;
+                angular.forEach($scope.documentos, function (documento) {
+                    if (documento.Seleccionado) {
+                        valorDocumentos = valorDocumentos + parseFloat(documento.Valor)
+                    };
+                });
+                $scope.valorDocumentos = valorDocumentos;
+            }
+
             $scope.MostrarServicios = function (documento) {
                 var documentos = [];
                 documentos.push(documento);

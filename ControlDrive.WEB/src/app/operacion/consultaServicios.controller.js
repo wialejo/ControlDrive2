@@ -2,7 +2,7 @@
     'use strict';
     angular
       .module('controldriveApp')
-          .controller('ConsultaServiciosController', function (ServicioSvc, $window, $filter, $state, $scope, FechaSvc, toastr) {
+          .controller('ConsultaServiciosController', function (ServicioSvc, $window, $uibModal, $filter, $state, $scope, FechaSvc, toastr) {
 
               var vm = this;
               vm.servicio = {};
@@ -28,6 +28,19 @@
                   //var url = $state.href('app.editar', { id: servicio.Id })
                   //$window.open(url,'_blank');
                   $state.go('app.editar', { id: servicio.Id })
+              }
+
+              vm.MostrarDetalles = function (servicio) {
+                  $uibModal.open({
+                      templateUrl: 'app/operacion/detalleServicio.html',
+                      size: 'lg',
+                      controller: 'DetalleServicioController',
+                      resolve: {
+                          servicio: function () {
+                              return servicio;
+                          }
+                      }
+                  });
               }
 
 

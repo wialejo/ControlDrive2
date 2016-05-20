@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Security.Principal;
 using ControlDrive.Core.Modelos;
+using ControlDrive.CORE.Enums;
 
 namespace ControlDrive.CORE.Modelos
 {
@@ -66,8 +67,8 @@ namespace ControlDrive.CORE.Modelos
         public int ServicioId { get; set; }
         public decimal Valor { get; set; }
         public string ConceptoCodigo { get; set; }
-        public int? ProveedorId { get; set; }
-        public int? ClienteId { get; set; }
+        //public int? ProveedorId { get; set; }
+        //public int? ClienteId { get; set; }
         public int? DocumentoId { get; set; }
         public DateTime? FechaRegistro { get; set; }
         public string UsuarioRegistroId { get; set; }
@@ -77,9 +78,9 @@ namespace ControlDrive.CORE.Modelos
 
         public Servicio Servicio { get; set; }
         public ServicioConcepto Concepto { get; set; }
-        public Conductor Proveedor { get; set; }
+        //public Conductor Proveedor { get; set; }
         public Documento Documento { get; set; }
-        public Aseguradora Cliente { get; set; }
+        //public Aseguradora Cliente { get; set; }
         public ApplicationUser UsuarioRegistro { get; set; }
         public ApplicationUser UsuarioModificacion { get; set; }
     }
@@ -116,7 +117,10 @@ namespace ControlDrive.CORE.Modelos
         [Key]
         public string Codigo { get; set; }
         public string Descripcion { get; set; }
+        public TipoConcepto TipoConcepto { get; set; }
     }
+
+    
 
     public class Seguimiento
     {

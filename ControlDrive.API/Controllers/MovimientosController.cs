@@ -13,6 +13,7 @@ using ControlDrive.CORE.Modelos;
 using ControlDrive.CORE.Services;
 using Microsoft.AspNet.Identity;
 using System.Web;
+using ControlDrive.CORE.Enums;
 
 namespace ControlDrive.Core.Controllers
 {
@@ -37,7 +38,8 @@ namespace ControlDrive.Core.Controllers
                         m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
                         && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
                         && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                        && m.ClienteId == clienteId
+                        && m.Servicio.AseguradoraId == clienteId
+                        && m.Concepto.TipoConcepto == TipoConcepto.Cliente
                         && m.DocumentoId == null)
                     .ToList();
                 return Ok(movimientos);
@@ -59,7 +61,8 @@ namespace ControlDrive.Core.Controllers
                         m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
                         && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
                         && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                        && m.ClienteId == clienteId
+                        && m.Servicio.AseguradoraId == clienteId
+                        && m.Concepto.TipoConcepto == TipoConcepto.Cliente
                         && m.Aprobado == aprobado
                         && m.DocumentoId == null)
                     .ToList();
@@ -82,7 +85,10 @@ namespace ControlDrive.Core.Controllers
                         m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
                         && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
                         && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                        && m.ProveedorId == proveedorId
+                        && (
+                            (m.ConceptoCodigo == "PROVE_COND_ELE" &&  m.Servicio.ConductorId == proveedorId)
+                            ||
+                            (m.ConceptoCodigo == "PROVE_RUTA_COND_ELE" && m.Servicio.RutaId == proveedorId))
                         && m.DocumentoId == null)
                     .ToList();
                 return Ok(movimientos);
