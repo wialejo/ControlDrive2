@@ -39,7 +39,7 @@
             <strong>Conductor: </strong> {{servicio.ConductorResumen}}
         </div>
         <div class="col-sm-6">
-            <strong>Ruta: </strong>{{servicio.RutaResumen}}
+            <strong>Ruta: </strong> {{servicio.RutaResumen}}
         </div>
     </div>
     <div class="row">
@@ -52,6 +52,21 @@
             <strong>Ultima modificación: </strong> {{servicio.UsuarioModificacion.Nombre}} <span> {{servicio.FechaModificacion | date:'HH:mm'}} - {{servicio.FechaModificacion | date:'dd/MM/yyyy'}}</span>
         </div>
     </div>
+    <h4 class="m-t-none m-b font-thin">Seguimiento</h4>
+    <table class="table">
+        <tr>
+            <th>Fecha</th>
+            <th>Nuevo estado</th>
+            <th>Observación</th>
+            <th>Usuario</th>
+        </tr>
+        <tr ng-repeat="seguimiento in servicio.Seguimientos">
+            <td>{{seguimiento.Fecha | date:'HH:mm dd/MM/yyyy '}}</td>
+            <td>{{seguimiento.NuevoEstado }} </td>
+            <td>{{seguimiento.Observacion }} </td>
+            <td>{{seguimiento.UsuarioRegistro.Nombre }} </td>
+        </tr>
+    </table>
     <h4 class="m-t-none m-b font-thin">Administración valores</h4>
     <table class="table">
         <tr>

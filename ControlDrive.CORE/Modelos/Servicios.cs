@@ -131,7 +131,12 @@ namespace ControlDrive.CORE.Modelos
         public string Observacion { get; set; }
         public string UsuarioRegistroId { get; set; }
         public virtual ApplicationUser UsuarioRegistro { get; set; }
+        
         public string NuevoEstado { get; set; }
+
+        [ForeignKey("NuevoEstado")]
+        public Estado Estado { get; set; }
+
     }
 
     public class Aseguradora

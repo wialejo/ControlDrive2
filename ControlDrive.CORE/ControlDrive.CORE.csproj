@@ -144,10 +144,6 @@
     <Compile Include="Migrations\201605110340532_valorDocumentos1.Designer.cs">
       <DependentUpon>201605110340532_valorDocumentos1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201605110417355_tipoDatoNumeroFac.cs" />
-    <Compile Include="Migrations\201605110417355_tipoDatoNumeroFac.Designer.cs">
-      <DependentUpon>201605110417355_tipoDatoNumeroFac.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201605170416198_addproveedordocumentos.cs" />
     <Compile Include="Migrations\201605170416198_addproveedordocumentos.Designer.cs">
       <DependentUpon>201605170416198_addproveedordocumentos.cs</DependentUpon>
@@ -155,6 +151,10 @@
     <Compile Include="Migrations\201605200110269_cambioMovimiento.cs" />
     <Compile Include="Migrations\201605200110269_cambioMovimiento.Designer.cs">
       <DependentUpon>201605200110269_cambioMovimiento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605240123094_addrelacionestadosseguimientos.cs" />
+    <Compile Include="Migrations\201605240123094_addrelacionestadosseguimientos.Designer.cs">
+      <DependentUpon>201605240123094_addrelacionestadosseguimientos.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
@@ -216,14 +216,14 @@
     <EmbeddedResource Include="Migrations\201605110340532_valorDocumentos1.resx">
       <DependentUpon>201605110340532_valorDocumentos1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201605110417355_tipoDatoNumeroFac.resx">
-      <DependentUpon>201605110417355_tipoDatoNumeroFac.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605170416198_addproveedordocumentos.resx">
       <DependentUpon>201605170416198_addproveedordocumentos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605200110269_cambioMovimiento.resx">
       <DependentUpon>201605200110269_cambioMovimiento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605240123094_addrelacionestadosseguimientos.resx">
+      <DependentUpon>201605240123094_addrelacionestadosseguimientos.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

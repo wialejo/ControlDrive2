@@ -188,7 +188,7 @@
                                 popUp(response.data)
                             } else {
                                 toastr.success(response.data);
-                                $scope.ObtenerServicios();
+                                //$scope.ObtenerServicios();
                             }
                             $scope.isSaving = false;
                         })
@@ -217,7 +217,7 @@
                                 popUp(response.data)
                             } else {
                                 toastr.success(response.data);
-                                $scope.ObtenerServicios();
+                                //$scope.ObtenerServicios();
                             }
                             $scope.isSaving = false;
                         })

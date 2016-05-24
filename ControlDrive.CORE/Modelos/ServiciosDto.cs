@@ -55,7 +55,7 @@ namespace ControlDrive.CORE.Modelos
         public ApplicationUserDto UsuarioRegistro { get; set; }
         public int? UsuarioModificacionId { get; set; }
         public ApplicationUserDto UsuarioModificacion { get; set; }
-        public ICollection<Seguimiento> Seguimientos { get; set; }
+        public ICollection<SeguimientoDto> Seguimientos { get; set; }
         public ICollection<MovimientoDto> Movimientos { get; set; }
         public bool Notificado { get; set; }
 
@@ -105,11 +105,9 @@ namespace ControlDrive.CORE.Modelos
     public class SeguimientoDto
     {
         public int Id { get; set; }
-        public int ServicioId { get; set; }
         public DateTime Fecha { get; set; }
         public string Observacion { get; set; }
-        public string UsuarioRegistroId { get; set; }
-        public virtual ApplicationUser UsuarioRegistro { get; set; }
+        public virtual ApplicationUserDto UsuarioRegistro { get; set; }
         public string NuevoEstado { get; set; }
     }
 
