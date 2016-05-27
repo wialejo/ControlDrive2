@@ -14,10 +14,12 @@ using ControlDrive.CORE.Services;
 using Microsoft.AspNet.Identity;
 using System.Web;
 using ControlDrive.CORE.Enums;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace ControlDrive.Core.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class MovimientosController : ApiController
     {
         private readonly IMovimientosService _movimientosService;
@@ -48,6 +50,51 @@ namespace ControlDrive.Core.Controllers
             {
                 return InternalServerError(ex);
             }
+        }
+
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<HttpResponseMessage> ObtenerPorPeriodoCSV(Periodo periodo)
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("api/movimientos/clienteCsv")]
+        public async Task<HttpResponseMessage> ObtenerMovimientosClienteCSV(paraCsv data)
+        {
+            var movimientos = _movimientosService
+                       .Obtener(
+                           m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(data.inicio)
+                           && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(data.fin)
+                           && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
+                           && m.Servicio.AseguradoraId == data.clienteId
+                           && m.Concepto.TipoConcepto == TipoConcepto.Cliente
+                           && m.DocumentoId == null)
+                       .ToList();
+
+            byte[] output = null;
+            await Task.Run(() =>
+            {
+                using (var stream = _movimientosService.ObtenerResumenMovimientosEnCSV(movimientos))
+                {
+                    stream.Flush();
+                    output = stream.ToArray();
+                }
+            });
+
+            if (output != null)
+            {
+                var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(output) };
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = "prefacturacion.xls"
+                };
+                result.Content.Headers.Add("x-filename", "prefacturacion.xls");
+                return result;
+            }
+
+            return this.Request.CreateErrorResponse(HttpStatusCode.NoContent, "No hay datos.");
         }
 
         [HttpGet]
@@ -86,7 +133,7 @@ namespace ControlDrive.Core.Controllers
                         && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
                         && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
                         && (
-                            (m.ConceptoCodigo == "PROVE_COND_ELE" &&  m.Servicio.ConductorId == proveedorId)
+                            (m.ConceptoCodigo == "PROVE_COND_ELE" && m.Servicio.ConductorId == proveedorId)
                             ||
                             (m.ConceptoCodigo == "PROVE_RUTA_COND_ELE" && m.Servicio.RutaId == proveedorId))
                         && m.DocumentoId == null)
@@ -177,5 +224,10 @@ namespace ControlDrive.Core.Controllers
             }
         }
 
+    }
+    public class paraCsv {
+        public DateTime inicio { get; set; }
+        public DateTime fin { get; set; }
+        public int clienteId { get; set; }
     }
 }

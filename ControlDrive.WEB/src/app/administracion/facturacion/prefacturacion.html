@@ -84,8 +84,11 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <label><strong>Número total: </strong></label> {{ movimientos.length }}
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button ng-click="ObtenerMovimientosCsv()" class="btn btn-default">Exportar</button>
                 </div>
             </div>
             <div class="table-responsive">

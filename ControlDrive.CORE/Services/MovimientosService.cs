@@ -1,10 +1,14 @@
 ﻿using ControlDrive.Core.Infraestructura;
 using ControlDrive.Core.Modelos;
+using ControlDrive.CORE.Enums;
+using ControlDrive.CORE.Infraestructura;
 using ControlDrive.CORE.Modelos;
 using ControlDrive.CORE.Repositorios;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -42,7 +46,7 @@ namespace ControlDrive.CORE.Services
                     UsuarioRegistroId = m.UsuarioRegistroId,
                     FechaModificacion = m.FechaModificacion,
                     UsuarioModificacionId = m.UsuarioModificacionId,
-                    Proveedor = m.ConceptoCodigo == "PROVE_COND_ELE" ? m.Servicio.Conductor : m.Servicio.Ruta, 
+                    Proveedor = m.ConceptoCodigo == "PROVE_COND_ELE" ? m.Servicio.Conductor : m.Servicio.Ruta,
                     Aprobado = m.Aprobado,
                     Servicio = new ServicioDto
                     {
@@ -111,6 +115,51 @@ namespace ControlDrive.CORE.Services
 
             _unitOfWork.Commit();
         }
+
+        public MemoryStream ObtenerResumenMovimientosEnCSV(List<MovimientoDto> movimientos)
+        {
+            var resumenMovimientos = GenerarResumenMovimientos(movimientos);
+            var memoryExcel = ExcelUtilities<MovimientoResumen>.Export(resumenMovimientos);
+            return memoryExcel;
+        }
+
+        private List<MovimientoResumen> GenerarResumenMovimientos(List<MovimientoDto> movimientos)
+        {
+            var movimientosResumen = new List<MovimientoResumen>();
+            movimientos.ForEach(f =>
+            {
+                var movimientoResumen = new MovimientoResumen
+                {
+                    hora = f.Servicio.Fecha.ToString("HH:mm"),
+                    fecha = f.Servicio.Fecha.ToString("dd/MM/yyyy"),
+                    codigo = f.Servicio.Radicado,
+                    aseguradora = f.Servicio.Aseguradora.Nombre,
+                    asignadoPor = f.Servicio.AsignadoPor,
+                    asegurado =
+                            f.Servicio.Asegurado.Nombre +
+                            (!string.IsNullOrEmpty(f.Servicio.Asegurado.Telefono1) ? " " + f.Servicio.Asegurado.Telefono1 : "") +
+                            (!string.IsNullOrEmpty(f.Servicio.Asegurado.Telefono2) ? " " + f.Servicio.Asegurado.Telefono2 : ""),
+                    vehiculo =
+                            f.Servicio.Vehiculo.Placa +
+                            (!string.IsNullOrEmpty(f.Servicio.Vehiculo.Descripcion) ? " " + f.Servicio.Vehiculo.Descripcion : ""),
+
+                    origen =
+                            f.Servicio.DireccionInicio.Descripcion +
+                            (!string.IsNullOrEmpty(f.Servicio.DireccionInicio.Barrio) ? " " + f.Servicio.DireccionInicio.Barrio : "") +
+                            (!string.IsNullOrEmpty(f.Servicio.DireccionInicio.Ciudad.Nombre) ? " " + f.Servicio.DireccionInicio.Ciudad.Nombre : ""),
+
+                    destino =
+                            f.Servicio.DireccionDestino.Descripcion +
+                            (!string.IsNullOrEmpty(f.Servicio.DireccionDestino.Barrio) ? " " + f.Servicio.DireccionDestino.Barrio : "") +
+                            (!string.IsNullOrEmpty(f.Servicio.DireccionDestino.Ciudad.Nombre) ? " " + f.Servicio.DireccionDestino.Ciudad.Nombre : ""),
+                    valor = f.Valor
+                };
+
+                movimientosResumen.Add(movimientoResumen);
+            });
+
+            return movimientosResumen;
+        }
     }
 
     public interface IMovimientosService
@@ -118,6 +167,22 @@ namespace ControlDrive.CORE.Services
         void Guardar(Movimiento movimiento);
         List<MovimientoDto> Obtener(Expression<Func<Movimiento, bool>> predicate);
         void ActualizarParaCierreFacuracion(Movimiento movimiento);
+        MemoryStream ObtenerResumenMovimientosEnCSV(List<MovimientoDto> movimientos);
+
         Movimiento ObtenerPorId(int id);
+    }
+
+    public class MovimientoResumen
+    {
+        public string asegurado { get; internal set; }
+        public string aseguradora { get; internal set; }
+        public string asignadoPor { get; internal set; }
+        public string codigo { get; internal set; }
+        public string destino { get; internal set; }
+        public string fecha { get; internal set; }
+        public string hora { get; internal set; }
+        public string origen { get; internal set; }
+        public decimal valor { get; internal set; }
+        public string vehiculo { get; internal set; }
     }
 }

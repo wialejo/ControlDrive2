@@ -15,6 +15,10 @@
                     });
             }
 
+            $scope.ObtenerMovimientosCsv = function () {
+                MovimientosSvc.ObtenerMovimientosClienteCsv($scope.fechaInicial, $scope.fechaFinal, $scope.cliente.Id);
+            }
+
             $scope.ObtenerAseguradoras = function () {
                 AseguradoraSvc.Obtener()
                     .then(function (response) {

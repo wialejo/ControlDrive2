@@ -6,6 +6,7 @@
                 ObtenerMovimientosCliente: ObtenerMovimientosCliente,
                 ObtenerMovimientosProveedor: ObtenerMovimientosProveedor,
                 ObtenerMovimientosClienteAprobados: ObtenerMovimientosClienteAprobados,
+                ObtenerMovimientosClienteCsv: ObtenerMovimientosClienteCsv,
                 ObtenerPorId: ObtenerPorId,
                 Guardar: Guardar,
                 Actualizar: Actualizar
@@ -17,6 +18,38 @@
                     data: data
                 });
                 return (request.then(function (respuesta) { return respuesta }, ManejadorErrores.ResponseError));
+            }
+
+
+            function open(verb, url, data, target) {
+                var form = document.createElement("form");
+                form.action = url;
+                form.method = verb;
+                form.target = target || "_self";
+                if (data) {
+                    for (var key in data) {
+                        var input = document.createElement("textarea");
+                        input.name = key;
+                        input.value = typeof data[key] === "object" ? JSON.stringify(data[key]) : data[key];
+                        form.appendChild(input);
+                    }
+                }
+                form.style.display = 'none';
+                document.body.appendChild(form);
+                form.submit();
+            };
+
+
+            function ObtenerMovimientosClienteCsv(inicioPeriodo, finPeriodo, clienteId) {
+                var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
+
+                var data = {
+                    inicio: periodo.Inicio,
+                    fin: periodo.Fin,
+                    clienteId: clienteId
+                }
+                var url = ngAuthSettings.apiServiceBaseUri + "api/movimientos/clienteCsv";
+                open('POST', url, data, '_blank');
             }
 
             function ObtenerMovimientosCliente(inicioPeriodo, finPeriodo, clienteId) {
