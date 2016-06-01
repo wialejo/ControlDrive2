@@ -158,6 +158,8 @@
     <Content Include="src\app\administracion\movimientos\movimientos.service.js" />
     <Content Include="src\app\administracion\pagos\pagoAProveedores.controller.js" />
     <Content Include="src\app\administracion\pagos\pagoAProveedores.html" />
+    <Content Include="src\app\inicio\inicioResumen.controller.js" />
+    <Content Include="src\app\inicio\inicioResumen.html" />
     <Content Include="src\app\operacion\detalleServicio.controller.js" />
     <Content Include="src\app\operacion\detalleServicio.html" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.eot" />

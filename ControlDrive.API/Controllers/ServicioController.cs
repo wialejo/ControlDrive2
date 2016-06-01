@@ -43,6 +43,15 @@ namespace ControlDrive.Core.Controllers
             return Ok(servicios);
         }
 
+
+        [HttpGet]
+        [Route("api/servicios/resumenEstado")]
+        public IHttpActionResult ObtenerServiciosEstados([FromUri]DateTime inicio, [FromUri]DateTime fin)
+        {
+            var servicios = _servicioServiceExt.ObtenerResumenEstados(s => s.Fecha >= inicio && s.Fecha <= fin);
+            return Ok(servicios);
+        }
+
         [HttpGet]
         [Route("api/servicios/seguimiento")]
         public IHttpActionResult ObtenerServicios([FromUri]DateTime inicioPeriodo)

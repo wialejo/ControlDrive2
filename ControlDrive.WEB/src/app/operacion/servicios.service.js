@@ -12,6 +12,7 @@
 		        ObtenerPorPeriodoCSV: ObtenerPorPeriodoCSV,
 		        NotificarServiciosARuta: NotificarServiciosARuta,
 		        NotificarServiciosAConductor: NotificarServiciosAConductor,
+		        ObtenerResumenEstado:ObtenerResumenEstado,
 		        GuardarValores: GuardarValores,
 		        Cerrar: Cerrar,
 		        Facturar: Facturar
@@ -39,6 +40,13 @@
 		    function Obtener(inicioPeriodo, finPeriodo) {
 		        var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
 		        var url = "servicios/rango?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin;
+		        var obj = http("GET", url);
+		        return obj
+		    }
+
+		    function ObtenerResumenEstado(inicioPeriodo, finPeriodo) {
+		        var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
+		        var url = "servicios/resumenEstado?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin;
 		        var obj = http("GET", url);
 		        return obj
 		    }

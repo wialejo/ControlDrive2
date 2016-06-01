@@ -157,7 +157,7 @@
                                 <input type="text" class="form-control" ng-model="movimiento.Valor" />
                             </td>
                             <td>
-                                <button class="btn btn-info" ng-disabled="isSaving" ng-click="ActualizarMovimiento($index)">
+                                <button class="btn btn-info" ng-disabled="isSaving" ng-click="ActualizarMovimiento(movimiento)">
                                     <span class="glyphicon glyphicon-ok" ng-if="movimiento.Aprobado"></span>
                                     Aprobar
                                 </button>

@@ -6,12 +6,17 @@
             $rootScope.$stateParams = $stateParams;
         })
         .config(function ($stateProvider, $urlRouterProvider) {
-            $urlRouterProvider.otherwise('/app');
+            $urlRouterProvider.otherwise('/app/resumen');
             $stateProvider
             .state('app', {
                 //abstract: true,
                 url: '/app',
                 templateUrl: 'app/main/app.html'
+            })
+            .state('app.resumen', {
+                //abstract: true,
+                url: '/resumen',
+                templateUrl: 'app/inicio/inicioResumen.html'
             })
             .state('app.nuevo', {
                 url: '/servicio',

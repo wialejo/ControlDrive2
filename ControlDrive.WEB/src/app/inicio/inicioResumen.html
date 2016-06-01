@@ -1,0 +1,18 @@
+﻿<div class="panel panel-default">
+    <div ng-controller="InicioController as vm">
+
+        <div class="panel-body">
+            <p>
+                <strong>Inicio: </strong> {{vm.fechaInicial}} <br />
+                <strong>Fin: </strong> {{vm.fechaFinal}}
+            </p>
+            <p>
+                <ul>
+                    <li ng-repeat="estado in vm.resumen">
+                        <strong>{{estado.Estado.Descripcion}}</strong>: <span>{{estado.Total}}</span>
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>

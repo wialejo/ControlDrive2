@@ -27,20 +27,22 @@
             };
 
             $scope.ObtenerAseguradoras();
-            $scope.ActualizarMovimiento = function ($index) {
-                var movimiento = {};
-                angular.copy($scope.movimientos[$index], movimiento);
+            $scope.ActualizarMovimiento = function (movimiento) {
+                //var movimiento = {};
+                //angular.copy($scope.movimientos[$index], movimiento);
                 
                 if (movimiento.Valor) {
                     //$confirm({ text: "¿Esta seguro de actualizar Consecutivo: " + movimiento.Servicio.Radicado + " Valor: " + movimiento.Valor + "?" })
                     //    .then(function () {
                     $scope.isSaving = true;
-                    MovimientosSvc.Actualizar(movimiento).then(function () {
+                    MovimientosSvc.Actualizar(movimiento).then(function (data) {
                         toastr.success("Actualizado correctamente.")
                         MovimientosSvc.ObtenerPorId(movimiento.Id)
                             .then(function (response) {
-                                var movimientoActualizado = response.data;
-                                angular.copy(movimientoActualizado, $scope.movimientos[$index])
+                                //var movimientoArray = $scope.movimientos.filter(function (item) {return item.Id == movimientoActualizado.Id ? true : false;})
+                                //movimiento.Aprobado = movimientoActualizado.Aprobado;
+
+                                angular.copy(response.data, movimiento)
 
                                 //movimiento = response.data;
                             }).catch(function (error) {

@@ -140,6 +140,20 @@ namespace ControlDrive.CORE.Services
             return servicios;
         }
 
+
+        public List<ResumenServiciosEstados> ObtenerResumenEstados(Expression<Func<Servicio, bool>> predicate)
+        {
+            var servicios = _servicioRepositorio.FindBy(predicate)
+                 .GroupBy(s => s.Estado)
+                .Select(s => new ResumenServiciosEstados
+                {
+                    Estado = s.FirstOrDefault().Estado,
+                    Total = s.Count()
+                })
+                .ToList();
+            return servicios;
+        }
+
         public List<Servicio> ObtenerPorDescripcion(string descripcion)
         {
             throw new NotImplementedException();
@@ -564,6 +578,7 @@ namespace ControlDrive.CORE.Services
     {
         ServicioDto ObtenerPorId(int id);
         List<ServicioDto> Obtener(Expression<Func<Servicio, bool>> predicate);
+        List<ResumenServiciosEstados> ObtenerResumenEstados(Expression<Func<Servicio, bool>> predicate);
         void CambioEstado(int idServicio, Estado nuevoEstado);
         void ActualizarConsecutivo(int idServicio, string nuevoConsecutivo);
         string NotificarServiciosAConductor(ICollection<Servicio> servicios);
@@ -572,9 +587,15 @@ namespace ControlDrive.CORE.Services
         string NotificarServiciosARuta(ICollection<Servicio> servicios);
         string ObtenerHtmlServiciosARuta(ICollection<Servicio> servicios);
         MemoryStream GenerarExcelServiciosResumen(Periodo periodo);
+        
         void Cerrar(List<Servicio> servicios);
     }
 
+    public class ResumenServiciosEstados
+    {
+        public Estado Estado { get; internal set; }
+        public int Total { get; internal set; }
+    }
     public class ServicioResumen
     {
         public string fecha { get; set; }
