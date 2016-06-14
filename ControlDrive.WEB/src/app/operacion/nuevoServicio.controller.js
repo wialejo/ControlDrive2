@@ -6,7 +6,24 @@
           .controller('NuevoServicioController', function ($scope, PeriodoSvc, AseguradoraSvc, $confirm, FechaSvc, localStorageService, $filter, $state, toastr, ServicioSvc, ConductorSvc, CiudadSvc) {
 
               $scope.$parent.$parent.app.viewName = "Registro de nuevo servicio";
-              $scope.servicio = {};
+
+              $scope.tiposServicio = [{
+                  Id: 1,
+                  Nombre: "Conductor elegido"
+              }, {
+                  Id: 2,
+                  Nombre: "Coordinación"
+              }, {
+                  Id: 3,
+                  Nombre: "Valet"
+              }, {
+                  Id: 4,
+                  Nombre: "Mensajeria"
+              }, {
+                  Id: 5,
+                  Nombre: "Transporte ejecutivo"
+              }]
+
               $scope.esEdicion = false;
               $scope.conductores = [];
               $scope.ciudades = [];
@@ -15,7 +32,12 @@
 
               $scope.Inicio = function () {
                   var servicioEnAlmacen = localStorageService.get('servicio');
-                  $scope.servicio = servicioEnAlmacen ? servicioEnAlmacen : {};
+                  $scope.servicio = servicioEnAlmacen ? servicioEnAlmacen : {
+                      Tipo: {
+                          Id: 4,
+                          Nombre: "Valet"
+                      }
+                  };
 
                   if (!$scope.servicio.FechaD)
                       $scope.servicio.FechaD = FechaSvc.ObtenerActual();

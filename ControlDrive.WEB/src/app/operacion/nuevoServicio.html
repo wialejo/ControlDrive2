@@ -15,6 +15,26 @@
                             <fieldset>
                                 <!--<legend>Datos servicio</legend>-->
                                 <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.SelTipo.$invalid  && !form.SelTipo.$pristine}">
+                                            <label for="SelTipo">Tipo servicio</label>
+                                            <!--<select ng-init="servicio.AseguradoraId = servicio.AseguradoraId || '-1'" ng-model="servicio.AseguradoraId" class="form-control" id="SelAseguradora">-->
+                                            <select tabindex="4"
+                                                    ng-model="servicio.Tipo"
+                                                    class="form-control"
+                                                    id="SelTipo"
+                                                    name="SelTipo"
+                                                    required
+                                                    ng-options="tipoServicio.Nombre for tipoServicio in tiposServicio track by tipoServicio.Id">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <!--<legend>Datos servicio</legend>-->
+                                <div class="row">
                                     <div class="col-sm-2">
                                         <div class="form-group" ng-class="{ 'has-error' : form.TxtHora.$invalid  && !form.TxtHora.$pristine}">
                                             <label for="TxtHora">Hora*</label>
