@@ -1,5 +1,4 @@
-﻿s
-<div ng-controller="CarteraController">
+﻿<div ng-controller="CarteraController">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -92,6 +91,10 @@
                                 <label class="checkbox i-checks m-l-xs m-b-xs">
                                     <input type="checkbox" ng-model="documento.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
                                 </label>
+                            </td>
+                            <td>
+                                <input type="button" value="Editar" ng-click="EdicionDocumento(documento)" class="btn btn-info btn-sm" />
+
                             </td>
                         </tr>
                     </tbody>
@@ -226,17 +229,26 @@
     </div>
 </div>
 
-<script type="text/ng-template" id="MostrarFacturacionMasiva.html">
+<script type="text/ng-template" id="edicionDocumento.html">
     <div class="modal-body wrapper-lg ">
         <a class="close" data-dismiss="modal" ng-click="cancel()">×</a>
-        <h3 class="m-t-none m-b font-thin">Facturación masiva</h3>
-        <span>Total factura: </span> <span> {{valorFactura | currency:"$":0}}</span>
+        <h3 class="m-t-none m-b font-thin">Editar documento</h3>
+        <strong>Concepto: </strong> <span> {{ documento.Concepto }}</span>
         <br />
-        <div class="form-group">
-            <label>Número de factura:</label>
-            <input type="text" name="name" value="" ng-model="numeroFactura" />
-        </div>
-        <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Facturar" ng-click="FacturarMasivo()" />
+        <strong>Total factura: </strong> <span> {{ documento.Valor | currency:"$":0}}</span>
+        <br />
+        <br />
+        <form class="form-inline" name="formDoc" ng-submit="formDoc.$valid && Actualizar()">
+            <div class="form-group">
+                <strong for="numeroFac">Número de factura:</strong>
+                <input type="text" required name="numeroFac" class="form-control" ng-model="documento.Numero" />
+            </div>
+
+            <br />
+            <div class="row text-right">
+                <input type="submit" class="btn btn-info" name="EditarServicio" value="Actualizar" ng-disabled="!formDoc.$valid" />
+            </div>
+        </form>
     </div>
 </script>
 

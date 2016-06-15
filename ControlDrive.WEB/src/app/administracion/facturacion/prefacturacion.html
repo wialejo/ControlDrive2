@@ -74,13 +74,21 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-xs-6 col-sm-4 text-center-xs text-right">
-                    <div class="form-group">
-                        <input placeholder="Filtrar..." class="form-control input-sm" type="search"
-                               ng-model="search.$" />
+                <div class="col-xs-6 col-sm-1">
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-model="search.Aprobado"> Aprobado
+                        </label>
+                    </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-3">
+                        <div class="form-group">
+                            <input placeholder="Filtrar..." class="form-control input-sm" type="search"
+                                   ng-model="search.$" />
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
         <div class="panel-body">
             <div class="row">

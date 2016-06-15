@@ -58,6 +58,41 @@
                 
             }
 
+            $scope.EdicionDocumento = function (documento) {
+
+                $uibModal.open({
+                    templateUrl: 'edicionDocumento.html',
+                    size: 'md',
+                    controller: function ($scope, $uibModalInstance, documento, scope) {
+
+                        $scope.documento = documento;
+
+                        $scope.cancel = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+
+                        $scope.Actualizar = function (servicio) {
+                            DocumentosSvc.Guardar($scope.documento)
+                               .then(function (response) {
+                                   scope.ObtenerDocumentos();
+                                   toastr.success("Actualizado correctamente.")
+                                   $scope.cancel();
+                               }, function (response) {
+                                   toastr.error(response.data.ExceptionMessage);
+                               });
+                        }
+                    },
+                    resolve: {
+                        documento: function () {
+                            return documento;
+                        },
+                        scope: function () {
+                            return $scope;
+                        }
+                    }
+                });
+            }
+
             $scope.ImprimirRelacion = function () {
                 var documentosSeleccionados = [];
                 angular.forEach($scope.documentos, function (documento) {

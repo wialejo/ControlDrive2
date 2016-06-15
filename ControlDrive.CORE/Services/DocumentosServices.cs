@@ -44,13 +44,15 @@ namespace ControlDrive.CORE.Services
 
         public void Guardar(Documento documento)
         {
+            var documentoRepo = new Documento();
             if (documento.Id != 0)
             {
-                throw new Exception("No se puede editar");
+                documentoRepo = _documentoRepositorio.FindBy(d => d.Id == documento.Id).FirstOrDefault();
+                documentoRepo.Numero = documento.Numero;
+                _documentoRepositorio.Edit(documentoRepo);
             }
             else
             {
-                var documentoRepo = new Documento();
                 documentoRepo.Tipo = documento.Tipo;
                 documentoRepo.Numero = documento.Numero;
                 documentoRepo.Fecha = DateTime.Now;
