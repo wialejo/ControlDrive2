@@ -7,14 +7,14 @@
               var vm = this;
               vm.servicio = {};
               vm.servicios = [];
-              $scope.$parent.$parent.app.viewName = "Consultar de servicios"
+              $scope.$parent.$parent.app.viewName = "Consulta de servicios"
 
               vm.fechaInicial = new Date();// FechaSvc.AdicionarMes(-1);
               vm.fechaFinal = new Date();  //FechaSvc.ObtenerActual();
 
               vm.ObtenerServicios = function (tableState) {
 
-                  ServicioSvc.Obtener(FechaSvc.Formatear(vm.fechaInicial), FechaSvc.Formatear(vm.fechaFinal))
+                  ServicioSvc.Obtener(FechaSvc.Formatear(vm.fechaInicial), FechaSvc.Formatear(vm.fechaFinal), vm.consecutivo)
                       .then(function (response) {
                           vm.servicios = response.data;
 

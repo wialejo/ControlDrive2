@@ -80,7 +80,8 @@
                   ServicioSvc.Guardar(servicio)
                     .then(function (response) {
                         $scope.isSaving = false;
-                        $scope.servicio = {};
+                        
+                        $scope.servicio = { Tipo: servicio.Tipo };
                         localStorageService.remove('servicio');
                         toastr.success('Servicio guardado correctamente.');
 

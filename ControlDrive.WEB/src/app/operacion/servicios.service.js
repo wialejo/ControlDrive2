@@ -37,9 +37,10 @@
 		        return obj
 		    }
 
-		    function Obtener(inicioPeriodo, finPeriodo) {
+		    function Obtener(inicioPeriodo, finPeriodo, consecutivo) {
+
 		        var periodo = PeriodoSvc.FormatearParaApi(inicioPeriodo, finPeriodo);
-		        var url = "servicios/rango?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin;
+		        var url = "servicios/rango?inicio=" + periodo.Inicio + "&fin=" + periodo.Fin + "&consecutivo=" + consecutivo;
 		        var obj = http("GET", url);
 		        return obj
 		    }

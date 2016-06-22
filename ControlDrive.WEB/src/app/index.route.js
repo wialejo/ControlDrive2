@@ -87,6 +87,10 @@
                 url: '/register',
                 templateUrl: 'app/account/register.html'
             })
+            .state('access.passwordChange', {
+                url: '/passwordChange',
+                templateUrl: 'app/account/passwordChange.html'
+            })
             .state('access.forgotpwd', {
                 url: '/forgotpwd',
                 templateUrl: 'app/tpl/page_forgotpwd.html'

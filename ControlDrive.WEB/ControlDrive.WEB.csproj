@@ -86,6 +86,7 @@
     <Content Include="e2e\main.spec.js" />
     <Content Include="gulp\build.js" />
     <Content Include="gulp\conf.js" />
+    <Content Include="gulp\deploy.js" />
     <Content Include="gulp\e2e-tests.js" />
     <Content Include="gulp\inject.js" />
     <Content Include="gulp\scripts.js" />
@@ -96,6 +97,9 @@
     <Content Include="gulp\.eslintrc" />
     <Content Include="e2e\.eslintrc" />
     <None Include="Properties\PublishProfiles\ColombiarRedesWEB.pubxml" />
+    <Content Include="src\app\account\passwordChange.html" />
+    <Content Include="src\app\account\register.html" />
+    <Content Include="src\app\account\passwordChange.controller.js" />
     <Content Include="src\app\administracion\facturacion\cartera.html" />
     <Content Include="src\app\administracion\facturacion\cartera.controller.js" />
     <Content Include="src\app\administracion\facturacion\facturacion.html" />
@@ -160,6 +164,7 @@
     <Content Include="src\app\administracion\pagos\pagoAProveedores.html" />
     <Content Include="src\app\inicio\inicioResumen.controller.js" />
     <Content Include="src\app\inicio\inicioResumen.html" />
+    <Content Include="src\app\main\blocks\header.html" />
     <Content Include="src\app\operacion\detalleServicio.controller.js" />
     <Content Include="src\app\operacion\detalleServicio.html" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.eot" />
@@ -186,7 +191,6 @@
     <Content Include="src\app\account\login.controller.js" />
     <Content Include="src\app\account\login.html" />
     <Content Include="src\app\account\register.controller.js" />
-    <Content Include="src\app\account\register.html" />
     <Content Include="src\app\account\tokensManagerService.js" />
     <Content Include="src\app\account\ui-load.js" />
     <Content Include="src\app\components\directives\setnganimate.js" />
@@ -226,7 +230,6 @@
     <Content Include="src\app\index.run.js" />
     <Content Include="src\app\main\app.html" />
     <Content Include="src\app\main\blocks\aside.html" />
-    <Content Include="src\app\main\blocks\header.html" />
     <Content Include="src\app\main\blocks\nav.html" />
     <Content Include="src\app\main\blocks\settings.html" />
     <Content Include="src\app\main\main.controller.js" />

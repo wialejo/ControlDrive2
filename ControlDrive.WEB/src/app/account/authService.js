@@ -30,6 +30,13 @@
 
             };
 
+            var _passwordChange = function (passwordData) {
+
+                return $http.post(serviceBase + 'api/account/ChangePassword', passwordData).then(function (response) {
+                    return response;
+                });
+
+            };
             var _login = function (loginData) {
 
                 var data = "grant_type=password&username=" + loginData.userName + "&password=" + loginData.password;
@@ -166,6 +173,7 @@
             };
 
             authServiceFactory.saveRegistration = _saveRegistration;
+            authServiceFactory.passwordChange = _passwordChange;
             authServiceFactory.login = _login;
             authServiceFactory.logOut = _logOut;
             authServiceFactory.fillAuthData = _fillAuthData;
