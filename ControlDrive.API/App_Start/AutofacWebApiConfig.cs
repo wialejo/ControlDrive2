@@ -100,6 +100,9 @@ namespace ControlDrive.Core.App_Start
                 .As<IDocumentosService>()
                 .InstancePerRequest();
 
+            builder.RegisterType<TiposServicioService>()
+                .As<ITiposServiciosService>()
+                .InstancePerRequest();
             Container = builder.Build();
 
             return Container;

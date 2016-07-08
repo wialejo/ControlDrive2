@@ -97,7 +97,7 @@
                         <th class="col-md-1">Estado</th>
                         <th class="hidden-xs">Consec.</th>
                         <th>Origen/Destino</th>
-                        <th>Conductor/Ruta</th>
+                        <th>Proveedor(s)</th>
                         <th>($)Valores</th>
                         <th>
                             <label class="checkbox i-checks ">
@@ -106,8 +106,8 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search) " ng-class=" { 'border-none' : active==servicio}">
-                    <tr>
+                <tbody class="text-xs" >
+                    <tr ng-repeat="servicio in serviciosActivos  = (servicios | filter: search) ">
                         <td>
                             {{servicio.Id}}
                         </td>
@@ -142,17 +142,9 @@
                             <strong>Ruta:</strong> {{servicio.RutaResumen}}
                         </td>
                         <td>
-                            <div class="form-group" ui-focus ng-class="{ 'has-error' : form.txtCierre.$invalid  && !form.txtCierre.$pristine}">
-                                <input type="text" ng-blur="GuardarMovimientoCliente(servicio)" required name="txtCierre" placeholder="Cierre"
-                                       ng-model="servicio.valorCliente" class="form-control input-sm input-xs" />
-                            </div>
-                            <div class="form-group" ng-class="{ 'has-error' : form.txtConductor.$invalid  && !form.txtConductor.$pristine}">
-                                <input type="text" ng-blur="GuardarMovimientoConductor(servicio)" required name="txtConductor" placeholder="Conductor"
-                                       ng-model="servicio.valorProveedorConductor" class="form-control input-sm input-xs" />
-                            </div>
-                            <div class="form-group" ng-class="{ 'has-error' : form.txtRuta.$invalid  && !form.txtRuta.$pristine}">
-                                <input type="text" ng-blur="GuardarMovimientoRuta(servicio)" required name="txtRuta" placeholder="Ruta"
-                                       ng-model="servicio.valorProveedorRuta" class="form-control input-sm input-xs" />
+                            <div ng-repeat="movimiento in servicio.Movimientos" class="form-group" ui-focus>
+                                <strong>{{movimiento.ConceptoDescripcion}} </strong>
+                                <input type="text" placeholder="{{ movimiento.Tercero }}" ng-blur="GuardarMovimiento(movimiento)" ng-model="movimiento.Valor" class="form-control input-sm input-xs" />
                             </div>
                         </td>
                         <td>

@@ -138,7 +138,7 @@ namespace ControlDrive.CORE.Services
                         Concepto = mov.Concepto.Descripcion,
                         ConsecutivoServicio = mov.Servicio.Radicado,
                         FechaServicio = mov.Servicio.Fecha,
-                        VehiculoServicio = mov.Servicio.Vehiculo.Placa + " " + mov.Servicio.Vehiculo.Descripcion,
+                        VehiculoServicio = mov.Servicio.Vehiculo.ToResumen(),
                         OrigenServicio = mov.Servicio.DireccionInicio.ToResumen(),
                         DestinoServicio = mov.Servicio.DireccionDestino.ToResumen(),
                     });

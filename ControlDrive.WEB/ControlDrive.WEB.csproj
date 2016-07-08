@@ -167,6 +167,17 @@
     <Content Include="src\app\main\blocks\header.html" />
     <Content Include="src\app\operacion\detalleServicio.controller.js" />
     <Content Include="src\app\operacion\detalleServicio.html" />
+    <Content Include="src\app\operacion\tiposServicio\ejecutivo.html" />
+    <Content Include="src\app\operacion\tiposServicio\ejecutivo.directive.js" />
+    <Content Include="src\app\operacion\tiposServicio\tiposServicio.service.js" />
+    <Content Include="src\app\operacion\tiposServicio\mensajeria.html" />
+    <Content Include="src\app\operacion\tiposServicio\mensajeria.directive.js" />
+    <Content Include="src\app\operacion\tiposServicio\valet.html" />
+    <Content Include="src\app\operacion\tiposServicio\valet.directive.js" />
+    <Content Include="src\app\operacion\tiposServicio\coordinacion.html" />
+    <Content Include="src\app\operacion\tiposServicio\coordinacion.directive.js" />
+    <Content Include="src\app\operacion\tiposServicio\conductorElegido.directive.js" />
+    <Content Include="src\app\operacion\tiposServicio\conductorElegido.html" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="src\assets\font-awesome\fonts\fontawesome-webfont.woff" />
@@ -241,8 +252,6 @@
     <Content Include="src\app\operacion\cierre.html" />
     <Content Include="src\app\operacion\consultaServicios.controller.js" />
     <Content Include="src\app\operacion\consultaServicios.html" />
-    <Content Include="src\app\operacion\editarServicio.controller.js" />
-    <Content Include="src\app\operacion\editarServicio.html" />
     <Content Include="src\app\operacion\estado.service.js" />
     <Content Include="src\app\operacion\nuevoServicio.controller.js" />
     <Content Include="src\app\operacion\nuevoServicio.html" />

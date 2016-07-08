@@ -156,6 +156,38 @@
     <Compile Include="Migrations\201605240123094_addrelacionestadosseguimientos.Designer.cs">
       <DependentUpon>201605240123094_addrelacionestadosseguimientos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606220255061_tiposServicio.cs" />
+    <Compile Include="Migrations\201606220255061_tiposServicio.Designer.cs">
+      <DependentUpon>201606220255061_tiposServicio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606220326588_aseguradorasNull.cs" />
+    <Compile Include="Migrations\201606220326588_aseguradorasNull.Designer.cs">
+      <DependentUpon>201606220326588_aseguradorasNull.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606280148173_MovimientosProveedorCliente.cs" />
+    <Compile Include="Migrations\201606280148173_MovimientosProveedorCliente.Designer.cs">
+      <DependentUpon>201606280148173_MovimientosProveedorCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606280248333_tipoProveedor.cs" />
+    <Compile Include="Migrations\201606280248333_tipoProveedor.Designer.cs">
+      <DependentUpon>201606280248333_tipoProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606280252246_AddTiposConceptos.cs" />
+    <Compile Include="Migrations\201606280252246_AddTiposConceptos.Designer.cs">
+      <DependentUpon>201606280252246_AddTiposConceptos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607080158533_addTipoServicio.cs" />
+    <Compile Include="Migrations\201607080158533_addTipoServicio.Designer.cs">
+      <DependentUpon>201607080158533_addTipoServicio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607080204090_tipoServiciosConceptosConfiguracion.cs" />
+    <Compile Include="Migrations\201607080204090_tipoServiciosConceptosConfiguracion.Designer.cs">
+      <DependentUpon>201607080204090_tipoServiciosConceptosConfiguracion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607080259301_idTipoServicio.cs" />
+    <Compile Include="Migrations\201607080259301_idTipoServicio.Designer.cs">
+      <DependentUpon>201607080259301_idTipoServicio.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -166,6 +198,7 @@
     <Compile Include="Repositorios\EntityBaseRepository.cs" />
     <Compile Include="Modelos\Servicios.cs" />
     <Compile Include="Services\DocumentosServices.cs" />
+    <Compile Include="Services\TiposServicioService.cs" />
     <Compile Include="Services\MovimientosService.cs" />
     <Compile Include="Services\CorreoService.cs" />
     <Compile Include="Services\VehiculoService.cs" />
@@ -224,6 +257,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605240123094_addrelacionestadosseguimientos.resx">
       <DependentUpon>201605240123094_addrelacionestadosseguimientos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606220255061_tiposServicio.resx">
+      <DependentUpon>201606220255061_tiposServicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606220326588_aseguradorasNull.resx">
+      <DependentUpon>201606220326588_aseguradorasNull.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606280148173_MovimientosProveedorCliente.resx">
+      <DependentUpon>201606280148173_MovimientosProveedorCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606280248333_tipoProveedor.resx">
+      <DependentUpon>201606280248333_tipoProveedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606280252246_AddTiposConceptos.resx">
+      <DependentUpon>201606280252246_AddTiposConceptos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607080158533_addTipoServicio.resx">
+      <DependentUpon>201607080158533_addTipoServicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607080204090_tipoServiciosConceptosConfiguracion.resx">
+      <DependentUpon>201607080204090_tipoServiciosConceptosConfiguracion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607080259301_idTipoServicio.resx">
+      <DependentUpon>201607080259301_idTipoServicio.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

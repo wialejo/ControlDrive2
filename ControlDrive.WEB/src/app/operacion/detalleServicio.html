@@ -3,13 +3,15 @@
     <h3 class="m-t-none m-b font-thin">Resumen</h3>
     <div class="row">
         <div class="col-sm-6">
+            <strong>Tipo servicio: </strong> <span> {{servicio.TipoServicio.Descripcion}}</span>
+            <br />
             <strong>Id: </strong> <span> {{servicio.Id}}</span>
         </div>
         <div class="col-sm-6">
             <strong>Fecha y Hora: </strong><span> {{servicio.Fecha | date:'HH:mm'}} {{servicio.Fecha | date:'dd/MM/yyyy'}}</span>
         </div>
     </div>
-    <div class="row"> 
+    <div class="row">
         <div class="col-sm-6">
             <strong>Consecutivo: </strong><span> {{servicio.Radicado}}</span>
         </div>

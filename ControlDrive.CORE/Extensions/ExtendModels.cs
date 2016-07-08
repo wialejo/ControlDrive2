@@ -11,7 +11,8 @@ namespace ControlDrive.CORE.Extensions
     {
         public static string ToResumen(this Conductor conductor)
         {
-            return (!string.IsNullOrEmpty(conductor.Nombre) ? conductor.Nombre : "") + " Tel:" + (!string.IsNullOrEmpty(conductor.Telefono1) ? " " + conductor.Telefono1 : "");
+            return conductor != null ? ((!string.IsNullOrEmpty(conductor.Nombre) ? conductor.Nombre : "") 
+                + " Tel:" + (!string.IsNullOrEmpty(conductor.Telefono1) ? " " + conductor.Telefono1 : "")) : "";
         }
     }
 
@@ -19,9 +20,18 @@ namespace ControlDrive.CORE.Extensions
     {
         public static string ToResumen(this Direccion direccion)
         {
-            return (!string.IsNullOrEmpty(direccion.Descripcion) ? direccion.Descripcion : "") 
+            return direccion != null ? ((!string.IsNullOrEmpty(direccion.Descripcion) ? direccion.Descripcion : "")
                     + ", " + (!string.IsNullOrEmpty(direccion.Barrio) ? " " + direccion.Barrio : "")
-                    + ", " + (!string.IsNullOrEmpty(direccion.Ciudad.Nombre) ? " " + direccion.Ciudad.Nombre : "");
+                    + ", " + (!string.IsNullOrEmpty(direccion.Ciudad.Nombre) ? " " + direccion.Ciudad.Nombre : "")) : "";
+        }
+    }
+
+    public static class VehiculoExtension
+    {
+        public static string ToResumen(this Vehiculo vehiculo)
+        {
+            return vehiculo != null ? ((!string.IsNullOrEmpty(vehiculo.Placa) ? vehiculo.Placa : "")
+                    + (!string.IsNullOrEmpty(vehiculo.Descripcion) ? " " + vehiculo.Descripcion : "")) : "";
         }
     }
 }

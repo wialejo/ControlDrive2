@@ -3,27 +3,10 @@
 
     angular
       .module('controldriveApp')
-          .controller('NuevoServicioController', function ($scope, PeriodoSvc, AseguradoraSvc, $confirm, FechaSvc, localStorageService, $filter, $state, toastr, ServicioSvc, ConductorSvc, CiudadSvc) {
+          .controller('NuevoServicioController', function ($scope, $filter, $state, $confirm, PeriodoSvc, TiposServicioSvc, EstadoSvc, $stateParams, FechaSvc, toastr, ServicioSvc, AseguradoraSvc, localStorageService, ConductorSvc, CiudadSvc) {
 
-              $scope.$parent.$parent.app.viewName = "Registro de nuevo servicio";
-
-              $scope.tiposServicio = [{
-                  Id: 1,
-                  Nombre: "Conductor elegido"
-              }, {
-                  Id: 2,
-                  Nombre: "Coordinación"
-              }, {
-                  Id: 3,
-                  Nombre: "Valet"
-              }, {
-                  Id: 4,
-                  Nombre: "Mensajeria"
-              }, {
-                  Id: 5,
-                  Nombre: "Transporte ejecutivo"
-              }]
-
+              $scope.servicio = {};
+              $scope.tiposServicio = []
               $scope.esEdicion = false;
               $scope.conductores = [];
               $scope.ciudades = [];
@@ -31,34 +14,67 @@
               $scope.aseguradoras = [];
 
               $scope.Inicio = function () {
+                  $scope.servicio.id = $stateParams.id;
+                  if ($scope.servicio.id) {
+                      $scope.esEdicion = true;
+                      EdicionServicio();
+                  } else {
+                      $scope.esEdicion = false;
+                      NuevoServicio();
+                  }
+              }
+
+              function EdicionServicio() {
+
+                  $scope.ObtenerEstados();
+
+                  ServicioSvc.ObtenerPorId($scope.servicio.id)
+                      .then(function (response) {
+                          var servicio = response.data;
+                          $scope.$parent.$parent.app.viewName = "Edición de servicio: " + servicio.Id
+                          CargarServicio(servicio);
+                      })
+                      .catch(function (err) {
+                          toastr.error(err, 'Edición de servicio');
+                      })
+              }
+              function NuevoServicio() {
+                  $scope.$parent.$parent.app.viewName = "Registro de nuevo servicio";
+
                   var servicioEnAlmacen = localStorageService.get('servicio');
+
                   $scope.servicio = servicioEnAlmacen ? servicioEnAlmacen : {
-                      Tipo: {
-                          Id: 4,
-                          Nombre: "Valet"
-                      }
+                      TipoServicio: $scope.tiposServicio[0]
                   };
 
                   if (!$scope.servicio.FechaD)
                       $scope.servicio.FechaD = FechaSvc.ObtenerActual();
+
+                  $scope.$watch('servicio', function () {
+                      localStorageService.add('servicio', $scope.servicio);
+                  }, true);
               }
 
-              $scope.$watch('servicio', function () {
-                  localStorageService.add('servicio', $scope.servicio);
-              }, true);
+              function CargarServicio(servicio) {
+                  servicio.Hora = $filter('date')(servicio.Fecha, 'HH:mm');
+                  servicio.FechaD = $filter('date')(servicio.Fecha, 'dd/MM/yyyy');
+                  $scope.servicio = servicio;
+              }
 
               $scope.isSaving = false;
               $scope.Guardar = function (servicio) {
                   $scope.isSaving = true;
 
-                  var d = servicio.FechaD.split("/").slice(0, 3).reverse();
-                  var fecha = new Date(d[1] + "/" + d[2] + "/" + d[0] + " " + servicio.Hora)
-                  if (fecha == "Invalid Date") {
-                      toastr.warning('Fecha no valida.');
-                      return;
-                  }
-                  servicio.Fecha = $filter('date')(fecha, 'yyyy-MM-dd HH:mm:ss');
-                  PeriodoSvc.FechaEnPeriodoActual(servicio.Fecha)
+                  if (servicio.TipoServicio.Id != 2) {
+                      var d = servicio.FechaD.split("/").slice(0, 3).reverse();
+                      var fecha = new Date(d[1] + "/" + d[2] + "/" + d[0] + " " + servicio.Hora)
+                      if (fecha == "Invalid Date") {
+                          toastr.warning('Fecha no valida.');
+                          return;
+                      }
+                      servicio.Fecha = $filter('date')(fecha, 'yyyy-MM-dd HH:mm:ss');
+
+                      PeriodoSvc.FechaEnPeriodoActual(servicio.Fecha)
                       .then(function (response) {
                           if (!response.data) {
                               $confirm({ text: "El servicio se guardará en un periodo diferente, ¿esta seguro de continuar?" }).then(function () {
@@ -74,23 +90,33 @@
                           $scope.isSaving = false;
                           toastr.error(response.data.ExceptionMessage);
                       });
+
+                  } else {
+                      var d = servicio.FechaD.split("/").slice(0, 3).reverse();
+                      var fecha = new Date(d[1] + "/" + d[2] + "/" + d[0])
+                      servicio.Fecha = $filter('date')(fecha, 'yyyy-MM-dd HH:mm:ss');
+                      Guardar(servicio);
+                  }
               }
 
               function Guardar(servicio) {
                   ServicioSvc.Guardar(servicio)
-                    .then(function (response) {
-                        $scope.isSaving = false;
-                        
-                        $scope.servicio = { Tipo: servicio.Tipo };
-                        localStorageService.remove('servicio');
-                        toastr.success('Servicio guardado correctamente.');
+                      .then(function (response) {
+                          $scope.isSaving = false;
+                          if ($scope.esEdicion) {
+                              toastr.success('Servicio actualizado correctamente.');
+                              $state.go($state.current, { id: response.data.Id }, { reload: true })
+                          } else {
+                              localStorageService.remove('servicio');
+                              toastr.success('Servicio guardado correctamente.');
 
-                        $state.go('app.editar', { id: response.data.Id })
-                    })
-                    .catch(function (response) {
-                        $scope.isSaving = false;
-                        toastr.error(response.data.ExceptionMessage);
-                    });
+                              $state.go($state.current, { id: response.data.Id })
+                          }
+                      })
+                      .catch(function (response) {
+                          $scope.isSaving = false;
+                          toastr.error(response.data.ExceptionMessage);
+                      });
               }
 
               $scope.ObtenerAseguradoras = function () {
@@ -99,16 +125,12 @@
                           $scope.aseguradoras = response.data;
                       })
               };
-              $scope.ObtenerAseguradoras();
-
               $scope.ObtenerCiudades = function () {
                   CiudadSvc.Obtener()
                       .then(function (response) {
                           $scope.ciudades = response.data;
                       })
               }
-              $scope.ObtenerCiudades();
-
               $scope.ObtenerConductores = function (filtro) {
                   if (filtro) {
                       ConductorSvc.ObtenerPorDescripcion(filtro)
@@ -119,29 +141,58 @@
                       $scope.conductores = [];
                   }
               }
-
               $scope.ObtenerFechaSiguienteDia = function (hora) {
-                  var bits = hora.split(':');
-                  var horas = bits[0];
 
-                  var date = new Date();
-                  var dateactual = new Date().getHours();
-                  if (horas < 6 && dateactual > 6) {
-                      $scope.CambioFecha = true;
-                      date.setDate(date.getDate() + 1);
-                  } else {
-                      $scope.CambioFecha = false;
+                  if (!$scope.esEdicion) {
+                      var bits = hora.split(':');
+                      var horas = bits[0];
+                      var date = new Date();
+                      var dateactual = new Date().getHours();
+                      if (horas < 6 && dateactual > 6) {
+                          $scope.CambioFecha = true;
+                          date.setDate(date.getDate() + 1);
+                      } else {
+                          $scope.CambioFecha = false;
+                      }
+                      var mes = (date.getMonth() + 1);
+                      mes = mes < 10 ? "0" + mes.toString() : mes;
+                      var dia = date.getDate();
+                      dia = dia < 10 ? "0" + dia.toString() : dia;
+
+                      var fechaSiguienteDia = (dia + '/' + mes + '/' + date.getFullYear());
+
+                      $scope.servicio.FechaD = fechaSiguienteDia;
                   }
-                  var mes = (date.getMonth() + 1);
-                  mes = mes < 10 ? "0" + mes.toString() : mes;
-                  var dia = date.getDate();
-                  dia = dia < 10 ? "0" + dia.toString() : dia;
-
-                  var fechaSiguienteDia = (dia + '/' + mes + '/' + date.getFullYear());
-
-                  $scope.servicio.FechaD = fechaSiguienteDia;
               }
 
-              $scope.Inicio();
+              $scope.ObtenerEstados = function () {
+                  EstadoSvc.Obtener()
+                      .then(function (response) {
+                          $scope.estadosParaRegistro = response.data.filter(function (estado) {
+                              if (estado.Codigo != "CR" && estado.Codigo != "CF" && estado.Codigo != "FA") {
+                                  return estado;
+                              }
+                          });
+                      })
+                      .catch(function (response) {
+                          toastr.error(response.data.ExceptionMessage);
+                      });
+              }
+              $scope.ObtenerTiposServicio = function () {
+                  TiposServicioSvc.Obtener()
+                      .then(function (response) {
+                          $scope.tiposServicio = response.data;
+                          $scope.Inicio();
+                      })
+                      .catch(function (response) {
+                          toastr.error(response.data.ExceptionMessage);
+                      });
+              }
+
+
+              $scope.ObtenerTiposServicio();
+              $scope.ObtenerAseguradoras();
+              $scope.ObtenerCiudades();
+             
           });
 })();

@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ControlDrive.CORE.Extensions;
 using System.Linq.Expressions;
+using ControlDrive.CORE.Enums;
 
 namespace ControlDrive.CORE.Services
 {
@@ -26,11 +27,13 @@ namespace ControlDrive.CORE.Services
         private readonly ICommonInterface<Asegurado> _aseguradoService;
         private readonly ICommonInterface<Vehiculo> _vehiculoService;
         private readonly ICorreoService _correoService;
+        private readonly IEntityBaseRepository<Movimiento> _movimientoRepositorio;
 
-        public ServicioService(IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService,
+        public ServicioService(IEntityBaseRepository<Movimiento> movimientoRepositorio, IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService,
             ICommonInterface<Asegurado> aseguradoService, ICommonInterface<Vehiculo> vehiculoService, ICorreoService correoService, IUnitOfWork unitOfWork)
         {
             _servicioRepositorio = servicioRepositorio;
+            _movimientoRepositorio = movimientoRepositorio;
             _direccionService = direccionService;
             _aseguradoService = aseguradoService;
             _vehiculoService = vehiculoService;
@@ -42,96 +45,233 @@ namespace ControlDrive.CORE.Services
         public Servicio Guardar(Servicio servicio)
         {
             var servicioRepo = new Servicio();
-            if (servicio.Id == 0)
+
+            bool EsEdicion = servicio.Id != 0;
+
+            if (EsEdicion)
+            {
+                if (!string.IsNullOrEmpty(servicio.Radicado) && _servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado && s.Id != servicio.Id).Count() > 0)
+                {
+                    throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
+                }
+                servicioRepo = _servicioRepositorio.FindByIncluding(s => s.Id == servicio.Id, s => s.Movimientos).FirstOrDefault();
+
+                servicioRepo.FechaModificacion = DateTime.Now;
+                servicioRepo.UsuarioModificacionId = servicio.UsuarioModificacionId;
+            }
+            else
             {
                 if (_servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado).Count() > 0 && !string.IsNullOrEmpty(servicio.Radicado))
                 {
                     throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
                 }
-                servicioRepo.UsuarioRegistroId = servicio.UsuarioRegistroId;
-                servicioRepo.EstadoCodigo = "RG";
-                servicioRepo.Fecha = servicio.Fecha;
-                servicioRepo.Hora = servicio.Hora;
-                servicioRepo.Radicado = servicio.Radicado;
-                servicioRepo.AsignadoPor = servicio.AsignadoPor;
-                servicioRepo.AseguradoraId = servicio.Aseguradora.Id;
-
-                _aseguradoService.Guardar(servicio.Asegurado);
-                servicioRepo.AseguradoId = servicio.Asegurado.Id;
-
-                _vehiculoService.Guardar(servicio.Vehiculo);
-                servicioRepo.VehiculoId = servicio.Vehiculo.Id;
-
-                _direccionService.Guardar(servicio.DireccionInicio);
-                servicioRepo.DireccionInicioId = servicio.DireccionInicio.Id;
-
-                _direccionService.Guardar(servicio.DireccionDestino);
-                servicioRepo.DireccionDestinoId = servicio.DireccionDestino.Id;
-
                 servicioRepo.FechaModificacion = DateTime.Now;
-                servicioRepo.FechaRegistro = DateTime.Now;
-
-                if (servicio.Conductor == null)
-                    servicioRepo.ConductorId = null;
-                else
-                    servicioRepo.ConductorId = servicio.Conductor.Id;
-
-                if (servicio.Ruta == null)
-                    servicioRepo.RutaId = null;
-                else
-                    servicioRepo.RutaId = servicio.Ruta.Id;
-
-                servicioRepo = _servicioRepositorio.Add(servicioRepo);
-            }
-            else
-            {
-
-                if (!string.IsNullOrEmpty(servicio.Radicado) && _servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado && s.Id != servicio.Id).Count() > 0)
-                {
-                    throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
-                }
-
-                servicioRepo = _servicioRepositorio.FindBy(s => s.Id == servicio.Id).FirstOrDefault();
                 servicioRepo.UsuarioModificacionId = servicio.UsuarioModificacionId;
-                servicioRepo.Fecha = servicio.Fecha;
-                servicioRepo.Hora = servicio.Hora;
-                servicioRepo.Radicado = servicio.Radicado;
-                servicioRepo.EstadoCodigo = servicio.EstadoCodigo;
-                servicioRepo.AsignadoPor = servicio.AsignadoPor;
-                servicioRepo.AseguradoraId = servicio.Aseguradora.Id;
+                servicioRepo.FechaRegistro = DateTime.Now;
+                servicioRepo.UsuarioRegistroId = servicio.UsuarioRegistroId;
 
+                if (!servicio.TipoServicio.RequiereSeguimiento)
+                {
+                    servicio.EstadoCodigo = "TE";
+                    servicio.Fecha = servicio.Fecha.AddHours(18);
+                    servicio.Hora = new TimeSpan(18, 0, 0);
+                }
+                else {
+                    servicio.EstadoCodigo = "RG";
+                }
+            }
+
+            servicioRepo.EstadoCodigo = servicio.EstadoCodigo;
+            servicioRepo.TipoServicioId = servicio.TipoServicio.Id;
+            servicioRepo.Hora = servicio.Hora;
+            servicioRepo.Fecha = servicio.Fecha;
+            servicioRepo.Radicado = servicio.Radicado;
+            servicioRepo.AsignadoPor = servicio.AsignadoPor;
+            servicioRepo.Observacion = servicio.Observacion;
+            servicioRepo.Notificado = false;
+
+            if (servicio.Aseguradora != null)
+            {
+                servicioRepo.AseguradoraId = servicio.Aseguradora.Id;
+            }
+
+            if (servicio.Asegurado != null)
+            {
                 _aseguradoService.Guardar(servicio.Asegurado);
                 servicioRepo.AseguradoId = servicio.Asegurado.Id;
+            }
 
+            if (servicio.Vehiculo != null)
+            {
                 _vehiculoService.Guardar(servicio.Vehiculo);
                 servicioRepo.VehiculoId = servicio.Vehiculo.Id;
+            }
 
+            if (servicio.DireccionInicio != null)
+            {
                 _direccionService.Guardar(servicio.DireccionInicio);
                 servicioRepo.DireccionInicioId = servicio.DireccionInicio.Id;
+            }
 
+            if (servicio.DireccionDestino != null)
+            {
                 _direccionService.Guardar(servicio.DireccionDestino);
                 servicioRepo.DireccionDestinoId = servicio.DireccionDestino.Id;
-
-                servicioRepo.FechaModificacion = DateTime.Now;
-
-                if (servicio.Conductor == null)
-                    servicioRepo.ConductorId = null;
-                else
-                    servicioRepo.ConductorId = servicio.Conductor.Id;
-
-                if (servicio.Ruta == null)
-                    servicioRepo.RutaId = null;
-                else
-                    servicioRepo.RutaId = servicio.Ruta.Id;
-
-                servicioRepo.Notificado = false;
-
-                _servicioRepositorio.Edit(servicioRepo);
             }
+
+            if (servicio.Conductor == null)
+                servicioRepo.ConductorId = null;
+            else
+                servicioRepo.ConductorId = servicio.Conductor.Id;
+
+            if (servicio.Ruta == null)
+                servicioRepo.RutaId = null;
+            else
+                servicioRepo.RutaId = servicio.Ruta.Id;
+
+
+            if (servicioRepo.Movimientos != null) {
+                servicioRepo.Movimientos.ToList().ForEach(movimiento =>
+                {   
+                    if (movimiento.Concepto.TipoConcepto == TipoConcepto.Proveedor && movimiento.Concepto.TipoProveedor == TipoProveedor.Conductor)
+                    {
+                        movimiento.ProveedorId = servicio.ConductorId;
+                    }
+
+                    if (movimiento.Concepto.TipoConcepto == TipoConcepto.Proveedor && movimiento.Concepto.TipoProveedor == TipoProveedor.Ruta)
+                    {
+                        movimiento.ProveedorId = servicio.RutaId;
+                    }
+
+                    if (movimiento.Concepto.TipoConcepto == TipoConcepto.Cliente)
+                    {
+                        movimiento.ClienteId = servicio.AseguradoraId;
+                    }
+                });
+            }
+            
+            if (EsEdicion)
+                _servicioRepositorio.Edit(servicioRepo);
+            else
+                servicioRepo = _servicioRepositorio.Add(servicioRepo);
 
             _unitOfWork.Commit();
 
             return servicioRepo;
+
+
+            //if (servicio.Id == 0)
+            //{
+            //    if (_servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado).Count() > 0 && !string.IsNullOrEmpty(servicio.Radicado))
+            //    {
+            //        throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
+            //    }
+
+            //    servicioRepo.TipoServicio = servicio.TipoServicio;
+            //    servicioRepo.UsuarioRegistroId = servicio.UsuarioRegistroId;
+            //    servicioRepo.EstadoCodigo = "RG";
+
+            //    servicioRepo.Fecha = servicio.Fecha;
+            //    servicioRepo.Hora = servicio.Hora;
+            //    servicioRepo.Radicado = servicio.Radicado;
+            //    servicioRepo.AsignadoPor = servicio.AsignadoPor;
+
+            //    if (servicio.Aseguradora != null)
+            //    {
+            //        servicioRepo.AseguradoraId = servicio.Aseguradora.Id;
+            //    }
+
+            //    if (servicio.Asegurado != null)
+            //    {
+            //        _aseguradoService.Guardar(servicio.Asegurado);
+            //        servicioRepo.AseguradoId = servicio.Asegurado.Id;
+            //    }
+
+            //    if (servicio.Vehiculo != null)
+            //    {
+            //        _vehiculoService.Guardar(servicio.Vehiculo);
+            //        servicioRepo.VehiculoId = servicio.Vehiculo.Id;
+            //    }
+
+            //    if (servicio.DireccionInicio != null) {
+
+            //        _direccionService.Guardar(servicio.DireccionInicio);
+            //        servicioRepo.DireccionInicioId = servicio.DireccionInicio.Id;
+            //    }
+
+            //    if (servicio.DireccionDestino != null)
+            //    {
+            //        _direccionService.Guardar(servicio.DireccionDestino);
+            //        servicioRepo.DireccionDestinoId = servicio.DireccionDestino.Id;
+            //    }
+
+            //    servicioRepo.FechaModificacion = DateTime.Now;
+            //    servicioRepo.FechaRegistro = DateTime.Now;
+            //    servicioRepo.Observacion = servicio.Observacion;
+
+            //    if (servicio.Conductor == null)
+            //        servicioRepo.ConductorId = null;
+            //    else
+            //        servicioRepo.ConductorId = servicio.Conductor.Id;
+
+            //    if (servicio.Ruta == null)
+            //        servicioRepo.RutaId = null;
+            //    else
+            //        servicioRepo.RutaId = servicio.Ruta.Id;
+
+            //    servicioRepo = _servicioRepositorio.Add(servicioRepo);
+            //}
+            //else
+            //{
+
+            //    if (!string.IsNullOrEmpty(servicio.Radicado) && _servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado && s.Id != servicio.Id).Count() > 0)
+            //    {
+            //        throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
+            //    }
+
+            //    servicioRepo = _servicioRepositorio.FindBy(s => s.Id == servicio.Id).FirstOrDefault();
+            //    servicioRepo.TipoServicio = servicio.TipoServicio;
+            //    servicioRepo.UsuarioModificacionId = servicio.UsuarioModificacionId;
+            //    servicioRepo.Fecha = servicio.Fecha;
+            //    servicioRepo.Hora = servicio.Hora;
+            //    servicioRepo.Radicado = servicio.Radicado;
+            //    servicioRepo.EstadoCodigo = servicio.EstadoCodigo;
+            //    servicioRepo.AsignadoPor = servicio.AsignadoPor;
+            //    servicioRepo.AseguradoraId = servicio.Aseguradora.Id;
+
+            //    _aseguradoService.Guardar(servicio.Asegurado);
+            //    servicioRepo.AseguradoId = servicio.Asegurado.Id;
+
+            //    _vehiculoService.Guardar(servicio.Vehiculo);
+            //    servicioRepo.VehiculoId = servicio.Vehiculo.Id;
+
+            //    _direccionService.Guardar(servicio.DireccionInicio);
+            //    servicioRepo.DireccionInicioId = servicio.DireccionInicio.Id;
+
+            //    _direccionService.Guardar(servicio.DireccionDestino);
+            //    servicioRepo.DireccionDestinoId = servicio.DireccionDestino.Id;
+
+            //    servicioRepo.FechaModificacion = DateTime.Now;
+            //    servicioRepo.Observacion = servicio.Observacion;
+
+            //    if (servicio.Conductor == null)
+            //        servicioRepo.ConductorId = null;
+            //    else
+            //        servicioRepo.ConductorId = servicio.Conductor.Id;
+
+            //    if (servicio.Ruta == null)
+            //        servicioRepo.RutaId = null;
+            //    else
+            //        servicioRepo.RutaId = servicio.Ruta.Id;
+
+            //    servicioRepo.Notificado = false;
+
+            //    _servicioRepositorio.Edit(servicioRepo);
+            //}
+
+            //_unitOfWork.Commit();
+
+            //return servicioRepo;
         }
 
         public List<Servicio> Obtener()
@@ -175,6 +315,8 @@ namespace ControlDrive.CORE.Services
                     Id = s.Id,
                     EstadoCodigo = s.EstadoCodigo,
                     Estado = s.Estado,
+                    TipoServicio = new TipoServicioDto { Id = s.TipoServicio.Id, 
+                        Descripcion = s.TipoServicio.Descripcion, ConceptosPagos = s.TipoServicio.ConceptosPagos, RequiereSeguimiento = s.TipoServicio.RequiereSeguimiento },
                     Fecha = s.Fecha,
                     Hora = s.Hora,
                     Radicado = s.Radicado,
@@ -184,6 +326,7 @@ namespace ControlDrive.CORE.Services
                     AseguradoraId = s.AseguradoraId,
                     Aseguradora = s.Aseguradora,
                     AseguradoId = s.AseguradoId,
+                    Observacion = s.Observacion,
                     Asegurado = s.Asegurado,
                     DireccionInicioId = s.DireccionInicioId,
                     DireccionInicio = s.DireccionInicio,
@@ -477,6 +620,7 @@ namespace ControlDrive.CORE.Services
                                             <th>Destino</th>
                                             <th>Conductor</th>
                                             <th>Ruta</th>
+                                            <th>Observación</th>
                                         </tr>
                                     </thead>
                                     <tbody>";
@@ -502,6 +646,7 @@ namespace ControlDrive.CORE.Services
                                             <td>{7}</td>
                                             <td>{8}</td>
                                             <td>{9}</td>
+                                            <td>{10}</td>
                                         </tr>
                     ",
                     servicio.Id.ToString(),
@@ -532,7 +677,10 @@ namespace ControlDrive.CORE.Services
 
                     (servicio.Ruta != null) ?
                     (!string.IsNullOrEmpty(servicio.Ruta.Nombre) ? servicio.Ruta.Nombre : "") +
-                    (!string.IsNullOrEmpty(servicio.Ruta.Telefono1) ? ", " + servicio.Ruta.Telefono1 : "") : ""
+                    (!string.IsNullOrEmpty(servicio.Ruta.Telefono1) ? ", " + servicio.Ruta.Telefono1 : "") : "",
+
+                    servicio.Observacion
+
                     );
             }
             return mensaje + "</tbody></table>";
@@ -587,7 +735,7 @@ namespace ControlDrive.CORE.Services
         string NotificarServiciosARuta(ICollection<Servicio> servicios);
         string ObtenerHtmlServiciosARuta(ICollection<Servicio> servicios);
         MemoryStream GenerarExcelServiciosResumen(Periodo periodo);
-        
+
         void Cerrar(List<Servicio> servicios);
     }
 

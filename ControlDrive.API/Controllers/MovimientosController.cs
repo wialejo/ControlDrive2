@@ -132,10 +132,8 @@ namespace ControlDrive.Core.Controllers
                         m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
                         && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
                         && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                        && (
-                            (m.ConceptoCodigo == "PROVE_COND_ELE" && m.Servicio.ConductorId == proveedorId)
-                            ||
-                            (m.ConceptoCodigo == "PROVE_RUTA_COND_ELE" && m.Servicio.RutaId == proveedorId))
+                        && (m.ProveedorId == proveedorId)
+                        && m.Concepto.TipoConcepto == TipoConcepto.Proveedor
                         && m.DocumentoId == null)
                     .ToList();
                 return Ok(movimientos);

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 
@@ -27,7 +28,24 @@ namespace ControlDrive.Core.Modelos
 
         public virtual void Commit()
         {
-            base.SaveChanges();
+            try
+            {
+                base.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
         }
 
         public static ApplicationDbContext Create()
@@ -61,7 +79,9 @@ namespace ControlDrive.Core.Modelos
 
         public DbSet<Empresa> Empresas { get; set; }
 
-        public DbSet<ServicioConcepto> ServicioConceptos { get; set; }
+        public DbSet<ConceptoPago> ConceptosPagos { get; set; }
+
+        public DbSet<TipoServicio> TiposServicios { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -70,6 +90,11 @@ namespace ControlDrive.Core.Modelos
             modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
             modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
             modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+
+
+            modelBuilder.Entity<ConceptoPago>()
+                .HasMany<TipoServicio>(p => p.TiposServicios)
+                .WithMany(c => c.ConceptosPagos);
 
             //modelBuilder.Entity<Servicio>()
             //    .HasOptional(s => s.Movimientos)

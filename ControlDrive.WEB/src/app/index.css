@@ -16,3 +16,9 @@
 .verde {
     background-color: lightgreen;
 }
+
+.resaltado {
+            background-color: #FFAB91;
+            -webkit-transition: background-color 1s;
+            transition: background-color 1s;
+        }

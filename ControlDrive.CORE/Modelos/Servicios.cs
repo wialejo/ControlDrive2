@@ -9,13 +9,28 @@ using System.Web;
 using System.Security.Principal;
 using ControlDrive.Core.Modelos;
 using ControlDrive.CORE.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Runtime.Serialization;
 
 namespace ControlDrive.CORE.Modelos
 {
+    public class TipoServicio
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public bool RequiereSeguimiento { get; set; }
+        public ICollection<ConceptoPago> ConceptosPagos { get; internal set; }
+    }
+
     public class Servicio
     {
         [Key]
         public int Id { get; set; }
+
+        public int? TipoServicioId { get; set; }
+        public virtual TipoServicio TipoServicio { get; set; }
 
         public string EstadoCodigo { get; set; }
         public virtual Estado Estado { get; set; }
@@ -24,10 +39,13 @@ namespace ControlDrive.CORE.Modelos
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }
         public string Radicado { get; set; }
+
         public int? VehiculoId { get; set; }
         public virtual Vehiculo Vehiculo { get; set; }
-        public int AseguradoraId { get; set; }
+
+        public int? AseguradoraId { get; set; }
         public virtual Aseguradora Aseguradora { get; set; }
+
         public int? AseguradoId { get; set; }
         public virtual Asegurado Asegurado { get; set; }
 
@@ -58,6 +76,8 @@ namespace ControlDrive.CORE.Modelos
         public ICollection<Movimiento> Movimientos { get; set; }
 
         public bool Notificado { get; set; }
+
+        public string Observacion { get; set; }
     }
 
     public class Movimiento
@@ -67,8 +87,10 @@ namespace ControlDrive.CORE.Modelos
         public int ServicioId { get; set; }
         public decimal Valor { get; set; }
         public string ConceptoCodigo { get; set; }
-        //public int? ProveedorId { get; set; }
-        //public int? ClienteId { get; set; }
+        public int? ProveedorId { get; set; }
+        public Conductor Proveedor { get; set; }
+        public int? ClienteId { get; set; }
+        public Aseguradora Cliente { get; set; }
         public int? DocumentoId { get; set; }
         public DateTime? FechaRegistro { get; set; }
         public string UsuarioRegistroId { get; set; }
@@ -77,10 +99,8 @@ namespace ControlDrive.CORE.Modelos
         public bool Aprobado { get; set; }
 
         public Servicio Servicio { get; set; }
-        public ServicioConcepto Concepto { get; set; }
-        //public Conductor Proveedor { get; set; }
+        public virtual ConceptoPago Concepto { get; set; }
         public Documento Documento { get; set; }
-        //public Aseguradora Cliente { get; set; }
         public ApplicationUser UsuarioRegistro { get; set; }
         public ApplicationUser UsuarioModificacion { get; set; }
     }
@@ -112,15 +132,15 @@ namespace ControlDrive.CORE.Modelos
         public string Ciudad { get; set; }
     }
 
-    public class ServicioConcepto
+    public class ConceptoPago
     {
         [Key]
         public string Codigo { get; set; }
         public string Descripcion { get; set; }
         public TipoConcepto TipoConcepto { get; set; }
+        public TipoProveedor TipoProveedor { get; set; }
+        public List<TipoServicio> TiposServicios { get; internal set; }
     }
-
-    
 
     public class Seguimiento
     {

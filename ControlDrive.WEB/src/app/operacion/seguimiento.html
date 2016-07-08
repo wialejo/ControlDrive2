@@ -313,6 +313,9 @@
         <h3 class="m-t-none m-b font-thin">Detalle del servicio: {{servicio.Id}}</h3>
         <ul>
             <li><strong>Id: </strong> <span> {{servicio.Id}}</span></li>
+            <li>
+                <strong>Tipo servicio: </strong> <span> {{servicio.TipoServicio.Descripcion}}</span>
+            </li>
             <li> <strong>Fecha y Hora: </strong><span> {{servicio.Fecha | date:'HH:mm'}} - {{servicio.Fecha | date:'dd/MM/yyyy'}}</span></li>
             <li>
                 <strong>Aseguradora: </strong><span> {{servicio.Aseguradora.Nombre }}</span> &nbsp;&nbsp;&nbsp;

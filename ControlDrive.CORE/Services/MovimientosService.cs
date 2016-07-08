@@ -46,7 +46,7 @@ namespace ControlDrive.CORE.Services
                     UsuarioRegistroId = m.UsuarioRegistroId,
                     FechaModificacion = m.FechaModificacion,
                     UsuarioModificacionId = m.UsuarioModificacionId,
-                    Proveedor = m.ConceptoCodigo == "PROVE_COND_ELE" ? m.Servicio.Conductor : m.Servicio.Ruta,
+                    Proveedor = m.Proveedor,
                     Aprobado = m.Aprobado,
                     Servicio = new ServicioDto
                     {
@@ -110,8 +110,9 @@ namespace ControlDrive.CORE.Services
             {
                 Id = movimiento.Id,
                 Valor = movimiento.Valor,
+                ClienteId = movimiento.Servicio.Aseguradora.Id,
                 Aprobado = true
-            }, m => m.Valor, m => m.Aprobado);
+            }, m => m.Valor, m => m.Aprobado, m => m.ClienteId);
 
             _unitOfWork.Commit();
         }

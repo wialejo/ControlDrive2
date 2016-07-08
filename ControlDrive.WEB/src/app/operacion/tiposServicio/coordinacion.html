@@ -1,0 +1,32 @@
+﻿<fieldset>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="form-group" ng-class="{ 'has-error' : form.TxtFecha.$invalid  && !form.TxtFecha.$pristine}">
+                <label for="TxtFecha">Fecha*</label>
+                <input tabindex="2"
+                       ng-model="servicio.FechaD"
+                       required
+                       ui-mask="99/99/9999" model-view-value="true"
+                       ng-class="{ 'resaltado' : CambioFecha } "
+                       type="text" class="form-control" name="TxtFecha" placeholder="dd/MM/yyyy">
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="SelConductores">Proveedor</label>
+                <ui-select tabindex="24" ng-model="servicio.Conductor" theme="bootstrap" reset-search-input="false">
+                    <ui-select-match placeholder="Proveedor">{{$select.selected.Nombre}}</ui-select-match>
+                    <ui-select-choices repeat="item in conductores" refresh="ObtenerConductores($select.search)" refresh-delay="0">
+                        <div ng-bind-html="item.Nombre | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+        <div class="col-sm-4" ng-if="esEdicion">
+            <div class="form-group">
+                <label for="estado">Estado</label>
+                <select ng-model="servicio.EstadoCodigo" name="estado" ng-options="estado.Codigo as estado.Descripcion for estado in estadosParaRegistro" class="form-control"></select>
+            </div>
+        </div>
+    </div>
+</fieldset>

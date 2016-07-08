@@ -19,12 +19,12 @@
                 templateUrl: 'app/inicio/inicioResumen.html'
             })
             .state('app.nuevo', {
-                url: '/servicio',
+                url: '/servicio/:id?',
                 templateUrl: 'app/operacion/nuevoServicio.html'
             })
             .state('app.editar', {
                 url: '/servicio/:id?',
-                templateUrl: 'app/operacion/editarServicio.html'
+                templateUrl: 'app/operacion/nuevoServicio.html'
             })
             .state('app.serviciosHistorico', {
                 url: '/servicios/historico',

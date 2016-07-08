@@ -10,4 +10,10 @@ namespace ControlDrive.CORE.Enums
         Proveedor = 0,
         Cliente = 1
     }
+
+    public enum TipoProveedor
+    {
+        Conductor,
+        Ruta
+    }
 }

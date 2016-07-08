@@ -41,7 +41,7 @@ namespace ControlDrive.Core.Controllers
         {
             var servicios = _servicioServiceExt.Obtener(s => (DbFunctions.TruncateTime(s.Fecha) >= DbFunctions.TruncateTime(inicio) 
             && DbFunctions.TruncateTime(s.Fecha) <= DbFunctions.TruncateTime(fin)) 
-            && ( string.IsNullOrEmpty(consecutivo) || s.Radicado.ToLower().Contains(consecutivo.ToLower()))).ToList();
+            ).ToList();
             return Ok(servicios);
         }
 
@@ -59,7 +59,8 @@ namespace ControlDrive.Core.Controllers
         public IHttpActionResult ObtenerServicios([FromUri]DateTime inicioPeriodo)
         {
             var periodo = new PeriodoService().Obtener(inicioPeriodo);
-            var servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN").ToList();
+            var servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN" 
+                                                            && s.TipoServicio.RequiereSeguimiento).ToList();
             return Ok(servicios);
         }
 

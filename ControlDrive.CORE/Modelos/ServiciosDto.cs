@@ -8,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Security.Principal;
 using ControlDrive.Core.Modelos;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ControlDrive.CORE.Modelos
 {
@@ -18,6 +20,8 @@ namespace ControlDrive.CORE.Modelos
         }
         public int Id { get; set; }
 
+        public TipoServicioDto TipoServicio { get; set; }
+
         public string EstadoCodigo { get; set; }
         public virtual Estado Estado { get; set; }
 
@@ -27,7 +31,7 @@ namespace ControlDrive.CORE.Modelos
         public string AsignadoPor { get; set; }
         public int? VehiculoId { get; set; }
         public Vehiculo Vehiculo { get; set; }
-        public int AseguradoraId { get; set; }
+        public int? AseguradoraId { get; set; }
         public Aseguradora Aseguradora { get; set; }
         public int? AseguradoId { get; set; }
         public Asegurado Asegurado { get; set; }
@@ -48,6 +52,8 @@ namespace ControlDrive.CORE.Modelos
         public Conductor Ruta { get; set; }
         public string RutaResumen { get; set; }
 
+        public string Observacion { get; set; }
+
         public DateTime FechaRegistro { get; internal set; }
         public DateTime FechaModificacion { get; internal set; }
 
@@ -59,6 +65,14 @@ namespace ControlDrive.CORE.Modelos
         public ICollection<MovimientoDto> Movimientos { get; set; }
         public bool Notificado { get; set; }
 
+    }
+
+    public class TipoServicioDto
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public bool RequiereSeguimiento { get; set; }
+        public ICollection<ConceptoPago> ConceptosPagos { get; internal set; }
     }
 
     public class DocumentoDto
