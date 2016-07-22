@@ -39,9 +39,18 @@ namespace ControlDrive.Core.Controllers
         [Route("api/servicios/rango")]
         public IHttpActionResult Obtener([FromUri]DateTime inicio, [FromUri]DateTime fin, string consecutivo)
         {
-            var servicios = _servicioServiceExt.Obtener(s => (DbFunctions.TruncateTime(s.Fecha) >= DbFunctions.TruncateTime(inicio) 
-            && DbFunctions.TruncateTime(s.Fecha) <= DbFunctions.TruncateTime(fin)) 
-            ).ToList();
+            var servicios = new List<ServicioDto>();
+
+            if (!string.IsNullOrEmpty(consecutivo))
+            {
+                servicios = _servicioServiceExt.Obtener(s => !string.IsNullOrEmpty(consecutivo) && s.Radicado == consecutivo).ToList();
+            }
+            else
+            {
+
+                servicios = _servicioServiceExt.Obtener(s => (DbFunctions.TruncateTime(s.Fecha) >= DbFunctions.TruncateTime(inicio)
+                                                                    && DbFunctions.TruncateTime(s.Fecha) <= DbFunctions.TruncateTime(fin))).ToList();
+            }
             return Ok(servicios);
         }
 

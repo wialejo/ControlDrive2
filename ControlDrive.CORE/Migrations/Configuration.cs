@@ -53,14 +53,14 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 new Aseguradora() { Id = 8, Nombre = "Axa-helm" }
             );
 
-            context.TiposServicios.AddOrUpdate(
-                new TipoServicio { Id = 1, Descripcion = "Conductor elegido", RequiereSeguimiento = true },
-                new TipoServicio { Id = 2, Descripcion = "Coordinación", RequiereSeguimiento = false },
-                new TipoServicio { Id = 3, Descripcion = "Valet", RequiereSeguimiento = true },
-                new TipoServicio { Id = 4, Descripcion = "Mensajeria", RequiereSeguimiento = true },
-                new TipoServicio { Id = 5, Descripcion = "Ejecutivo", RequiereSeguimiento = true },
-                new TipoServicio { Id = 6, Descripcion = "Valet conductor elegido", RequiereSeguimiento = true }
-                );
+            //context.TiposServicios.AddOrUpdate(
+            //    new TipoServicio { Id = 1, Descripcion = "Conductor elegido", RequiereSeguimiento = true },
+            //    new TipoServicio { Id = 2, Descripcion = "Coordinación", RequiereSeguimiento = false },
+            //    new TipoServicio { Id = 3, Descripcion = "Valet", RequiereSeguimiento = true },
+            //    new TipoServicio { Id = 4, Descripcion = "Mensajeria", RequiereSeguimiento = true },
+            //    new TipoServicio { Id = 5, Descripcion = "Ejecutivo", RequiereSeguimiento = true },
+            //    new TipoServicio { Id = 6, Descripcion = "Valet conductor elegido", RequiereSeguimiento = true }
+            //    );
             //context.Conductores.AddOrUpdate(
             //    new Conductor()
             //    {

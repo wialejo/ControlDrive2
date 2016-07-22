@@ -55,8 +55,8 @@
             }
 
             $scope.GuardarMovimiento = function (movimiento) {
-                if (!movimiento.Valor)
-                    return;
+                
+                movimiento.Valor = movimiento.Valor ? movimiento.Valor : 0;
 
                 movimiento.Valor = parseFloat(movimiento.Valor);
 
@@ -73,10 +73,10 @@
                 var valido = true;
                 angular.forEach($scope.servicios, function (servicio) {
                     if (servicio.Seleccionado && valido) {
-                        var MovimientosValidos = servicio.Movimientos.filter(function (m) { return m.Valor });
-                        if (MovimientosValidos.length == 0) {
+                        var MovimientosNoValidos = servicio.Movimientos.filter(function (m) { return (!m.Valor ) });
+                        if (MovimientosNoValidos.length != 0) {
                             valido = false;
-                            toastr.error("Se deben completar los valores del servicio: " + servicio.Id);
+                            toastr.warning("Se deben completar los valores del servicio: " + servicio.Id);
                             return;
                         } else {
                             var nuevoServicio = {

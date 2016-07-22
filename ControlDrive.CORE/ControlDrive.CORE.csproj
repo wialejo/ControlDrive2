@@ -188,6 +188,10 @@
     <Compile Include="Migrations\201607080259301_idTipoServicio.Designer.cs">
       <DependentUpon>201607080259301_idTipoServicio.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607220401343_ActualizaciontipoServicio.cs" />
+    <Compile Include="Migrations\201607220401343_ActualizaciontipoServicio.Designer.cs">
+      <DependentUpon>201607220401343_ActualizaciontipoServicio.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -281,6 +285,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607080259301_idTipoServicio.resx">
       <DependentUpon>201607080259301_idTipoServicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607220401343_ActualizaciontipoServicio.resx">
+      <DependentUpon>201607220401343_ActualizaciontipoServicio.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

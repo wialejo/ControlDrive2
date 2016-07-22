@@ -7,6 +7,7 @@
               var vm = this;
               vm.servicio = {};
               vm.servicios = [];
+              vm.consecutivo = "";
               $scope.$parent.$parent.app.viewName = "Consulta de servicios"
 
               vm.fechaInicial = new Date();// FechaSvc.AdicionarMes(-1);

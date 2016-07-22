@@ -7,7 +7,34 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
     {
         public override void Up()
         {
-            Sql(@"  IF NOT EXISTS (SELECT * FROM ConceptoPagoTipoServicio WHERE ConceptoPago_Codigo = 'CLIENTE_COND_ELE' AND TipoServicio_Id = 1) BEGIN
+            Sql(@" 
+                  IF( NOT EXISTS(SELECT * FROM TipoServicio WHERE Descripcion = 'Conductor elegido')) BEGIN
+	                INSERT INTO TipoServicio
+	                SELECT 'Conductor elegido', 1
+                  END
+                  IF( NOT EXISTS(SELECT * FROM TipoServicio WHERE Descripcion = 'Coordinación')) BEGIN
+	                INSERT INTO TipoServicio
+	                SELECT 'Coordinación', 0
+                  END
+                  IF( NOT EXISTS(SELECT * FROM TipoServicio WHERE Descripcion = 'Valet')) BEGIN
+	                INSERT INTO TipoServicio
+	                SELECT 'Valet', 1
+                  END
+                  IF( NOT EXISTS(SELECT * FROM TipoServicio WHERE Descripcion = 'Mensajeria')) BEGIN
+	                INSERT INTO TipoServicio
+	                SELECT 'Mensajeria', 1
+                  END
+                  IF( NOT EXISTS(SELECT * FROM TipoServicio WHERE Descripcion = 'Ejecutivo')) BEGIN
+	                INSERT INTO TipoServicio
+	                SELECT 'Ejecutivo', 1
+                  END
+                  IF( NOT EXISTS(SELECT * FROM TipoServicio WHERE Descripcion = 'Valet conductor elegido')) BEGIN
+	                INSERT INTO TipoServicio
+	                SELECT 'Valet conductor elegido', 1
+                  END
+  
+
+                    IF NOT EXISTS (SELECT * FROM ConceptoPagoTipoServicio WHERE ConceptoPago_Codigo = 'CLIENTE_COND_ELE' AND TipoServicio_Id = 1) BEGIN
 	                    INSERT INTO ConceptoPagoTipoServicio
 	                    SELECT 'CLIENTE_COND_ELE' as concepto, 1 as tipoServicio
                     END
@@ -56,6 +83,7 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
         {
             Sql(@"
                 DELETE ConceptoPagoTipoServicio
+                DELETE TipoServicio
                 ");
         }
     }
