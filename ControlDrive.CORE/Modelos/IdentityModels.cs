@@ -5,13 +5,19 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using System.Collections.Generic;
 using System.Data.Entity;
+using ControlDrive.CORE.Modelos;
 
 namespace ControlDrive.Core.Modelos
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser() {
+            Sucursales = new List<Sucursal>();
+        }
+
         public string Nombre { get; set; }
+        public ICollection<Sucursal> Sucursales { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {

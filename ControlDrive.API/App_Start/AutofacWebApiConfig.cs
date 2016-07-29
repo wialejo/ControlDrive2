@@ -69,7 +69,7 @@ namespace ControlDrive.Core.App_Start
                 .InstancePerRequest();
             
             builder.RegisterType<ConductorService>()
-                .As<ICommonInterface<Conductor>>()
+                .As<IConductorService>()
                 .InstancePerRequest();
 
             builder.RegisterType<AseguradoraService>()
@@ -88,12 +88,20 @@ namespace ControlDrive.Core.App_Start
                 .As<ICommonInterface<Ciudad>>()
                 .InstancePerRequest();
 
+            builder.RegisterType<SucursalService>()
+                .As<ICommonInterface<Sucursal>, ISucursalService>()
+                .InstancePerRequest();
+
             builder.RegisterType<CorreoService>()
                 .As<ICorreoService>()
                 .InstancePerRequest();
 
             builder.RegisterType<MovimientosService>()
                 .As<IMovimientosService>()
+                .InstancePerRequest();
+
+            builder.RegisterType<UsuarioService>()
+                .As<IUsuarioService>()
                 .InstancePerRequest();
 
             builder.RegisterType<DocumentosService>()

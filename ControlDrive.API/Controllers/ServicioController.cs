@@ -22,7 +22,7 @@ using Microsoft.AspNet.Identity;
 namespace ControlDrive.Core.Controllers
 {
     [Authorize]
-    public class ServicioController : ApiController
+    public class ServicioController : BaseController
     {
         private readonly ICommonInterface<Servicio> _servicioService;
         private IServicioService _servicioServiceExt;
@@ -43,7 +43,7 @@ namespace ControlDrive.Core.Controllers
 
             if (!string.IsNullOrEmpty(consecutivo))
             {
-                servicios = _servicioServiceExt.Obtener(s => !string.IsNullOrEmpty(consecutivo) && s.Radicado == consecutivo).ToList();
+                servicios = _servicioServiceExt.Obtener(s => !string.IsNullOrEmpty(consecutivo) && s.Radicado.Contains(consecutivo)).ToList();
             }
             else
             {
@@ -60,6 +60,7 @@ namespace ControlDrive.Core.Controllers
         public IHttpActionResult ObtenerServiciosEstados([FromUri]DateTime inicio, [FromUri]DateTime fin)
         {
             var servicios = _servicioServiceExt.ObtenerResumenEstados(s => s.Fecha >= inicio && s.Fecha <= fin);
+            User.Identity.GetUserId();
             return Ok(servicios);
         }
 
@@ -69,7 +70,8 @@ namespace ControlDrive.Core.Controllers
         {
             var periodo = new PeriodoService().Obtener(inicioPeriodo);
             var servicios = _servicioServiceExt.Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & s.EstadoCodigo != "AN" 
-                                                            && s.TipoServicio.RequiereSeguimiento).ToList();
+                                                            && s.TipoServicio.RequiereSeguimiento
+                                                            && s.SucursalId == IdSucursal ).ToList();
             return Ok(servicios);
         }
 
@@ -79,7 +81,10 @@ namespace ControlDrive.Core.Controllers
         {
             var periodo = new PeriodoService().Obtener(inicio);
             var servicios = _servicioServiceExt
-                .Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin & (s.EstadoCodigo == "FL" || s.EstadoCodigo == "CN" || s.EstadoCodigo == "TE"))
+                .Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin 
+                            && (s.EstadoCodigo == "FL" || s.EstadoCodigo == "CN" || s.EstadoCodigo == "TE"
+                            && s.SucursalId == IdSucursal
+                        ))
                 .ToList();
             return Ok(servicios);
         }
@@ -133,6 +138,7 @@ namespace ControlDrive.Core.Controllers
             if (servicio.Id == 0)
             {
                 servicio.UsuarioRegistroId = HttpContext.Current.User.Identity.GetUserId();
+                servicio.SucursalId = IdSucursal;
             }
             else
             {

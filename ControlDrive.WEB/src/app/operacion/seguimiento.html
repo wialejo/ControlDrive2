@@ -82,7 +82,7 @@
     <div class="panel panel-default">
         <div class="fixedHeader navbar-collapse  panel-heading form-inline ">
             <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-3 text-center-xs">
+                <div class="col-xs-6 col-sm-6 col-md-2 text-center-xs">
                     <form class="form-inline inline" ng-submit="ObtenerServicios()">
                         <div class="form-group">
                             <div class="input-group">
@@ -94,8 +94,27 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-xs-5 col-sm-5 col-md-4 text-center-xs text-right">
-                    <div class="col-md-3 hidden-xs hidden-sm">
+                <div class="col-xs-5 col-sm-5 col-md-5 text-center-xs text-right">
+                    <div class="col-md-2 hidden-xs hidden-sm">
+                        <div class="btn-group" uib-dropdown is-open="status2.isopen">
+                            <button id="single-button2" type="button" class="btn btn-default btn-sm" uib-dropdown-toggle ng-disabled="disabled">
+                                Tipo <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button2">
+                                <li ng-repeat="tipoServicio in tiposServicio">
+                                    <a>
+                                        <div class="checkbox" ng-click="$event.stopPropagation()">
+                                            <label>
+                                                <input type="checkbox" ng-model="tipoServicio.Mostrar">
+                                                {{tipoServicio.Descripcion}}
+                                            </label>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-2 hidden-xs hidden-sm">
                         <div class="btn-group" uib-dropdown is-open="status.isopen">
                             <button id="single-button" type="button" class="btn btn-default btn-sm" uib-dropdown-toggle ng-disabled="disabled">
                                 Estados <span class="caret"></span>
@@ -114,7 +133,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-3">
+                    <div class="col-xs-12 col-sm-12 col-md-2">
                         <div class="form-group">
                             <input placeholder="Filtar todo..." class="form-control input-sm" type="search"
                                    ng-model="search.$" />
@@ -134,11 +153,13 @@
                 <div class="col-xs-1 col-sm-1 col-md-5 text-center-xs text-right inline">
                     <span class="glyphicon glyphicon-cog hidden-md hidden-lg" ng-click="MostrarHerramientas()"></span>
                     <div class="hidden-xs hidden-sm">
-                        <button ng-click="EnviarCorreoConductor()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Notifica los servicios seleccionados a los respectivos conductores"><i class="fa fa-envelope-o"></i> Conductor</button>
-                        <button ng-click="EnviarCorreoConductor(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Conductor</button>
-                        <button ng-click="EnviarCorreoRuta()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Notifica los servicios seleccionados a las respectivas rutas"><i class="fa fa-envelope-o"></i> Ruta</button>
-                        <button ng-click="EnviarCorreoRuta(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i> Ruta</button>
-                        <button ng-click="ExportarCSV()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> Excel</button>
+                        <label>Conductor:</label>
+                        <button ng-click="EnviarCorreoConductor()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Notifica los servicios seleccionados a los respectivos conductores"><i class="fa fa-envelope-o"></i></button>
+                        <button ng-click="EnviarCorreoConductor(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i></button>
+                        <label>Ruta:</label>
+                        <button ng-click="EnviarCorreoRuta()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Notifica los servicios seleccionados a las respectivas rutas"><i class="fa fa-envelope-o"></i></button>
+                        <button ng-click="EnviarCorreoRuta(true)" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Imprimir"><i class="glyphicon glyphicon-print"></i></button>
+                        <button ng-click="ExportarCSV()" ng-disabled="isSaving" class="btn btn-sm btn-info" tooltip-placement="bottom" uib-tooltip="Exporta los servicios del periodo seleccionado en formato CSV"><i class="fa fa-file-excel-o"></i> </button>
                     </div>
                 </div>
                 <div class="col-xs-12 hidden-md hidden-lg text-center" ng-class=" {  'hidden-xs': verHerramientas, 'hidden-sm': verHerramientas }">
@@ -153,6 +174,23 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
+                            <div class="btn-group" uib-dropdown is-open="status2.isopen">
+                                <button id="single-button2" type="button" class="btn btn-default btn-sm" uib-dropdown-toggle ng-disabled="disabled">
+                                    Tipo <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button2">
+                                    <li ng-repeat="tipoServicio in tiposServicio">
+                                        <a>
+                                            <div class="checkbox" ng-click="$event.stopPropagation()">
+                                                <label>
+                                                    <input type="checkbox" ng-model="tipoServicio.Mostrar">
+                                                    {{tipoServicio.Descripcion}}
+                                                </label>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                             <div class="btn-group" uib-dropdown is-open="status.isopen">
                                 <button id="single-button" type="button" class="btn btn-default btn-sm" uib-dropdown-toggle ng-disabled="disabled">
                                     Estados <span class="caret"></span>
@@ -209,17 +247,19 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles ) " ng-class=" { 'border-none' : active==servicio}">
+                    <tbody class="text-xs" ng-repeat="servicio in ::serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles | filter: TiposServicioVisiblesFilter ) " ng-class=" { 'border-none' : active==servicio}">
                         <tr>
                             <td class="text-center" style="background-color:#edeaea" ng-click="VerSeguimientos(servicio);">
                                 <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>
                             </td>
-                            <td class="text-center">{{$index+1}}
+                            <td class="text-center">
+                                {{$index+1}}
                                 <span class="glyphicon glyphicon-pencil" ng-click="Editar(servicio)" uib-tooltip="Editar el servicio"></span>
                                 <span ng-if="servicio.Notificado" class="glyphicon glyphicon-envelope" uib-tooltip="¡Servicio notificado!"></span>
-                                <span ng-if="!servicio.Asegurado.Telefono1 || servicio.Vehiculo.Placa.length != 6" class="glyphicon glyphicon-info-sign text-danger" uib-tooltip="Datos faltantes: {{ !servicio.Asegurado.Telefono1 ? 'Teléfono del asegurado, ' : '' }} {{ servicio.Vehiculo.Placa.length != 6 ? 'Placa del vehiculo' : ''}}"></span>
+                                <span ng-if="!servicio.Asegurado.Telefono1 || servicio.Vehiculo.Placa.length != 6"
+                                      class="glyphicon glyphicon-info-sign text-danger" uib-tooltip="Datos faltantes: {{ !servicio.Asegurado.Telefono1 ? 'Teléfono del asegurado, ' : '' }} {{ servicio.Vehiculo.Placa.length != 6 ? 'Placa del vehiculo' : ''}}"></span>
                                 <br />
-                                <a class="btn btn-link text-center" ng-click="MostrarDetalles(servicio,  $event)" uib-tooltip="Mostrar detalles el servicio">
+                                <a class="btn btn-link text-center" ng-click="MostrarDetalles(servicio, $event)" uib-tooltip="Mostrar detalles el servicio">
                                     <u> {{servicio.Id}}</u>
                                 </a>
                             </td>
@@ -227,13 +267,12 @@
                                 {{servicio.Fecha | date:'HH:mm'}}
                                 <br />
                                 {{servicio.Fecha | date:'dd/MM/yyyy'}}
-
                             </td>
                             <td>
-                                <strong class="estadoTexto">{{servicio.Estado.Descripcion}}</strong>
+                                <strong class="estadoTexto" uib-tooltip="Tipo servicio: {{servicio.TipoServicio.Descripcion}}">{{servicio.Estado.Descripcion}}</strong>
                                 <div class="hidden-sm hidden-md hidden-lg">
                                     <br />
-                                    <strong>{{(servicio.Aseguradora.Nombre ? "Red: " :"")}}</strong>  {{servicio.Aseguradora.Nombre}} <br />
+                                    <strong>{{(servicio.Aseguradora.Nombre ? "Red: " :"")}}</strong> {{servicio.Aseguradora.Nombre}} <br />
                                     <strong> {{(servicio.Radicado ? "Consecutivo: " :"") }}</strong> {{ servicio.Radicado }}
                                 </div>
                             </td>
@@ -257,7 +296,6 @@
                                 {{servicio.RutaResumen}}
                             </td>
                             <td>
-
                                 <label class="checkbox i-checks m-l-xs m-b-xs">
                                     <input type="checkbox" ng-model="servicio.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
                                 </label>
@@ -334,6 +372,9 @@
             </li>
             <li>
                 <strong>Ruta: </strong>{{servicio.RutaResumen}}
+            </li>
+            <li>
+                <strong>Observaciones: </strong>{{servicio.Observacion}}
             </li>
         </ul>
         <input type="button" class="btn btn-danger pull-right" name="EditarServicio" value="Editar" ng-click="Editar(servicio)" />

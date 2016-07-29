@@ -20,16 +20,27 @@
 
     <div class="nav navbar-nav hidden-xs">
         <a href class="btn no-shadow navbar-btn" ng-click="app.settings.asideFolded = !app.settings.asideFolded">
-            <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
+            <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw" title="Ocultar/mostrar menu"></i>
         </a>
     </div>
 
     <div class="nav navbar-nav" style="margin:12px">
-        <h1 class="m-n font-thin h3">{{ app.viewName }}</h1>
+        <h1 class="m-n font-thin h3" title="Vista actual">{{ app.viewName }}</h1>
     </div>
 
     <!-- nabar right -->
     <ul class="nav navbar-nav navbar-right">
+        <li class="nav navbar-nav">
+            <!--<a class="m-n font-thin h3" ng-click="seleccionarSucursal()" title="Sucursal"> {{ sucursal.Descripcion }} </a>-->
+            <select uib-tooltip="Sucursal"
+                    ng-model="sucursal"
+                    class="navbar-btn form-control "
+                    id="SelSucursal"
+                    name="SelSucursal"
+                    required
+                    ng-change="seleccionarSucursal(sucursal)"
+                    ng-options="sucursal.Descripcion for sucursal in sucursales"></select>
+        </li>
         <li class="hidden-xs">
             <a ui-fullscreen></a>
         </li>
@@ -52,6 +63,5 @@
         </li>
     </ul>
     <!-- / navbar right -->
-
 </div>
 <!-- / navbar collapse -->

@@ -83,6 +83,9 @@ namespace ControlDrive.Core.Modelos
 
         public DbSet<TipoServicio> TiposServicios { get; set; }
 
+        public DbSet<Sucursal> Sucursales { get; set; }
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

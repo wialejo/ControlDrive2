@@ -50,9 +50,13 @@ namespace ControlDrive.CORE.Services
 
             if (EsEdicion)
             {
-                if (!string.IsNullOrEmpty(servicio.Radicado) && _servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado && s.Id != servicio.Id).Count() > 0)
+                if (!string.IsNullOrEmpty(servicio.Radicado)
+                    && _servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado && s.Id != servicio.Id).Count() > 0)
                 {
-                    throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
+                    if (servicio.TipoServicio.Id != 6 && servicio.TipoServicio.Id != 3)
+                    {
+                        throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
+                    }
                 }
                 servicioRepo = _servicioRepositorio.FindByIncluding(s => s.Id == servicio.Id, s => s.Movimientos).FirstOrDefault();
 
@@ -61,14 +65,19 @@ namespace ControlDrive.CORE.Services
             }
             else
             {
-                if (_servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado).Count() > 0 && !string.IsNullOrEmpty(servicio.Radicado))
+                if (_servicioRepositorio.FindBy(s => s.Radicado == servicio.Radicado).Count() > 0
+                    && !string.IsNullOrEmpty(servicio.Radicado))
                 {
-                    throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
+                    if (servicio.TipoServicio.Id != 6)
+                    {
+                        throw new Exception("El consecutivo ingresado ya se encuentra registrado.");
+                    }
                 }
                 servicioRepo.FechaModificacion = DateTime.Now;
                 servicioRepo.UsuarioModificacionId = servicio.UsuarioModificacionId;
                 servicioRepo.FechaRegistro = DateTime.Now;
                 servicioRepo.UsuarioRegistroId = servicio.UsuarioRegistroId;
+                servicioRepo.SucursalId = servicio.SucursalId;
 
                 if (!servicio.TipoServicio.RequiereSeguimiento)
                 {
@@ -76,10 +85,12 @@ namespace ControlDrive.CORE.Services
                     servicio.Fecha = servicio.Fecha.AddHours(18);
                     servicio.Hora = new TimeSpan(18, 0, 0);
                 }
-                else {
+                else
+                {
                     servicio.EstadoCodigo = "RG";
                 }
             }
+
 
             servicioRepo.EstadoCodigo = servicio.EstadoCodigo;
             servicioRepo.TipoServicioId = servicio.TipoServicio.Id;
@@ -130,9 +141,10 @@ namespace ControlDrive.CORE.Services
                 servicioRepo.RutaId = servicio.Ruta.Id;
 
 
-            if (servicioRepo.Movimientos != null) {
+            if (servicioRepo.Movimientos != null)
+            {
                 servicioRepo.Movimientos.ToList().ForEach(movimiento =>
-                {   
+                {
                     if (movimiento.Concepto.TipoConcepto == TipoConcepto.Proveedor && movimiento.Concepto.TipoProveedor == TipoProveedor.Conductor)
                     {
                         movimiento.ProveedorId = servicio.ConductorId;
@@ -149,7 +161,7 @@ namespace ControlDrive.CORE.Services
                     }
                 });
             }
-            
+
             if (EsEdicion)
                 _servicioRepositorio.Edit(servicioRepo);
             else
@@ -315,8 +327,15 @@ namespace ControlDrive.CORE.Services
                     Id = s.Id,
                     EstadoCodigo = s.EstadoCodigo,
                     Estado = s.Estado,
-                    TipoServicio = new TipoServicioDto { Id = s.TipoServicio.Id, 
-                        Descripcion = s.TipoServicio.Descripcion, ConceptosPagos = s.TipoServicio.ConceptosPagos, RequiereSeguimiento = s.TipoServicio.RequiereSeguimiento },
+                    Sucursal = s.Sucursal,
+                    SucursalId = s.SucursalId,
+                    TipoServicio = new TipoServicioDto
+                    {
+                        Id = s.TipoServicio.Id,
+                        Descripcion = s.TipoServicio.Descripcion,
+                        ConceptosPagos = s.TipoServicio.ConceptosPagos,
+                        RequiereSeguimiento = s.TipoServicio.RequiereSeguimiento
+                    },
                     Fecha = s.Fecha,
                     Hora = s.Hora,
                     Radicado = s.Radicado,
@@ -457,25 +476,26 @@ namespace ControlDrive.CORE.Services
                     hora = f.Fecha.ToString("HH:mm"),
                     fecha = f.Fecha.ToString("dd/MM/yyyy"),
                     codigo = f.Radicado,
-                    aseguradora = f.Aseguradora.Nombre,
-                    asegurado =
+                    aseguradora = (f.Aseguradora != null) ? 
+                            f.Aseguradora.Nombre : "",
+                    asegurado = (f.Asegurado != null) ? (
                             f.Asegurado.Nombre +
                             (!string.IsNullOrEmpty(f.Asegurado.Telefono1) ? " " + f.Asegurado.Telefono1 : "") +
-                            (!string.IsNullOrEmpty(f.Asegurado.Telefono2) ? " " + f.Asegurado.Telefono2 : ""),
+                            (!string.IsNullOrEmpty(f.Asegurado.Telefono2) ? " " + f.Asegurado.Telefono2 : "")) : "",
 
-                    vehiculo =
+                    vehiculo = (f.Vehiculo != null) ? (
                             f.Vehiculo.Placa +
-                            (!string.IsNullOrEmpty(f.Vehiculo.Descripcion) ? " " + f.Vehiculo.Descripcion : ""),
+                            (!string.IsNullOrEmpty(f.Vehiculo.Descripcion) ? " " + f.Vehiculo.Descripcion : "")) : "",
 
-                    origen =
+                    origen = (f.DireccionInicio != null) ? (
                             f.DireccionInicio.Descripcion +
                             (!string.IsNullOrEmpty(f.DireccionInicio.Barrio) ? " " + f.DireccionInicio.Barrio : "") +
-                            (!string.IsNullOrEmpty(f.DireccionInicio.Ciudad.Nombre) ? " " + f.DireccionInicio.Ciudad.Nombre : ""),
+                            (!string.IsNullOrEmpty(f.DireccionInicio.Ciudad.Nombre) ? " " + f.DireccionInicio.Ciudad.Nombre : "")) : "",
 
-                    destino =
+                    destino = (f.DireccionDestino != null) ? (
                             f.DireccionDestino.Descripcion +
                             (!string.IsNullOrEmpty(f.DireccionDestino.Barrio) ? " " + f.DireccionDestino.Barrio : "") +
-                            (!string.IsNullOrEmpty(f.DireccionDestino.Ciudad.Nombre) ? " " + f.DireccionDestino.Ciudad.Nombre : ""),
+                            (!string.IsNullOrEmpty(f.DireccionDestino.Ciudad.Nombre) ? " " + f.DireccionDestino.Ciudad.Nombre : "")) : "",
 
                     conductor = (f.Conductor != null) ?
                             (!string.IsNullOrEmpty(f.Conductor.Nombre) ? f.Conductor.Nombre : "") +
@@ -486,7 +506,9 @@ namespace ControlDrive.CORE.Services
                             (!string.IsNullOrEmpty(f.Ruta.Telefono1) ? " " + f.Ruta.Telefono1 : "") : "",
 
                     asignadoPor = f.AsignadoPor,
-                    estado = f.Estado.Descripcion
+                    estado = f.Estado.Descripcion,
+                    tipoServicio = f.TipoServicio.Descripcion,
+                    observacion = f.Observacion
                 };
                 serviciosResumen.Add(servicio);
             });
@@ -611,6 +633,7 @@ namespace ControlDrive.CORE.Services
                                             <th>Id</th>
                                             <th>Feha y hora</th>
                                             <th>Consecutivo</th>
+                                            <th>Tipo</th>
                                             <th>Red</th>
 
                                             <th>Asegurado</th>
@@ -637,6 +660,7 @@ namespace ControlDrive.CORE.Services
                                             <td>{0}</td>
                                             <td>{1}</td>
                                             <td>{2}</td>
+                                            <td>{11}</td>
                                             <td>{3}</td>
 
                                             <td>{4}</td>
@@ -679,7 +703,8 @@ namespace ControlDrive.CORE.Services
                     (!string.IsNullOrEmpty(servicio.Ruta.Nombre) ? servicio.Ruta.Nombre : "") +
                     (!string.IsNullOrEmpty(servicio.Ruta.Telefono1) ? ", " + servicio.Ruta.Telefono1 : "") : "",
 
-                    servicio.Observacion
+                    servicio.Observacion,
+                    servicio.TipoServicio.Descripcion
 
                     );
             }
@@ -758,6 +783,8 @@ namespace ControlDrive.CORE.Services
         public string conductor { get; set; }
         public string ruta { get; set; }
         public string estado { get; set; }
+        public string tipoServicio { get; internal set; }
+        public string observacion { get; internal set; }
     }
 
     //public class ServicioConcepto

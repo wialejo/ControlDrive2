@@ -95,6 +95,7 @@
                         <th>Id</th>
                         <th class="col-md-1">Hora/fecha</th>
                         <th class="col-md-1">Estado</th>
+                        <th class="col-md-1">Tipo</th>
                         <th class="hidden-xs">Consec.</th>
                         <th>Origen/Destino</th>
                         <th>Proveedor(s)</th>
@@ -106,7 +107,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="text-xs" >
+                <tbody class="text-xs">
                     <tr ng-repeat="servicio in serviciosActivos  = (servicios | filter: search) ">
                         <td>
                             {{servicio.Id}}
@@ -123,6 +124,9 @@
                                 <strong>{{(servicio.Aseguradora.Nombre ? "Red: " :"")}}</strong>  {{servicio.Aseguradora.Nombre}} <br />
                                 <strong> {{(servicio.Radicado ? "Consecutivo: " :"") }}</strong> {{ servicio.Radicado }}
                             </div>
+                        </td>
+                        <td>
+                            <span>{{servicio.TipoServicio.Descripcion}}</span>
                         </td>
                         <td class="hidden-xs">
                             {{servicio.Radicado}}

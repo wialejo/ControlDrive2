@@ -109,6 +109,9 @@
     <Content Include="src\app\administracion\documentos\documentos.service.js" />
     <Content Include="src\app\administracion\pagos\CuentasPorPagar.controller.js" />
     <Content Include="src\app\administracion\pagos\CuentasPorPagar.html" />
+    <Content Include="src\app\configuracion\usuarios.service.js" />
+    <Content Include="src\app\configuracion\usuarios.html" />
+    <Content Include="src\app\configuracion\usuarios.controller.js" />
     <Content Include="src\app\content\css\less\app.arrow.less" />
     <Content Include="src\app\content\css\less\app.butterbar.less" />
     <Content Include="src\app\content\css\less\app.buttons.less" />
@@ -165,6 +168,7 @@
     <Content Include="src\app\inicio\inicioResumen.controller.js" />
     <Content Include="src\app\inicio\inicioResumen.html" />
     <Content Include="src\app\main\blocks\header.html" />
+    <Content Include="src\app\main\sucursal.service.js" />
     <Content Include="src\app\operacion\detalleServicio.controller.js" />
     <Content Include="src\app\operacion\detalleServicio.html" />
     <Content Include="src\app\operacion\tiposServicio\ejecutivo.html" />
@@ -172,8 +176,6 @@
     <Content Include="src\app\operacion\tiposServicio\tiposServicio.service.js" />
     <Content Include="src\app\operacion\tiposServicio\mensajeria.html" />
     <Content Include="src\app\operacion\tiposServicio\mensajeria.directive.js" />
-    <Content Include="src\app\operacion\tiposServicio\valet.html" />
-    <Content Include="src\app\operacion\tiposServicio\valet.directive.js" />
     <Content Include="src\app\operacion\tiposServicio\coordinacion.html" />
     <Content Include="src\app\operacion\tiposServicio\coordinacion.directive.js" />
     <Content Include="src\app\operacion\tiposServicio\conductorElegido.directive.js" />

@@ -20,6 +20,9 @@ namespace ControlDrive.CORE.Modelos
         }
         public int Id { get; set; }
 
+        public int? SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
+
         public TipoServicioDto TipoServicio { get; set; }
 
         public string EstadoCodigo { get; set; }
@@ -203,6 +206,10 @@ namespace ControlDrive.CORE.Modelos
     }
 
     public class ApplicationUserDto {
+        public string Email { get; internal set; }
+        public string Id { get; internal set; }
         public string Nombre { get; set; }
+        public ICollection<Sucursal> Sucursales { get; internal set; }
+        public string UserName { get; internal set; }
     }
 }

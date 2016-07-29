@@ -1,0 +1,77 @@
+﻿<div ng-controller="UsuariosController as vm">
+    <div class="clearfix bg-light lter b-b wrapper-md">
+        <input type="button" class="btn btn-info" ui-sref="app.register" value="Nuevo usuario" />
+    </div>
+        <div class="wrapper-md">
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover b-t b-b">
+                                    <thead>
+                                        <tr>
+                                            <td colspan="4">
+                                                <input ng-model="busqueda" placeholder="Buscar..." class="input-sm form-control" type="search" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-sm-4 ">
+                                                Nombre
+                                            </th>
+                                            <th class="col-sm-3">
+                                                Usuario
+                                            </th>
+                                            <th class="col-sm-3">
+                                                Email
+                                            </th>
+                                            <th class="col-sm-1 text-center">
+                                                Sucursales
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <thead>
+                                        <tr ng-repeat="usuario in vm.usuarios | filter:busqueda">
+                                            <td class="col-md-1">
+                                                {{usuario.Nombre}}
+                                            </td>
+                                            <td class="col-md-2">
+                                                {{usuario.UserName}}
+                                            </td>
+                                            <td>
+                                                {{usuario.Email}}
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="button" value="Sucursales" class="btn btn-default btn-sm" ng-click="vm.abrirModalSucursales(usuario)" />
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/ng-template" id="UsuarioSucursales.html">
+    <div class="modal-header">
+        <a class="close" ng-click="cancel()">×</a>
+        <h3 class="modal-title">Sucursales del usuario</h3>
+    </div>
+    <div class="modal-body">
+        <strong>Sucursales asignadas a:</strong> {{ usuario.Nombre }}
+        <br />
+        <div class="col-sm-offset-2">
+            <div class="checkbox" ng-repeat="sucursal in sucursales">
+                <label>
+                    <input type="checkbox" ng-model="sucursal.asignada" ng-change="asignar(sucursal)">
+                    {{ sucursal.Descripcion }}
+                </label>
+            </div>
+        </div>
+    </div>
+</script>

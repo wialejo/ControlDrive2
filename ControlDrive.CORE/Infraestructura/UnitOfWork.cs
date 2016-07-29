@@ -16,7 +16,7 @@ namespace ControlDrive.Core.Infraestructura
         {
             this.dbFactory = dbFactory;
         }
-
+        
         public ApplicationDbContext DbContext
         {
             get { return dbContext ?? (dbContext = dbFactory.Init()); }

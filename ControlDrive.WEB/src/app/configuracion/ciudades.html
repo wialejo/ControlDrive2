@@ -8,6 +8,11 @@
                             <table class="table table-striped b-t b-b">
                                 <thead>
                                     <tr>
+                                        <td colspan="5">
+                                            <input ng-model="busqueda" placeholder="Buscar..." class="input-sm form-control" type="search" />
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th class="col-md-1 text-center">
                                             Id
                                         </th>
@@ -23,7 +28,7 @@
                                     </tr>
                                 </thead>
                                 <thead>
-                                    <tr ng-repeat="ciudad in vm.ciudades">
+                                    <tr ng-repeat="ciudad in vm.ciudades | filter:busqueda">
                                         <td class="col-md-1 text-center">
                                             {{ciudad.Id}}
                                         </td>

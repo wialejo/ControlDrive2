@@ -1,7 +1,7 @@
-(function() {
-'use strict';
+(function () {
+    'use strict';
     angular.module('controldriveApp')
-        .controller('SeguimientoController', function ($scope, $filter, $window, $uibModal, $state, toastr, PeriodoSvc, ServicioSvc, SeguimientoSvc, EstadoSvc, FechaSvc) {
+        .controller('SeguimientoController', function ($scope, $filter, $window, $uibModal, $state, toastr, TiposServicioSvc, PeriodoSvc, ServicioSvc, SeguimientoSvc, EstadoSvc, FechaSvc) {
             $scope.$parent.$parent.app.viewName = "Seguimiénto";
             $scope.servicio = {};
             $scope.servicios = [];
@@ -48,7 +48,7 @@
                 }
                 $scope.seguimiento.ServicioId = $scope.servicio.Id;
                 $scope.seguimiento.NuevoEstado = $scope.servicio.EstadoCodigo;
-                
+
                 SeguimientoSvc.Guardar($scope.seguimiento)
                     .then(function () {
                         $scope.seguimiento = {};
@@ -65,11 +65,43 @@
                 //var idServicio = parseInt($scope.servicio.Id);
                 SeguimientoSvc.ObtenerPorServicio(servicio.Id)
                     .then(function (response) {
-                          servicio.Seguimientos = response.data;
+                        servicio.Seguimientos = response.data;
                     }, function (response) {
                         toastr.error(response.data.ExceptionMessage);
                     });
             }
+
+            $scope.ObtenerTiposServicio = function () {
+                TiposServicioSvc.Obtener()
+                    .then(function (response) {
+                        var tiposServicios = response.data;
+                        angular.forEach(tiposServicios, function (tipoServicio) {
+                            tipoServicio.Mostrar = true;
+                        });
+
+                        $scope.tiposServicio = tiposServicios;
+                    })
+                    .catch(function (response) {
+                        toastr.error(response.data.ExceptionMessage);
+                    });
+            }
+            $scope.ObtenerTiposServicio();
+
+            $scope.TiposServicioVisiblesFilter = function (servicio) {
+                var existe = 0;
+                $scope.tiposServicio.filter(function (tipoServicio) {
+                    if (tipoServicio.Mostrar) {
+                        if (tipoServicio.Id == servicio.TipoServicio.Id) {
+                            existe++;
+                            return;
+                        }
+                    }
+                });
+                if (existe == 1)
+                    return servicio;
+            }
+
+
             $scope.ObtenerEstados = function () {
                 EstadoSvc.Obtener()
                     .then(function (response) {
@@ -87,29 +119,27 @@
                             }
                         });
                     })
-                    .catch(function (response){
+                    .catch(function (response) {
                         toastr.error(response.data.ExceptionMessage);
                     });
             }
             $scope.ObtenerEstados();
 
             $scope.EstadosVisibles = function (servicio) {
-                
-                    var existe = 0;
-                    $scope.estados.filter(function (estado) {
-                        if (estado.Mostrar) {
-                            if (estado.Codigo == servicio.Estado.Codigo) {
-                                existe++;
-                                return;
-                            }
+                var existe = 0;
+                $scope.estados.filter(function (estado) {
+                    if (estado.Mostrar) {
+                        if (estado.Codigo == servicio.Estado.Codigo) {
+                            existe++;
+                            return;
                         }
-                    })
-                    if (existe == 1)
-                        return servicio;
+                    }
+                })
+                if (existe == 1)
+                    return servicio;
             }
 
             $scope.ObtenerServicios = function () {
-
                 ServicioSvc.ObtenerParaSeguimiento($scope.periodo)
                     .then(function (response) {
                         var estadoServicios = {};
@@ -123,7 +153,7 @@
 
                         ////$scope.servicios = ;
                         ////$scope.filtrarServicios(response.data);
-                        
+
                         //var estadoServicios = {};
                         //response.data.filter(function (servicio) {
                         //    if (servicio.Estado.EnOperacion == true) {
@@ -133,7 +163,7 @@
                         //});
                         //$scope.estadoServiciosActivos = estadoServicios;
                     })
-                    .catch(function (response){
+                    .catch(function (response) {
                         toastr.error(response.data.ExceptionMessage);
                     });
             }
@@ -183,7 +213,7 @@
                 });
                 if (serviciosSeleccionados.length > 0) {
                     ServicioSvc.NotificarServiciosAConductor(serviciosSeleccionados, impresion)
-                        .then(function(response){
+                        .then(function (response) {
                             if (impresion) {
                                 popUp(response.data)
                             } else {
@@ -192,7 +222,7 @@
                             }
                             $scope.isSaving = false;
                         })
-                        .catch(function(response){
+                        .catch(function (response) {
                             toastr.error(response.data.ExceptionMessage);
                             $scope.isSaving = false;
                         })
@@ -221,7 +251,7 @@
                             }
                             $scope.isSaving = false;
                         })
-                        .catch(function(response){
+                        .catch(function (response) {
                             toastr.error(response.data.ExceptionMessage);
                             $scope.isSaving = false;
                         })

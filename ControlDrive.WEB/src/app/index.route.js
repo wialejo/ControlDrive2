@@ -70,6 +70,14 @@
                 url: '/configuracion/ciudades',
                 templateUrl: 'app/configuracion/ciudades.html'
             })
+            .state('app.usuarios', {
+                url: '/configuracion/usuarios',
+                templateUrl: 'app/configuracion/usuarios.html'
+            })
+            .state('app.register', {
+                url: '/configuracion/register',
+                templateUrl: 'app/account/register.html'
+            })
             // others
             .state('lockme', {
                 url: '/lockme',

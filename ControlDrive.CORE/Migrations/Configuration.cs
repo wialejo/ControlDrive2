@@ -26,7 +26,6 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                     PasswordHash = new PasswordHasher().HashPassword("admin"),
                     PhoneNumber = "3175104254",
                     SecurityStamp = Guid.NewGuid().ToString()
-
                 });
 
             context.Estados.AddOrUpdate(
@@ -52,6 +51,8 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                 new Aseguradora() { Id = 7, Nombre = "Axa-previsora" },
                 new Aseguradora() { Id = 8, Nombre = "Axa-helm" }
             );
+
+            
 
             //context.TiposServicios.AddOrUpdate(
             //    new TipoServicio { Id = 1, Descripcion = "Conductor elegido", RequiereSeguimiento = true },

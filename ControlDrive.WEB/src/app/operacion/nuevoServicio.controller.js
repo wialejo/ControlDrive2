@@ -23,6 +23,7 @@
                       NuevoServicio();
                   }
               }
+              var watchServicio;
 
               function EdicionServicio() {
 
@@ -37,7 +38,12 @@
                       .catch(function (err) {
                           toastr.error(err, 'Edición de servicio');
                       })
+                  if (watchServicio) {
+                      watchServicio();
+                      watchServicio = undefined;
+                  }
               }
+
               function NuevoServicio() {
                   $scope.$parent.$parent.app.viewName = "Registro de nuevo servicio";
 
@@ -50,7 +56,7 @@
                   if (!$scope.servicio.FechaD)
                       $scope.servicio.FechaD = FechaSvc.ObtenerActual();
 
-                  $scope.$watch('servicio', function () {
+                  watchServicio = $scope.$watch('servicio', function () {
                       localStorageService.add('servicio', $scope.servicio);
                   }, true);
               }
@@ -105,12 +111,15 @@
                           $scope.isSaving = false;
                           if ($scope.esEdicion) {
                               toastr.success('Servicio actualizado correctamente.');
-                              $state.go($state.current, { id: response.data.Id }, { reload: true })
+                              $state.go($state.current, { id: response.data.Id }, { notify: false })
+                              $stateParams.id = response.data.Id;
+                              $scope.Inicio();
                           } else {
-                              localStorageService.remove('servicio');
                               toastr.success('Servicio guardado correctamente.');
-
-                              $state.go($state.current, { id: response.data.Id })
+                              $state.go($state.current, { id: response.data.Id }, { notify: false })
+                              $stateParams.id = response.data.Id;
+                              localStorageService.remove('servicio');
+                              $scope.Inicio();
                           }
                       })
                       .catch(function (response) {
@@ -143,7 +152,7 @@
               }
               $scope.ObtenerFechaSiguienteDia = function (hora) {
 
-                  if (!$scope.esEdicion) {
+                  if (!$scope.esEdicion && hora) {
                       var bits = hora.split(':');
                       var horas = bits[0];
                       var date = new Date();

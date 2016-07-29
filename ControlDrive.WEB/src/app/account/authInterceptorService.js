@@ -2,7 +2,7 @@
 'use strict';
   angular
     .module('controldriveApp')
-        .factory('authInterceptorService', function ($q, $injector,$location, localStorageService) {
+        .factory('authInterceptorService', function ($q, $injector, $location, localStorageService) {
 
         var authInterceptorServiceFactory = {};
 
@@ -14,6 +14,14 @@
             if (authData) {
                 config.headers.Authorization = 'Bearer ' + authData.token;
             }
+
+            var sucursalActual = localStorageService.get('sucursal');
+            if (sucursalActual) {
+                config.headers.idSucursal = sucursalActual.Id;
+            } else {
+             //   toastr.warning("Debe seleccionar una sucursal.");
+            }
+
 
             return config;
         }

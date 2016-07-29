@@ -6,12 +6,13 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ControlDrive.CORE.Services
 {
-    public class ConductorService : ICommonInterface<Conductor>
+    public class ConductorService : IConductorService
     {
 
         private readonly IEntityBaseRepository<Conductor> _conductorRepositorio;
@@ -23,25 +24,10 @@ namespace ControlDrive.CORE.Services
             _unitOfWork = unitOfWork;
         }
 
-        public List<Conductor> Obtener()
+        public IQueryable<Conductor> Obtener()
         {
-            var conductores = _conductorRepositorio.GetAll().ToList();
+            var conductores = _conductorRepositorio.GetAll();
             return conductores;
-        }
-
-        public List<Conductor> ObtenerPorDescripcion(string descripcion)
-        {
-            var conductores = _conductorRepositorio.FindBy(c => c.Nombre.ToLower().Contains(descripcion.ToLower()))
-                .Where(c => c.Activo == true)
-                .Take(10)
-                .ToList();
-            return conductores;
-        }
-
-        public Conductor ObtenerPorId(int id)
-        {
-            var conductor = _conductorRepositorio.FindBy(c => c.Id == id).FirstOrDefault();
-            return conductor;
         }
 
         public void Eliminar(int id)
@@ -70,10 +56,17 @@ namespace ControlDrive.CORE.Services
                 conductorRepo.Telefono2 = conductor.Telefono2;
                 conductorRepo.Direccion = conductor.Direccion;
                 conductorRepo.Activo = conductor.Activo;
+                conductorRepo.SucursalId = conductor.SucursalId;
                 _conductorRepositorio.Edit(conductorRepo);
             }
             _unitOfWork.Commit();
             return conductorRepo;
         }
+    }
+
+    public interface IConductorService {
+        Conductor Guardar(Conductor conductor);
+        IQueryable<Conductor> Obtener();
+        void Eliminar(int id);
     }
 }

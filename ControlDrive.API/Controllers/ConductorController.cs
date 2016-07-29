@@ -15,12 +15,12 @@ using ControlDrive.CORE.Services;
 namespace ControlDrive.Core.Controllers
 {
     [Authorize]
-    public class ConductoresController : ApiController
+    public class ConductoresController : BaseController
     {
-        private readonly ICommonInterface<Conductor> _conductorSevice;
+        private readonly IConductorService _conductorSevice;
         private readonly IMovimientosService _movimientosService;
 
-        public ConductoresController(ICommonInterface<Conductor> conductorSevice, IMovimientosService movimientosService)
+        public ConductoresController(IConductorService conductorSevice, IMovimientosService movimientosService)
         {
             _movimientosService = movimientosService;
             _conductorSevice = conductorSevice;
@@ -29,10 +29,9 @@ namespace ControlDrive.Core.Controllers
         [HttpGet]
         public IHttpActionResult Obtener()
         {
-            var conductores = _conductorSevice.Obtener();
+            var conductores = _conductorSevice.Obtener().Where(c => c.SucursalId == IdSucursal);
             return Ok(conductores);
         }
-
 
         [HttpGet]
         [Route("api/conductores/movimientos")]
@@ -50,14 +49,19 @@ namespace ControlDrive.Core.Controllers
         [HttpGet]
         public IHttpActionResult Obtener(int id)
         {
-            var conductor = _conductorSevice.ObtenerPorId(id);
+            var conductor = _conductorSevice.Obtener()
+                .Where(c => c.Id == id && c.SucursalId == IdSucursal);
             return Ok(conductor);
         }
 
         [HttpGet]
         public IHttpActionResult ObtenerPorDescripcion(string id)
         {
-            var conductores = _conductorSevice.ObtenerPorDescripcion(id);
+            var conductores = _conductorSevice.Obtener()
+                .Where(c => c.Nombre.ToLower().Contains(id.ToLower()) && c.SucursalId == IdSucursal)
+                .Select(c => new { c.Id, c.Nombre })
+                .Take(10);
+
             return Ok(conductores);
         }
 
@@ -69,6 +73,7 @@ namespace ControlDrive.Core.Controllers
             {
                 return BadRequest(ModelState);
             }
+            conductor.SucursalId = IdSucursal;
             var conductorRepo = _conductorSevice.Guardar(conductor);
 
             return Ok(conductorRepo);

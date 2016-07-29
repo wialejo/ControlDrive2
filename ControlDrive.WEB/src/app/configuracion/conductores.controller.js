@@ -17,7 +17,8 @@
                 .catch( function (response) {
                     toastr.error(response.data.MessageDetail);
                 });
-        }()
+        }
+        $scope.Obtener();
 
         $scope.eliminar = function (conductor) {
             if (confirm("¿Esta seguro de elimnar el conductor '" + conductor.Nombre + "'.")) {

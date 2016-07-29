@@ -15,6 +15,14 @@ using System.Runtime.Serialization;
 
 namespace ControlDrive.CORE.Modelos
 {
+    public class Sucursal
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public ICollection<ApplicationUser> Usuarios { get; set; }
+    }
+
     public class TipoServicio
     {
         [Key]
@@ -28,6 +36,9 @@ namespace ControlDrive.CORE.Modelos
     {
         [Key]
         public int Id { get; set; }
+
+        public int? SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
 
         public int? TipoServicioId { get; set; }
         public virtual TipoServicio TipoServicio { get; set; }
@@ -203,6 +214,9 @@ namespace ControlDrive.CORE.Modelos
         public string Direccion { get; set; }
 
         public bool Activo { get; set; }
+
+        public int? SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
     }
 
     public class Periodo

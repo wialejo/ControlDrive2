@@ -31,14 +31,17 @@
                                 </tr>
                                 <tr>
                                     <th>Id</th>
+                                    <th st-sort="Fecha">TipoS</th>
                                     <th st-sort="Fecha">Hora/Fecha</th>
                                     <th st-sort="Estado.Descripcion">Estado</th>
+                                    <th st-sort="TipoServicio">Tipo</th>
                                     <th>Radicado</th>
                                     <th>Aseguradora</th>
                                     <th>Vehiculo</th>
                                     <th>Asegurado</th>
                                     <th>Origen/Destino</th>
                                     <th>Conductor/Ruta</th>
+                                    <th>Sucursal</th>
                                     <th>Usuario registro</th>
                                     <th st-sort="FechaRegistro">Fecha registro</th>
                                     <th></th>
@@ -54,12 +57,15 @@
                                         <input type="text" class="form-control input-sm" placeholder="Estado" st-search="Estado.Descripcion" />
                                     </td>
                                     <td colspan="1">
-                                        <input type="text" class="form-control input-sm" placeholder="Consecutivo" st-search="Radicado" />
+                                        <input type="text" class="form-control input-sm" placeholder="Consecutivo" st-search="TipoServicio.Descripcion" />
+                                    </td>
+                                    <td colspan="1">
+                                        <input type="text" class="form-control input-sm" placeholder="Tipo" st-search="Radicado" />
                                     </td>
                                     <td colspan="1">
                                         <input type="text" class="form-control input-sm" placeholder="Cliente" st-search="Aseguradora.Nombre" />
                                     </td>
-                                    <td colspan="4">
+                                    <td colspan="5">
                                         <input type="text" class="form-control input-sm" placeholder="Buscar..." st-search />
                                     </td>
                                     <td>
@@ -86,6 +92,9 @@
                                         {{svr.Estado.Descripcion }}
                                     </td>
                                     <td>
+                                        {{svr.TipoServicio.Descripcion }}
+                                    </td>
+                                    <td>
                                         {{svr.Radicado }}
                                     </td>
                                     <td>
@@ -105,6 +114,9 @@
                                     <td>
                                         <strong>Cond.</strong>{{svr.ConductorResumen }}<br />
                                         <strong>Ruta.</strong>{{svr.RutaResumen }}
+                                    </td>
+                                    <td>
+                                        {{svr.Sucursal.Descripcion }}
                                     </td>
                                     <td>
                                         {{svr.UsuarioRegistro.Nombre }}
