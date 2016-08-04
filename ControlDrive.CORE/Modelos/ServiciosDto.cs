@@ -21,7 +21,7 @@ namespace ControlDrive.CORE.Modelos
         public int Id { get; set; }
 
         public int? SucursalId { get; set; }
-        public Sucursal Sucursal { get; set; }
+        public SucursalDto Sucursal { get; set; }
 
         public TipoServicioDto TipoServicio { get; set; }
 
@@ -68,6 +68,13 @@ namespace ControlDrive.CORE.Modelos
         public ICollection<MovimientoDto> Movimientos { get; set; }
         public bool Notificado { get; set; }
 
+    }
+
+    public class SucursalDto
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public ICollection<ApplicationUser> Usuarios { get; set; }
     }
 
     public class TipoServicioDto

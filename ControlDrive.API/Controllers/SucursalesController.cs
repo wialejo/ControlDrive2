@@ -16,7 +16,7 @@ using Microsoft.AspNet.Identity;
 
 namespace ControlDrive.Core.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class SucursalesController : ApiController
     {
         private readonly ICommonInterface<Sucursal> _sucursalSevice;

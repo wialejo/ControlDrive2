@@ -327,7 +327,7 @@ namespace ControlDrive.CORE.Services
                     Id = s.Id,
                     EstadoCodigo = s.EstadoCodigo,
                     Estado = s.Estado,
-                    Sucursal = s.Sucursal,
+                    Sucursal = new SucursalDto { Id =  s.Sucursal.Id, Descripcion = s.Sucursal.Descripcion },
                     SucursalId = s.SucursalId,
                     TipoServicio = new TipoServicioDto
                     {

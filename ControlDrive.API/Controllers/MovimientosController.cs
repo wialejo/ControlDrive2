@@ -23,10 +23,12 @@ namespace ControlDrive.Core.Controllers
     public class MovimientosController : ApiController
     {
         private readonly IMovimientosService _movimientosService;
+        private readonly ISucursalService _sucursalServiceExt;
 
-        public MovimientosController(IMovimientosService movimientosService)
+        public MovimientosController(IMovimientosService movimientosService, ISucursalService sucursalServiceExt)
         {
             _movimientosService = movimientosService;
+            _sucursalServiceExt = sucursalServiceExt;
         }
 
         [HttpGet]
@@ -35,15 +37,21 @@ namespace ControlDrive.Core.Controllers
         {
             try
             {
-                var movimientos = _movimientosService
-                    .Obtener(
-                        m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
-                        && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
-                        && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                        && m.Servicio.AseguradoraId == clienteId
-                        && m.Concepto.TipoConcepto == TipoConcepto.Cliente
-                        && m.DocumentoId == null)
-                    .ToList();
+                var idUsuario = HttpContext.Current.User.Identity.GetUserId();
+                var sucursales = _sucursalServiceExt.ObtenerPorUsuario(idUsuario);
+
+                var movimientos = from s in sucursales.AsQueryable()
+                                  join m in _movimientosService
+                                          .Obtener(
+                                                  m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
+                                                  && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
+                                                  && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
+                                                  && m.Servicio.AseguradoraId == clienteId
+                                                  && m.Concepto.TipoConcepto == TipoConcepto.Cliente
+                                                  && m.DocumentoId == null).AsQueryable() on s.Id equals m.Servicio.SucursalId
+                                  select m;
+
+
                 return Ok(movimientos);
             }
             catch (Exception ex)
@@ -62,20 +70,24 @@ namespace ControlDrive.Core.Controllers
         [Route("api/movimientos/clienteCsv")]
         public async Task<HttpResponseMessage> ObtenerMovimientosClienteCSV(paraCsv data)
         {
-            var movimientos = _movimientosService
-                       .Obtener(
-                           m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(data.inicio)
-                           && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(data.fin)
-                           && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                           && m.Servicio.AseguradoraId == data.clienteId
-                           && m.Concepto.TipoConcepto == TipoConcepto.Cliente
-                           && m.DocumentoId == null)
-                       .ToList();
+            var idUsuario = HttpContext.Current.User.Identity.GetUserId();
+            var sucursales = _sucursalServiceExt.ObtenerPorUsuario(idUsuario);
+
+            var movimientos = from s in sucursales.AsQueryable()
+                              join m in _movimientosService
+                            .Obtener(
+                                m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(data.inicio)
+                                && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(data.fin)
+                                && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
+                                && m.Servicio.AseguradoraId == data.clienteId
+                                && m.Concepto.TipoConcepto == TipoConcepto.Cliente
+                                && m.DocumentoId == null).AsQueryable() on s.Id equals m.Servicio.SucursalId
+                              select m;
 
             byte[] output = null;
             await Task.Run(() =>
             {
-                using (var stream = _movimientosService.ObtenerResumenMovimientosEnCSV(movimientos))
+                using (var stream = _movimientosService.ObtenerResumenMovimientosEnCSV(movimientos.ToList()))
                 {
                     stream.Flush();
                     output = stream.ToArray();
@@ -103,7 +115,11 @@ namespace ControlDrive.Core.Controllers
         {
             try
             {
-                var movimientos = _movimientosService
+                var idUsuario = HttpContext.Current.User.Identity.GetUserId();
+                var sucursales = _sucursalServiceExt.ObtenerPorUsuario(idUsuario);
+
+                var movimientos = from s in sucursales.AsQueryable()
+                                  join m in _movimientosService
                     .Obtener(
                         m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
                         && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
@@ -111,8 +127,8 @@ namespace ControlDrive.Core.Controllers
                         && m.Servicio.AseguradoraId == clienteId
                         && m.Concepto.TipoConcepto == TipoConcepto.Cliente
                         && m.Aprobado == aprobado
-                        && m.DocumentoId == null)
-                    .ToList();
+                        && m.DocumentoId == null).AsQueryable() on s.Id equals m.Servicio.SucursalId
+                                  select m;
                 return Ok(movimientos);
             }
             catch (Exception ex)
@@ -127,15 +143,20 @@ namespace ControlDrive.Core.Controllers
         {
             try
             {
-                var movimientos = _movimientosService
-                    .Obtener(
-                        m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
-                        && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
-                        && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                        && (m.ProveedorId == proveedorId)
-                        && m.Concepto.TipoConcepto == TipoConcepto.Proveedor
-                        && m.DocumentoId == null)
-                    .ToList();
+
+                var idUsuario = HttpContext.Current.User.Identity.GetUserId();
+                var sucursales = _sucursalServiceExt.ObtenerPorUsuario(idUsuario);
+
+                var movimientos = from s in sucursales.AsQueryable()
+                                  join m in _movimientosService.Obtener(
+                                                m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
+                                                && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
+                                                && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
+                                                && (m.ProveedorId == proveedorId)
+                                                && m.Concepto.TipoConcepto == TipoConcepto.Proveedor
+                                                && m.DocumentoId == null).AsQueryable() on s.Id equals m.Servicio.SucursalId
+                                  select m;
+
                 return Ok(movimientos);
             }
             catch (Exception ex)
@@ -223,7 +244,8 @@ namespace ControlDrive.Core.Controllers
         }
 
     }
-    public class paraCsv {
+    public class paraCsv
+    {
         public DateTime inicio { get; set; }
         public DateTime fin { get; set; }
         public int clienteId { get; set; }

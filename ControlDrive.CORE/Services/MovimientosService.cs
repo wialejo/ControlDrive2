@@ -53,6 +53,7 @@ namespace ControlDrive.CORE.Services
                         Id = m.Servicio.Id,
                         EstadoCodigo = m.Servicio.EstadoCodigo,
                         Estado = m.Servicio.Estado,
+                        SucursalId = m.Servicio.SucursalId,
                         Fecha = m.Servicio.Fecha,
                         Hora = m.Servicio.Hora,
                         Radicado = m.Servicio.Radicado,
@@ -68,7 +69,10 @@ namespace ControlDrive.CORE.Services
                         DireccionDestinoId = m.Servicio.DireccionDestinoId,
                         DireccionDestino = m.Servicio.DireccionDestino,
                         UsuarioRegistro = new ApplicationUserDto { Nombre = m.Servicio.UsuarioRegistro.Nombre },
-                        FechaRegistro = m.Servicio.FechaRegistro
+                        FechaRegistro = m.Servicio.FechaRegistro,
+                        TipoServicio = new TipoServicioDto { Id = m.Servicio.TipoServicio.Id, Descripcion = m.Servicio.TipoServicio.Descripcion },
+                        Sucursal = new SucursalDto { Descripcion = m.Servicio.Sucursal.Descripcion, Id = m.Servicio.Sucursal.Id}
+
                     }
                 })
                 .ToList();

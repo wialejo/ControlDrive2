@@ -247,7 +247,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="text-xs" ng-repeat="servicio in ::serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles | filter: TiposServicioVisiblesFilter ) " ng-class=" { 'border-none' : active==servicio}">
+                    <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles | filter: TiposServicioVisiblesFilter ) " ng-class=" { 'border-none' : active==servicio}">
                         <tr>
                             <td class="text-center" style="background-color:#edeaea" ng-click="VerSeguimientos(servicio);">
                                 <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>

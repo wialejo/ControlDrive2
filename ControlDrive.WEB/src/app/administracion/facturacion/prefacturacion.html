@@ -107,6 +107,8 @@
                             <th class="col-md-1">Hora/fecha</th>
                             <th class="col-md-2">Cliente</th>
                             <th>Asig.Por</th>
+                            <th>Tipo servicio</th>
+                            <th>Sucursal</th>
                             <th class="col-md-3">
                                 Consecutivo
                             </th>
@@ -142,6 +144,12 @@
                             </td>
                             <td>
                                 {{movimiento.Servicio.AsignadoPor }}
+                            </td>
+                            <td>
+                                {{movimiento.Servicio.TipoServicio.Descripcion }}
+                            </td>
+                            <td>
+                                {{movimiento.Servicio.Sucursal.Descripcion }}
                             </td>
                             <td>
                                 <input type="text" class="form-control" ng-model="movimiento.Servicio.Radicado" />
