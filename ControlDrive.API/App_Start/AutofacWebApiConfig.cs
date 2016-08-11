@@ -85,7 +85,7 @@ namespace ControlDrive.Core.App_Start
                 .InstancePerRequest();
 
             builder.RegisterType<CiudadService>()
-                .As<ICommonInterface<Ciudad>>()
+                .As<ICommonInterface<Ciudad>, ICiudadService>()
                 .InstancePerRequest();
 
             builder.RegisterType<SucursalService>()

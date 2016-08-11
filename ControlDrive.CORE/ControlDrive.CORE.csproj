@@ -200,6 +200,10 @@
     <Compile Include="Migrations\201607290438102_sucursalesDatos.Designer.cs">
       <DependentUpon>201607290438102_sucursalesDatos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608110217007_ciudadesConSucursales.cs" />
+    <Compile Include="Migrations\201608110217007_ciudadesConSucursales.Designer.cs">
+      <DependentUpon>201608110217007_ciudadesConSucursales.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -304,6 +308,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607290438102_sucursalesDatos.resx">
       <DependentUpon>201607290438102_sucursalesDatos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608110217007_ciudadesConSucursales.resx">
+      <DependentUpon>201608110217007_ciudadesConSucursales.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

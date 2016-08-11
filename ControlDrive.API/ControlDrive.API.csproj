@@ -229,8 +229,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <None Include="Properties\PublishProfiles\azure.pubxml" />
-    <None Include="Properties\PublishProfiles\ColombiaRedes.pubxml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -240,9 +238,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\controldrive.pubxml" />
-    <None Include="Properties\PublishProfiles\CR.pubxml" />
-    <None Include="Properties\PublishProfiles\tualiado.pubxml" />
+    <None Include="Properties\PublishProfiles\azureControlDrive.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ControlDrive.CORE\ControlDrive.CORE.csproj">

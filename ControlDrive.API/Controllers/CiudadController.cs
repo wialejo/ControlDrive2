@@ -15,19 +15,21 @@ using ControlDrive.CORE.Services;
 namespace ControlDrive.Core.Controllers
 {
     //[Authorize]
-    public class CiudadesController : ApiController
+    public class CiudadesController : BaseController
     {
         private readonly ICommonInterface<Ciudad> _ciudadSevice;
+        private readonly ICiudadService _ciudadServiceExt;
 
-        public CiudadesController(ICommonInterface<Ciudad> ciudadSevice)
+        public CiudadesController(ICommonInterface<Ciudad> ciudadSevice, ICiudadService ciudadServiceExt)
         {
             _ciudadSevice = ciudadSevice;
+            _ciudadServiceExt = ciudadServiceExt;
         }
 
         [HttpGet]
         public IHttpActionResult Obtener()
         {
-            var ciudades  = _ciudadSevice.Obtener();
+            var ciudades  = _ciudadServiceExt.ObtenerQ().Where(c => c.SucursalId == IdSucursal);
             return Ok(ciudades);
         }
 
@@ -46,6 +48,7 @@ namespace ControlDrive.Core.Controllers
             {
                 return BadRequest(ModelState);
             }
+            ciudad.SucursalId = IdSucursal;
             var ciudadRepo = _ciudadSevice.Guardar(ciudad);
 
             return Ok(ciudadRepo);

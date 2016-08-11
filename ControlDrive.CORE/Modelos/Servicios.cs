@@ -261,6 +261,9 @@ namespace ControlDrive.CORE.Modelos
         public string Nombre { get; set; }
         public bool Principal { get; set; }
         public string Tarifa { get; set; }
+
+        public int? SucursalId { get; set; }
+        public Sucursal Sucursal { get; set; }
     }
 
     public class Barrio
@@ -282,4 +285,4 @@ namespace ControlDrive.CORE.Modelos
         public string Telefono2 { get; set; }
 
     }
-}
+}   

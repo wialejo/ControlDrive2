@@ -4,7 +4,7 @@
     /* Controllers */
 
     angular.module('controldriveApp')
-      .controller('MainController', function ($location, $localStorage, $window, authService, $scope, SucursalSvc) {
+      .controller('MainController', function ($location, $localStorage, $window, $state,authService, $scope, SucursalSvc) {
           $scope.authentication = authService.authentication;
 
           $scope.logOut = function () {
@@ -67,7 +67,8 @@
           }, true);
 
           $scope.seleccionarSucursal = function (sucursal) {
-              SucursalSvc.EstablecerSucursalActual(sucursal)
+              SucursalSvc.EstablecerSucursalActual(sucursal);
+              $state.go($state.current, {}, { reload: true })
           }
 
           function ObtenerSucursales() {

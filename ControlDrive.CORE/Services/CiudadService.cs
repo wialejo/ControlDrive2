@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ControlDrive.CORE.Services
 {
-    public class CiudadService : ICommonInterface<Ciudad>
+    public class CiudadService : ICommonInterface<Ciudad>, ICiudadService
     {
 
         private readonly IEntityBaseRepository<Ciudad> _ciudadRepositorio;
@@ -61,10 +61,21 @@ namespace ControlDrive.CORE.Services
                 ciudadRepo = _ciudadRepositorio.FindBy(c => c.Id == ciudad.Id).FirstOrDefault();
                 ciudadRepo.Nombre = ciudad.Nombre;
                 ciudadRepo.Tarifa = ciudad.Tarifa;
+                ciudadRepo.SucursalId = ciudad.SucursalId;
                 _ciudadRepositorio.Edit(ciudadRepo);
             }
             _unitOfWork.Commit();
             return ciudadRepo;
         }
+
+        public IQueryable<Ciudad> ObtenerQ()
+        {
+            var ciudades = _ciudadRepositorio.GetAll();
+            return ciudades;
+        }
+    }
+
+    public interface ICiudadService {
+        IQueryable<Ciudad> ObtenerQ();
     }
 }
