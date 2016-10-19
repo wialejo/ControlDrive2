@@ -35,7 +35,7 @@
                                     <th st-sort="Estado.Descripcion">Estado</th>
                                     <th>Radicado</th>
                                     <th st-sort="TipoServicio">Tipo</th>
-                                    <th>Aseguradora</th>
+                                    <th>Cliente</th>
                                     <th>Vehiculo</th>
                                     <th>Asegurado</th>
                                     <th>Origen/Destino</th>
@@ -91,10 +91,10 @@
                                         {{svr.Estado.Descripcion }}
                                     </td>
                                     <td>
-                                        {{svr.TipoServicio.Descripcion }}
+                                        {{svr.Radicado }}
                                     </td>
                                     <td>
-                                        {{svr.Radicado }}
+                                        {{svr.TipoServicio.Descripcion }}
                                     </td>
                                     <td>
                                         {{svr.Aseguradora.Nombre }}<br />
