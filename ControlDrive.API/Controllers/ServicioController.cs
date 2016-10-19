@@ -82,9 +82,9 @@ namespace ControlDrive.Core.Controllers
             var periodo = new PeriodoService().Obtener(inicio);
             var servicios = _servicioServiceExt
                 .Obtener(s => s.Fecha > periodo.Inicio && s.Fecha < periodo.Fin 
-                            && (s.EstadoCodigo == "FL" || s.EstadoCodigo == "CN" || s.EstadoCodigo == "TE"
+                            && (s.EstadoCodigo == "FL" || s.EstadoCodigo == "CN" || s.EstadoCodigo == "TE")
                             && s.SucursalId == IdSucursal
-                        ))
+                        )
                 .ToList();
             return Ok(servicios);
         }
