@@ -204,6 +204,10 @@
     <Compile Include="Migrations\201608110217007_ciudadesConSucursales.Designer.cs">
       <DependentUpon>201608110217007_ciudadesConSucursales.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609150202136_addTipoServicioTransporte.cs" />
+    <Compile Include="Migrations\201609150202136_addTipoServicioTransporte.Designer.cs">
+      <DependentUpon>201609150202136_addTipoServicioTransporte.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -213,6 +217,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\EntityBaseRepository.cs" />
     <Compile Include="Modelos\Servicios.cs" />
+    <Compile Include="Services\RolesService.cs" />
     <Compile Include="Services\UsuarioService.cs" />
     <Compile Include="Services\SucursalService.cs" />
     <Compile Include="Services\DocumentosServices.cs" />
@@ -311,6 +316,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608110217007_ciudadesConSucursales.resx">
       <DependentUpon>201608110217007_ciudadesConSucursales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609150202136_addTipoServicioTransporte.resx">
+      <DependentUpon>201609150202136_addTipoServicioTransporte.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

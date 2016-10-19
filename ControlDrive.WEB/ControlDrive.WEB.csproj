@@ -173,6 +173,8 @@
     <Content Include="src\app\operacion\detalleServicio.html" />
     <Content Include="src\app\operacion\tiposServicio\ejecutivo.html" />
     <Content Include="src\app\operacion\tiposServicio\ejecutivo.directive.js" />
+    <Content Include="src\app\operacion\tiposServicio\transporte.html" />
+    <Content Include="src\app\operacion\tiposServicio\transporte.directive.js" />
     <Content Include="src\app\operacion\tiposServicio\tiposServicio.service.js" />
     <Content Include="src\app\operacion\tiposServicio\mensajeria.html" />
     <Content Include="src\app\operacion\tiposServicio\mensajeria.directive.js" />
