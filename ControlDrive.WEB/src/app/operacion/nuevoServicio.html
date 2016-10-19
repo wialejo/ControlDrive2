@@ -22,7 +22,8 @@
                                                || servicio.TipoServicio.Id == 3"></conductor-elegido>
                             <coordinacion ng-if="servicio.TipoServicio.Id == 2"></coordinacion>
                             <mensajeria ng-if="servicio.TipoServicio.Id == 4"></mensajeria>
-                            <ejecutivo ng-if="servicio.TipoServicio.Id == 5"></ejecutivo>
+                            <transporte ng-if="servicio.TipoServicio.Id == 7"></transporte>
+                            <!--<ejecutivo ng-if="servicio.TipoServicio.Id == 7"></ejecutivo>-->
 
                             <fieldset>
                                 <input tabindex="30" ng-disabled="form.$invalid || isSaving" type="submit" class="btn btn-info" name="BtnNuevoServicio" value="Guardar servicio" />
