@@ -80,6 +80,29 @@ namespace ControlDrive.CORE.Services
             return movimientos;
         }
 
+        public List<MovimientoDto> ObtenerDeCliente(DateTime inicio, DateTime fin, int clienteId) 
+        {
+            return Obtener(m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
+                                                 && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
+                                                 && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
+                                                 && m.Servicio.AseguradoraId == clienteId
+                                                 && m.Concepto.TipoConcepto == TipoConcepto.Cliente
+                                                 && m.DocumentoId == null
+                                                 //&& m.Servicio.Sucursal.Usuarios.Any(u => u.Id == idUsuario))
+                                                 );
+        }
+        public List<MovimientoDto> ObtenerDeClienteAprobados(DateTime inicio, DateTime fin, int clienteId) 
+        {
+            return Obtener(m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
+                                                 && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
+                                                 && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
+                                                 && m.Servicio.AseguradoraId == clienteId
+                                                 && m.Concepto.TipoConcepto == TipoConcepto.Cliente
+                                                 && m.DocumentoId == null
+                                                 && m.Aprobado == true
+                                                 //&& m.Servicio.Sucursal.Usuarios.Any(u => u.Id == idUsuario))
+                                                 );
+        }
         public Movimiento ObtenerPorId(int id)
         {
             var movimiento = _movimientoRepositorio.FindBy(m => m.Id == id).FirstOrDefault();
@@ -138,6 +161,7 @@ namespace ControlDrive.CORE.Services
                     hora = f.Servicio.Fecha.ToString("HH:mm"),
                     fecha = f.Servicio.Fecha.ToString("dd/MM/yyyy"),
                     codigo = f.Servicio.Radicado,
+                    sucursal = f.Servicio.Sucursal.Descripcion,
                     aseguradora = f.Servicio.Aseguradora.Nombre,
                     asignadoPor = f.Servicio.AsignadoPor,
                     asegurado =
@@ -171,6 +195,8 @@ namespace ControlDrive.CORE.Services
     {
         void Guardar(Movimiento movimiento);
         List<MovimientoDto> Obtener(Expression<Func<Movimiento, bool>> predicate);
+        List<MovimientoDto> ObtenerDeCliente(DateTime inicio, DateTime fin, int clienteId);
+        List<MovimientoDto> ObtenerDeClienteAprobados(DateTime inicio, DateTime fin, int clienteId);
         void ActualizarParaCierreFacuracion(Movimiento movimiento);
         MemoryStream ObtenerResumenMovimientosEnCSV(List<MovimientoDto> movimientos);
 
@@ -179,6 +205,7 @@ namespace ControlDrive.CORE.Services
 
     public class MovimientoResumen
     {
+        public string sucursal { get; internal set; }
         public string asegurado { get; internal set; }
         public string aseguradora { get; internal set; }
         public string asignadoPor { get; internal set; }

@@ -37,21 +37,7 @@ namespace ControlDrive.Core.Controllers
         {
             try
             {
-                var idUsuario = HttpContext.Current.User.Identity.GetUserId();
-                var sucursales = _sucursalServiceExt.ObtenerPorUsuario(idUsuario);
-
-                var movimientos = from s in sucursales.AsQueryable()
-                                  join m in _movimientosService
-                                          .Obtener(
-                                                  m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
-                                                  && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
-                                                  && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                                                  && m.Servicio.AseguradoraId == clienteId
-                                                  && m.Concepto.TipoConcepto == TipoConcepto.Cliente
-                                                  && m.DocumentoId == null).AsQueryable() on s.Id equals m.Servicio.SucursalId
-                                  select m;
-
-
+                var movimientos = _movimientosService.ObtenerDeCliente(inicio, fin, clienteId).AsQueryable();
                 return Ok(movimientos);
             }
             catch (Exception ex)
@@ -60,29 +46,12 @@ namespace ControlDrive.Core.Controllers
             }
         }
 
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public async Task<HttpResponseMessage> ObtenerPorPeriodoCSV(Periodo periodo)
-
         [HttpPost]
         [AllowAnonymous]
         [Route("api/movimientos/clienteCsv")]
         public async Task<HttpResponseMessage> ObtenerMovimientosClienteCSV(paraCsv data)
         {
-            var idUsuario = HttpContext.Current.User.Identity.GetUserId();
-            var sucursales = _sucursalServiceExt.ObtenerPorUsuario(idUsuario);
-
-            var movimientos = from s in sucursales.AsQueryable()
-                              join m in _movimientosService
-                            .Obtener(
-                                m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(data.inicio)
-                                && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(data.fin)
-                                && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                                && m.Servicio.AseguradoraId == data.clienteId
-                                && m.Concepto.TipoConcepto == TipoConcepto.Cliente
-                                && m.DocumentoId == null).AsQueryable() on s.Id equals m.Servicio.SucursalId
-                              select m;
+            var movimientos = _movimientosService.ObtenerDeCliente(data.inicio, data.fin, data.clienteId).AsQueryable();
 
             byte[] output = null;
             await Task.Run(() =>
@@ -115,20 +84,7 @@ namespace ControlDrive.Core.Controllers
         {
             try
             {
-                var idUsuario = HttpContext.Current.User.Identity.GetUserId();
-                var sucursales = _sucursalServiceExt.ObtenerPorUsuario(idUsuario);
-
-                var movimientos = from s in sucursales.AsQueryable()
-                                  join m in _movimientosService
-                    .Obtener(
-                        m => DbFunctions.TruncateTime(m.Servicio.Fecha) >= DbFunctions.TruncateTime(inicio)
-                        && DbFunctions.TruncateTime(m.Servicio.Fecha) <= DbFunctions.TruncateTime(fin)
-                        && (m.Servicio.EstadoCodigo == "CF" || m.Servicio.EstadoCodigo == "CR")
-                        && m.Servicio.AseguradoraId == clienteId
-                        && m.Concepto.TipoConcepto == TipoConcepto.Cliente
-                        && m.Aprobado == aprobado
-                        && m.DocumentoId == null).AsQueryable() on s.Id equals m.Servicio.SucursalId
-                                  select m;
+                var movimientos = _movimientosService.ObtenerDeClienteAprobados(inicio, fin, clienteId).AsQueryable();
                 return Ok(movimientos);
             }
             catch (Exception ex)

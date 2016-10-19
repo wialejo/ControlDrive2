@@ -11,7 +11,7 @@
             $scope.ObtenerMovimientos = function () {
                 MovimientosSvc.ObtenerMovimientosClienteAprobados($scope.fechaInicial, $scope.fechaFinal, $scope.cliente.Id)
                     .then(function (response) {
-                        $scope.movimientos = response.data;
+                        $scope.movCompletos = response.data;
                     }, function (response) {
                         toastr.error(response.data.ExceptionMessage);
                     });

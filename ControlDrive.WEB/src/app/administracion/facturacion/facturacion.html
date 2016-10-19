@@ -47,15 +47,15 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-6 col-sm-8 text-center-xs">
+                <div class="col-xs-6 col-sm-12 text-center-xs">
                     <div class="form-inline">
                         <form name="formConsulta" class="form-inline" novalidate ng-submit="formConsulta.$valid && ObtenerMovimientos()">
                             <div class="form-group">
-                                <label for="TxtFechaInicial">Fecha inicial</label>
+                                <label for="TxtFechaInicial">Desde</label>
                                 <input tabindex="5" ng-model="fechaInicial" required type="text" class="form-control input-sm" name="TxtFechaInicial" placeholder="dd/MM/yyyy">
                             </div>
                             <div class="form-group">
-                                <label for="TxtFechaFinal">Fecha final</label>
+                                <label for="TxtFechaFinal">Hasta</label>
                                 <input tabindex="10" ng-model="fechaFinal" required type="text" class="form-control input-sm" name="TxtFechaFinal" placeholder="dd/MM/yyyy">
                             </div>
                             <div class="form-group">
@@ -74,12 +74,6 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-xs-6 col-sm-4 text-center-xs text-right">
-                    <div class="form-group">
-                        <input placeholder="Filtrar..." class="form-control input-sm" type="search"
-                               ng-model="search.$" />
-                    </div>
-                </div>
             </div>
         </div>
         <div class="panel-body">
@@ -87,8 +81,18 @@
                 <div class="col-sm-6">
                     <label><strong>Número total: </strong></label> {{ movimientos.length }} <strong style="margin-left:10px"> Valor total: </strong><span> {{valorFactura | currency:"$":0}}</span>
                 </div>
-                <div class="col-sm-6 text-right">
-                    <button ng-click="MostrarFacturacionMasiva()" class="btn btn-info btn-sm">Facturación masiva</button>
+                <div class="col-sm-6 text-right form-inline">
+                    <div class="form-group">
+                        <input placeholder="Filtrar..." class="form-control" type="search"
+                               ng-model="search.$" />
+                    </div>
+                    <div class="form-group">
+                        <input placeholder="Sucursal" class="form-control" type="search"
+                               ng-model="search.Servicio.Sucursal.Descripcion" />
+                    </div>
+                    <div class="form-group">
+                        <button ng-click="MostrarFacturacionMasiva()" class="btn btn-info">Facturación masiva</button>
+                    </div>
                 </div>
             </div>
             <div class="table-responsive">
@@ -98,6 +102,7 @@
                             <th>Id</th>
                             <th class="col-md-1">Hora/fecha</th>
                             <th class="col-md-1">Cliente</th>
+                            <th>Sucursal</th>
                             <th>Consecutivo</th>
                             <th class="col-md-1">Vehiculo</th>
                             <th>Origen/Destino</th>
@@ -111,7 +116,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="text-xs" ng-repeat="movimiento in movimientos | filter: search">
+                    <tbody class="text-xs" ng-repeat="movimiento in movCompletos | filter: search as movimientos ">
                         <tr>
                             <td>
                                 {{movimiento.Servicio.Id}}
@@ -125,6 +130,9 @@
                             <td>
                                 {{movimiento.Servicio.Aseguradora.Nombre }}<br />
                                 <strong>Asig.Por:</strong> {{movimiento.Servicio.AsignadoPor }}
+                            </td>
+                            <td>
+                                {{movimiento.Servicio.Sucursal.Descripcion }}
                             </td>
                             <td>
                                 {{movimiento.Servicio.Radicado}}
