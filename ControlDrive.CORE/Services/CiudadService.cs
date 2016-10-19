@@ -59,6 +59,7 @@ namespace ControlDrive.CORE.Services
             else
             {
                 ciudadRepo = _ciudadRepositorio.FindBy(c => c.Id == ciudad.Id).FirstOrDefault();
+                ciudadRepo.Principal = ciudad.Principal;
                 ciudadRepo.Nombre = ciudad.Nombre;
                 ciudadRepo.Tarifa = ciudad.Tarifa;
                 ciudadRepo.SucursalId = ciudad.SucursalId;

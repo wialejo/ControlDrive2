@@ -1,5 +1,5 @@
 ﻿<div ng-controller="CiudadesController as vm">
-        <div class="wrapper-md">
+    <div class="wrapper-md">
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
@@ -8,23 +8,17 @@
                             <table class="table table-striped b-t b-b">
                                 <thead>
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="6">
                                             <input ng-model="busqueda" placeholder="Buscar..." class="input-sm form-control" type="search" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="col-md-1 text-center">
-                                            Id
-                                        </th>
-                                        <th>
-                                            Nombre
-                                        </th>
-                                        <th  class="text-center">
-                                            Tarifa
-                                        </th>
-                                        <th  class="text-center">
-                                            Acciones
-                                        </th>
+                                        <th class="col-md-1 text-center">Id</th>
+                                        <th>Nombre</th>
+                                        <th class="text-center">Tarifa</th>
+                                        <th class="text-center">Principal</th>
+                                        <th class="text-center">Sucursal</th>
+                                        <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <thead>
@@ -33,35 +27,68 @@
                                             {{ciudad.Id}}
                                         </td>
                                         <td class="col-md-2">
-                                            {{ciudad.Nombre}}
-                                        </td>
-                                        <td>
-                                            {{ciudad.Tarifa}}
+                                            <span ng-if="!ciudad.enEdicion">
+                                                {{ciudad.Nombre}}
+                                            </span>
+                                            <input ng-if="ciudad.enEdicion" type="text" placeholder="Nombre" class="form-control" required
+                                                   ng-model="ciudad.Nombre" name="txtCiudad" />
                                         </td>
                                         <td class="text-center">
-                                            <input type="button" value="Editar" class="btn btn-default btn-sm" ng-click="vm.editar(ciudad)" />
-                                            <input type="button" value="Eliminar" class="btn btn-danger btn-sm" ng-click="vm.eliminar(ciudad)" />
+                                            <span ng-if="!ciudad.enEdicion">
+                                                {{ciudad.Tarifa}}
+                                            </span>
+                                            <input ng-if="ciudad.enEdicion" type="text" class="form-control" placeholder="Valor"
+                                                   ng-model="ciudad.Tarifa" name="txtTarifa" />
+                                        </td>
+                                        <td class="text-center">
+                                            <span ng-if="!ciudad.enEdicion">
+                                                {{ciudad.Principal ? 'Si' : 'No'}}
+                                            </span>
+                                            <div class="checkbox">
+                                                <label ng-if="ciudad.enEdicion">
+                                                    <input type="checkbox" ng-model="ciudad.Principal"> Principal
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ciudad.Sucursal.Descripcion}}
+                                        </td>
+                                        <td class="text-center">
+                                            <input ng-if="ciudad.enEdicion" type="button" value="Actualizar" class="btn btn-info btn-sm"
+                                                   ng-click="vm.editar(ciudad)" />
+                                            <input ng-if="ciudad.enEdicion" type="button" value="Cancelar" class="btn btn-danger btn-sm" ng-click="ciudad.enEdicion = false;" />
+
+                                            <input ng-if="!ciudad.enEdicion" type="button" value="Editar" class="btn btn-default btn-sm" ng-click="ciudad.enEdicion = true;" />
+                                            <input ng-if="!ciudad.enEdicion" type="button" value="Eliminar" class="btn btn-danger btn-sm" ng-click="vm.eliminar(ciudad)" />
                                         </td>
                                     </tr>
                                 </thead>
-                                 <form name="form" class="form-horizontal" role="form" novalidate >
-                                        <tfoot>
-                                            <tr>
-                                                <td class="col-md-1 text-center">
-                                                    Nueva ciudad
-                                                </td>
-                                                <td >
-                                                    <input type="text" class="form-control"  required ng-model="vm.nuevaCiudad.Nombre" name="txtCiudad" />
-                                                </td>
-                                                <td class="col-md-2">
-                                                    <input type="text" class="form-control" ng-model="vm.nuevaCiudad.Tarifa" name="txtTarifa" />
-                                                </td>
-                                                <td class="text-center">
-                                                    <input type="submit" value="Guardar" class="btn btn-primary btn-sm" ng-click="vm.guardar(vm.nuevaCiudad);"/>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
-                                    </form>
+                                <form name="form" class="form-horizontal" role="form" novalidate>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="col-md-1 text-center">
+                                                Nueva ciudad
+                                            </td>
+                                            <td>
+                                                <input type="text" placeholder="Nombre" class="form-control" required ng-model="vm.nuevaCiudad.Nombre" name="txtCiudad" />
+                                            </td>
+                                            <td class="col-md-2">
+                                                <input type="text" class="form-control" placeholder="Valor" ng-model="vm.nuevaCiudad.Tarifa" name="txtTarifa" />
+                                            </td>
+                                            <td class="col-md-1">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" ng-model="vm.nuevaCiudad.Principal"> Principal
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td class="text-center">
+                                                <input type="submit" value="Guardar" class="btn btn-info btn-sm" ng-click="vm.guardar(vm.nuevaCiudad);" />
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </form>
                             </table>
                         </div>
 
