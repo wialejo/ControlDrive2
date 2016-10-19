@@ -24,6 +24,11 @@
             margin-top: 5px;
         }
 
+        .resaltado {
+            /*background-color:#edeaea;*/
+            background-color: #edeaea;
+        }
+
         .fixedHeader {
             position: fixed;
             z-index: 200;
@@ -221,127 +226,146 @@
         </div>
 
         <div class="staticBody">
-            <div class="table-responsive">
-                <table class="table table-hover table-condensed">
-                    <thead>
-                        <tr>
-                            <td colspan="10">
-                                <label><strong>Total servicios: </strong></label> {{ serviciosActivos.length }}
-                                <span style="margin-left:30px" ng-repeat="(key,val) in estadoServiciosActivos"><label><strong>{{key}}: </strong></label> {{ val }}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style="width:10px;padding-left:5px;padding-right:5px;background-color:#FDFDFD"></th>
-                            <th class="text-center">Id</th>
-                            <th>Hora/fecha</th>
-                            <th class="col-md-1">Estado</th>
-                            <th class="hidden-xs">Consec.</th>
-                            <th>Origen</th>
-                            <th>Destino</th>
-                            <th>Conductor</th>
-                            <th>Ruta</th>
-                            <th>
-                                <label class="checkbox i-checks ">
-                                    <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
-                                </label>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles | filter: TiposServicioVisiblesFilter ) " ng-class=" { 'border-none' : active==servicio}">
-                        <tr>
-                            <td class="text-center" style="background-color:#edeaea" ng-click="VerSeguimientos(servicio);">
-                                <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>
-                            </td>
-                            <td class="text-center">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <td colspan="10">
+                            <label><strong>Total servicios: </strong></label> {{ serviciosActivos.length }}
+                            <span style="margin-left:30px" ng-repeat="(key,val) in estadoServiciosActivos"><label><strong>{{key}}: </strong></label> {{ val }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width:10px;padding-left:5px;padding-right:5px;"></th>
+                        <th class="text-center "><div class="hidden-xs">Id</div> </th>
+                        <th><div class="hidden-xs">Hora/fecha</div></th>
+                        <th class="col-md-1 hidden-xs">Estado</th>
+                        <th class="hidden-xs">Consec.</th>
+                        <th class="hidden-xs">Origen</th>
+                        <th class="hidden-xs">Destino</th>
+                        <th class="hidden-xs">Conductor</th>
+                        <th class="hidden-xs">Ruta</th>
+                        <th class="text-center ">
+                            <label class="checkbox i-checks ">
+                                <input type="checkbox" ng-model="seleccion" ng-change="Seleccionar(seleccion)" aria-checked="false" aria-invalid="false"><i></i>
+                            </label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="text-xs" ng-repeat="servicio in serviciosActivos  = (servicios | filter: search | filter: EstadosVisibles | filter: TiposServicioVisiblesFilter ) " ng-class=" { 'border-none' : active==servicio}">
+                    <tr>
+                        <td class="text-center resaltado" ng-click="VerSeguimientos(servicio);">
+                            <span class="glyphicon glyphicon-chevron-right" ng-class="{'glyphicon-chevron-down': active==servicio } "></span>
+                        </td>
+                        <td class="text-center">
+                            <div>
                                 {{$index+1}}
                                 <span class="glyphicon glyphicon-pencil" ng-click="Editar(servicio)" uib-tooltip="Editar el servicio"></span>
                                 <span ng-if="servicio.Notificado" class="glyphicon glyphicon-envelope" uib-tooltip="¡Servicio notificado!"></span>
                                 <span ng-if="!servicio.Asegurado.Telefono1 || servicio.Vehiculo.Placa.length != 6"
                                       class="glyphicon glyphicon-info-sign text-danger" uib-tooltip="Datos faltantes: {{ !servicio.Asegurado.Telefono1 ? 'Teléfono del asegurado, ' : '' }} {{ servicio.Vehiculo.Placa.length != 6 ? 'Placa del vehiculo' : ''}}"></span>
-                                <br />
-                                <a class="btn btn-link text-center" ng-click="MostrarDetalles(servicio, $event)" uib-tooltip="Mostrar detalles el servicio">
+                                <br class="hidden-xs" />
+                                <a class="btn-link text-center text-xs" ng-click="MostrarDetalles(servicio, $event)" uib-tooltip="Mostrar detalles el servicio">
                                     <u> {{servicio.Id}}</u>
                                 </a>
-                            </td>
-                            <td class="text-center">
+                            </div>
+                            <div class="hidden-sm hidden-md hidden-lg">
+                                <strong>Hora:</strong> {{servicio.Fecha | date:'HH:mm dd/MM/yyyy'}}
+                                <br />
+                                <strong>{{(servicio.Aseguradora.Nombre ? "Red: " :"")}}</strong> {{servicio.Aseguradora.Nombre}}
+                                <br />
+                                <strong>{{(servicio.Radicado ? "Consecutivo: " :"") }}</strong> {{ servicio.Radicado }}
+                                <br />
+                                <strong>Estado:</strong> {{servicio.Estado.Descripcion}}
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="hidden-xs">
                                 {{servicio.Fecha | date:'HH:mm'}}
                                 <br />
                                 {{servicio.Fecha | date:'dd/MM/yyyy'}}
-                            </td>
-                            <td>
+                            </div>
+                            <div class="hidden-sm hidden-md hidden-lg">
+                                <div ng-class="{ 'verde': !servicio.DireccionInicio.Ciudad.Principal }">
+                                    <strong>Inicio:</strong> {{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
+                                </div>
+                                <div ng-class="{ 'verde': !servicio.DireccionDestino.Ciudad.Principal }">
+                                    <strong>Destino:</strong> {{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
+                                </div>
+                                <br />
+                                <strong>Conductor: </strong> {{servicio.ConductorResumen}} <br />
+                                <strong>Ruta: </strong> {{servicio.RutaResumen}}
+                            </div>
+                        </td>
+                        <td class="hidden-xs">
+                            <div>
                                 <strong class="estadoTexto" uib-tooltip="Tipo servicio: {{servicio.TipoServicio.Descripcion}}">{{servicio.Estado.Descripcion}}</strong>
                                 <div class="hidden-sm hidden-md hidden-lg">
                                     <br />
                                     <strong>{{(servicio.Aseguradora.Nombre ? "Red: " :"")}}</strong> {{servicio.Aseguradora.Nombre}} <br />
                                     <strong> {{(servicio.Radicado ? "Consecutivo: " :"") }}</strong> {{ servicio.Radicado }}
                                 </div>
-                            </td>
-                            <td class="hidden-xs">
-                                {{servicio.Radicado}}
-                                <br />
-                                {{servicio.Aseguradora.Nombre}}
+                            </div>
+                        </td>
+                        <td class="hidden-xs">
+                            {{servicio.Radicado}}
+                            <br />
+                            {{servicio.Aseguradora.Nombre}}
+                        </td>
+                        <td class="hidden-xs" ng-class="{ 'verde': !servicio.DireccionInicio.Ciudad.Principal }">
+                            -{{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
+                        </td>
+                        <td class="hidden-xs" ng-class="{ 'verde': !servicio.DireccionDestino.Ciudad.Principal }">
+                            -{{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
+                        </td>
+                        <td class="hidden-xs">
+                            {{servicio.ConductorResumen}}
+                        </td>
+                        <td class="hidden-xs">
+                            {{servicio.RutaResumen}}
+                        </td>
+                        <td class="text-center ">
+                            <label class="checkbox i-checks m-l-xs m-b-xs">
+                                <input type="checkbox" ng-model="servicio.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr ng-if="active==servicio">
+                        <td class="resaltado"></td>
+                        <td colspan="9">
+                            <ul class="list-group list-group-xs">
+                                <li class="list-group-item border-none">
+                                    <form name="formSeguimiento" role="form" class="form-inline" ng-submit="GuardarSeguimiento()">
+                                        <div class="form-group">
+                                            <select ng-model="servicio.EstadoCodigo" name="estado" ng-options="estado.Codigo as estado.Descripcion for estado in estadosParaRegistro" class="form-control"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" ng-model="seguimiento.Observacion" class="form-control" placeholder="Ingrese su observación" />
+                                        </div>
+                                        <div class="form-group">
+                                            <button ng-disabled="isSaving" class="btn btn-info" type="submit">Guardar</button>
+                                        </div>
+                                    </form>
+                                </li>
+                                <li ng-repeat="seguimiento in servicio.Seguimientos | orderBy:'-Fecha'" class="list-group-item border-none">
+                                    <a ui-sref="app.page.profile" class="avatar thumb pull-left s-r">
+                                        <img ng-src="app/content/img/no_user.jpg" src="app/content/img/no_user.jpg">
+                                    </a>
+                                    <div class="pull-right text-sm text-muted">
 
-                            </td>
-                            <td ng-class="{ 'verde': !servicio.DireccionInicio.Ciudad.Principal }">
-                                -{{servicio.DireccionInicio.Descripcion}}, {{servicio.DireccionInicio.Ciudad.Nombre}}, {{servicio.DireccionInicio.Barrio}}
-
-                            </td>
-                            <td ng-class="{ 'verde': !servicio.DireccionDestino.Ciudad.Principal }">
-                                -{{servicio.DireccionDestino.Descripcion}}, {{servicio.DireccionDestino.Ciudad.Nombre}}, {{servicio.DireccionDestino.Barrio}}
-                            </td>
-                            <td>
-                                {{servicio.ConductorResumen}}
-                            </td>
-                            <td>
-                                {{servicio.RutaResumen}}
-                            </td>
-                            <td>
-                                <label class="checkbox i-checks m-l-xs m-b-xs">
-                                    <input type="checkbox" ng-model="servicio.Seleccionado" aria-checked="false" aria-invalid="false"><i></i>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr ng-if="active==servicio" ng-class=" { 'border-none' : active==servicio}">
-                            <td colspan="10">
-                                <div class="panel panel-default  border-none">
-                                    <ul class="list-group list-group-xs">
-                                        <li class="list-group-item border-none">
-                                            <div class="row">
-                                                <form name="formSeguimiento" class="form ng-pristine ng-valid" ng-submit="GuardarSeguimiento()">
-                                                    <div class="col-xs-3 form-group">
-                                                        <select ng-model="servicio.EstadoCodigo" name="estado" ng-options="estado.Codigo as estado.Descripcion for estado in estadosParaRegistro" class="form-control"></select>
-                                                    </div>
-                                                    <div class="col-xs-7 form-group">
-                                                        <input type="text" ng-model="seguimiento.Observacion" class="form-control" placeholder="Ingrese su observación" />
-                                                    </div>
-                                                    <div class="col-md-2 col-xs-12">
-                                                        <button ng-disabled="isSaving" class="btn btn-info" type="submit">Guardar</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </li>
-                                        <li ng-repeat="seguimiento in servicio.Seguimientos | orderBy:'-Fecha'"
-                                            class="list-group-item border-none">
-                                            <a ui-sref="app.page.profile" class="avatar thumb pull-left s-r">
-                                                <img ng-src="app/content/img/no_user.jpg" src="app/content/img/no_user.jpg">
-                                            </a>
-                                            <div class="pull-right text-sm text-muted">
-                                                <span class="hidden-xs">{{ seguimiento.Fecha | date:'HH:mm yyyy/MM/dd' }}</span>
-                                            </div>
-                                            <div class="clear">
-                                                <div>
-                                                    <strong class="text-xs">{{seguimiento.UsuarioRegistro.Nombre}}</strong>
-                                                </div>
-                                                <div class="text-xs text-ellipsis m-t-xs">{{seguimiento.Observacion}}</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                    </div>
+                                    <div class="clear">
+                                        <div>
+                                            <strong class="text-xs">{{seguimiento.UsuarioRegistro.Nombre}}</strong>
+                                        </div>
+                                        <div class="text-xs text-ellipsis m-t-xs">{{seguimiento.Observacion}}</div>
+                                        <span class="text-xs">Fecha: {{ seguimiento.Fecha | date:'HH:mm yyyy/MM/dd' }}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
