@@ -205,6 +205,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\CiudadController.cs" />
@@ -239,6 +240,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\azureControlDrive.pubxml" />
+    <None Include="Properties\PublishProfiles\pruebas.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ControlDrive.CORE\ControlDrive.CORE.csproj">

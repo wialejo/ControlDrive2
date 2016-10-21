@@ -4,7 +4,7 @@
     /* Controllers */
 
     angular.module('controldriveApp')
-      .controller('MainController', function ($location, $localStorage, $window, $state,authService, $scope, SucursalSvc) {
+      .controller('MainController', function ($location, $localStorage, $rootScope, $window, $state, authService, $scope, UsuarioSvc, SucursalSvc) {
           $scope.authentication = authService.authentication;
 
           $scope.logOut = function () {
@@ -66,14 +66,18 @@
               $localStorage.settings = $scope.app.settings;
           }, true);
 
+
           $scope.seleccionarSucursal = function (sucursal) {
               SucursalSvc.EstablecerSucursalActual(sucursal);
+              $scope.sucursal = sucursal;
               $state.go($state.current, {}, { reload: true })
           }
 
           function ObtenerSucursales() {
-              SucursalSvc.ObtenerPorUsuario().then(function (response) {
-                  $scope.sucursales = response.data;
+
+              UsuarioSvc.ObtenerUsuarioActual().then(function (response) {
+                  $rootScope.currentUser = response.data;
+                  $scope.sucursales = $rootScope.currentUser.Sucursales;
 
                   var sucursalActual = SucursalSvc.ObtenerSucursalActual();
                   if (sucursalActual) {
@@ -82,7 +86,7 @@
                       $scope.sucursal = $scope.sucursales[0];
                       SucursalSvc.EstablecerSucursalActual($scope.sucursales[0])
                   }
-              })
+              });
           }
           ObtenerSucursales();
 

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace ControlDrive.CORE.Repositorios
 {
     public class EntityBaseRepository<T> : IEntityBaseRepository<T>
-            where T : class,  new()
+            where T : class, new()
     {
 
         private ApplicationDbContext dataContext;
@@ -92,6 +92,12 @@ namespace ControlDrive.CORE.Repositorios
             DbEntityEntry dbEntityEntry = DbContext.Entry<T>(entity);
             dbEntityEntry.State = EntityState.Modified;
         }
+        public virtual void Unchanged(T entity)
+        {
+            DbContext.Set<T>().Attach(entity);
+            DbContext.Entry(entity).State = EntityState.Unchanged;
+        }
+
         public virtual void Update(T entity, params Expression<Func<T, object>>[] properties)
         {
             //dbEntityEntry.State = EntityState.Modified; --- I cannot do this.
@@ -147,6 +153,7 @@ namespace ControlDrive.CORE.Repositorios
         IQueryable<T> FindByNotTracking(Expression<Func<T, bool>> predicate);
         T Add(T entity);
         void Delete(T entity);
+        void Unchanged(T entity);
         void Edit(T entity);
         void Update(T entity, params Expression<Func<T, object>>[] updatedProperties);
     }

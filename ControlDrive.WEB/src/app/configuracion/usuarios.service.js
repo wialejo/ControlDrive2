@@ -5,9 +5,11 @@
 			return {
 				Guardar: Guardar,
 				ObtenerPorId: ObtenerPorId,
+				ObtenerUsuarioActual: ObtenerUsuarioActual,
 				Obtener: Obtener,
 				Eliminar: Eliminar,
 				AsignarSucursal: AsignarSucursal,
+				AsignarRol: AsignarRol,
 				DesAsignarSucursal: DesAsignarSucursal
 			}
 			function http(method, urlMetodo, data) {
@@ -31,6 +33,20 @@
 			    var obj = http('GET', url);
 				return obj;
 			}
+			function AsignarRol(idUsuario,nombreRol) {
+			    var rol = { usuario: idUsuario, Rol: nombreRol };
+			    var url = 'account/setRol';
+			    var obj = http('POST', url, rol);
+				return obj;
+			}
+			function AsignarRol2(idUsuario, nombreRol) {
+			    var url = "Usuarios/" + idUsuario + "/AsignarRol/" + nombreRol;
+
+			    //var rol = { usuario: idUsuario, Rol: nombreRol };
+			    //var url = 'account/setRol';
+			    var obj = http('GET', url);
+			    return obj;
+			}
 			function DesAsignarSucursal(idUsuario, idSucursal) {
 			    var url = "Usuarios/" + idUsuario + "/DesAsignarSucursal/" + idSucursal;
 			    var obj = http('GET', url);
@@ -38,6 +54,11 @@
 			}
 			function ObtenerPorId(id) {
 				var url = "Usuarios/ObtenerPorId/" + id;
+				var obj = http("GET", url);
+				return obj
+			}
+			function ObtenerUsuarioActual() {
+			    var url = "Usuarios/ObtenerUsuarioActual";
 				var obj = http("GET", url);
 				return obj
 			}

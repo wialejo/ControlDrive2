@@ -18,6 +18,12 @@
               vm.sucursales = response.data;
           });
 
+          vm.Guardar = function (usuario) {
+              UsuarioSvc.Guardar(usuario).then(function (response) {
+                  toastr.success('Usuario actualizado correctamente.')
+              });
+          }
+
           vm.abrirModalSucursales = function (usuario) {
               var modalInstance = $uibModal.open({
                   templateUrl: 'UsuarioSucursales.html',

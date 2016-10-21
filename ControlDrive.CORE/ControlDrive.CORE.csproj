@@ -208,6 +208,10 @@
     <Compile Include="Migrations\201609150202136_addTipoServicioTransporte.Designer.cs">
       <DependentUpon>201609150202136_addTipoServicioTransporte.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610210502094_addRol.cs" />
+    <Compile Include="Migrations\201610210502094_addRol.Designer.cs">
+      <DependentUpon>201610210502094_addRol.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Modelos\ApplicationDbContext.cs" />
     <Compile Include="Modelos\Correo.cs" />
@@ -319,6 +323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201609150202136_addTipoServicioTransporte.resx">
       <DependentUpon>201609150202136_addTipoServicioTransporte.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610210502094_addRol.resx">
+      <DependentUpon>201610210502094_addRol.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

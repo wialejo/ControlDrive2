@@ -216,7 +216,13 @@ namespace ControlDrive.CORE.Modelos
         public string Email { get; internal set; }
         public string Id { get; internal set; }
         public string Nombre { get; set; }
-        public ICollection<Sucursal> Sucursales { get; internal set; }
+        public string Rol { get; internal set; }
+        public virtual ICollection<RolDto> Roles { get; internal set; }
+        public virtual ICollection<Sucursal> Sucursales { get; internal set; }
         public string UserName { get; internal set; }
+    }
+    public class RolDto {
+        public string Name { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -25,7 +25,8 @@ namespace ControlDrive.API.Migrations.ApplicationDbContext
                     Email = "wi_alejo@hotmail.com",
                     PasswordHash = new PasswordHasher().HashPassword("admin"),
                     PhoneNumber = "3175104254",
-                    SecurityStamp = Guid.NewGuid().ToString()
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    Rol="Administrador"
                 });
 
             context.Estados.AddOrUpdate(

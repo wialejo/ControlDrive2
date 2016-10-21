@@ -97,6 +97,8 @@
     <Content Include="gulp\.eslintrc" />
     <Content Include="e2e\.eslintrc" />
     <None Include="Properties\PublishProfiles\ColombiarRedesWEB.pubxml" />
+    <Content Include="src\app\account\access.directive.js" />
+    <Content Include="src\app\account\authorization.service.js" />
     <Content Include="src\app\account\passwordChange.html" />
     <Content Include="src\app\account\register.html" />
     <Content Include="src\app\account\passwordChange.controller.js" />

@@ -35,13 +35,19 @@ namespace ControlDrive.Core.Controllers
             return Ok(usuarios);
         }
 
-
         [HttpGet]
         [Route("api/usuarios/{idUsuario}/AsignarSucursal/{idSucursal}")]
         public IHttpActionResult AsignarSucursal([FromUri]string idUsuario, [FromUri] int idSucursal)
         {
-            _usuarioService.AsignarSucursal(idUsuario, idSucursal);
-            return Ok();
+            try
+            {
+                _usuarioService.AsignarSucursal(idUsuario, idSucursal);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
         [HttpGet]
         [Route("api/usuarios/{idUsuario}/DesAsignarSucursal/{idSucursal}")]
@@ -51,10 +57,49 @@ namespace ControlDrive.Core.Controllers
             return Ok();
         }
 
+
+        [HttpGet]
+        [Route("api/usuarios/{idUsuario}/AsignarRol/{idRol}")]
+        public IHttpActionResult AsignarRol([FromUri]string idUsuario, [FromUri] string idRol)
+        {
+            _usuarioService.AsignarRol(idUsuario, idRol);
+            return Ok();
+        }
+        [HttpGet]
+        [Route("api/usuarios/{idUsuario}/DesAsignarRol/{idRol}")]
+        public IHttpActionResult DesAsignarRol([FromUri]string idUsuario, [FromUri] int idRol)
+        {
+            _usuarioService.DesAsignarSucursal(idUsuario, idRol);
+            return Ok();
+        }
+
         [HttpGet]
         public IHttpActionResult ObtenerPorId(string id)
         {
             var usuarios = _usuarioService.ObtenerPorId(id);
+            return Ok(usuarios);
+        }
+
+        [HttpPost]
+        public IHttpActionResult Guardar(ApplicationUser usuario)
+        {
+            try
+            {
+                _usuarioService.Guardar(usuario);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/usuarios/ObtenerUsuarioActual")]
+        public IHttpActionResult ObtenerUsuarioActual()
+        {
+            var idUsuario = HttpContext.Current.User.Identity.GetUserId();
+            var usuarios = _usuarioService.ObtenerPorId(idUsuario);
             return Ok(usuarios);
         }
     }

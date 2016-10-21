@@ -20,11 +20,21 @@
             })
             .state('app.nuevo', {
                 url: '/servicio/:id?',
-                templateUrl: 'app/operacion/nuevoServicio.html'
+                templateUrl: 'app/operacion/nuevoServicio.html',
+                data: {
+                    access: {
+                        loginRequired: true,
+                        requiredPermissions: ['Administrador','Seguimiento']
+                    }
+                }
             })
             .state('app.editar', {
                 url: '/servicio/:id?',
-                templateUrl: 'app/operacion/nuevoServicio.html'
+                templateUrl: 'app/operacion/nuevoServicio.html',
+                access: {
+                    loginRequired: true,
+                    requiredPermissions: ['Administrador','Seguimiento']
+                }
             })
             .state('app.serviciosHistorico', {
                 url: '/servicios/historico',
@@ -42,9 +52,16 @@
                 url: '/servicios/cierre',
                 templateUrl: 'app/operacion/cierre.html'
             })
+
             .state('app.facturacion', {
                 url: '/administracion/facturacion',
-                templateUrl: 'app/administracion/facturacion/facturacion.html'
+                templateUrl: 'app/administracion/facturacion/facturacion.html',
+                data: {
+                    access: {
+                        loginRequired: true,
+                        requiredPermissions: ['Administrador']
+                    }
+                }
             })
             .state('app.prefacturacion', {
                 url: '/administracion/prefacturacion',
@@ -54,6 +71,7 @@
                 url: '/administracion/cartera',
                 templateUrl: 'app/administracion/facturacion/cartera.html'
             })
+
             .state('app.pagoAProveedores', {
                 url: '/pagos/proveedores',
                 templateUrl: 'app/administracion/pagos/pagoAProveedores.html'

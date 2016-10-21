@@ -104,6 +104,10 @@ namespace ControlDrive.Core.App_Start
                 .As<IUsuarioService>()
                 .InstancePerRequest();
 
+            builder.RegisterType<RolService>()
+                .As<IRolService>()
+                .InstancePerRequest();
+
             builder.RegisterType<DocumentosService>()
                 .As<IDocumentosService>()
                 .InstancePerRequest();

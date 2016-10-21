@@ -27,6 +27,9 @@
                                             <th class="col-sm-3">
                                                 Email
                                             </th>
+                                            <th class="col-sm-3">
+                                                Rol
+                                            </th>
                                             <th class="col-sm-1 text-center">
                                                 Sucursales
                                             </th>
@@ -42,6 +45,14 @@
                                             </td>
                                             <td>
                                                 {{usuario.Email}}
+                                            </td>
+                                            <td>
+                                                <select ng-model="usuario.Rol" ng-change="vm.Guardar(usuario)" class="form-control">
+                                                    <option value="Administrador">Administrador</option>
+                                                    <option value="Coordinador">Coordinador</option>
+                                                    <option value="Seguimiento">Seguimiento</option>
+                                                    <option value="Proveedor">Proveedor</option>
+                                                </select>
                                             </td>
                                             <td class="text-center">
                                                 <input type="button" value="Sucursales" class="btn btn-default btn-sm" ng-click="vm.abrirModalSucursales(usuario)" />

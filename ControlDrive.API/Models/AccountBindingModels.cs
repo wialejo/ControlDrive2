@@ -63,6 +63,15 @@ namespace ControlDrive.Core.Modelos
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
+    public class RegisterRolBindingModel
+    {
+        [Required]
+        [Display(Name = "Rol")]
+        public string Rol { get; set; }
+        [Required]
+        [Display(Name = "usuario")]
+        public string usuario { get; set; }
+    }
 
     public class RemoveLoginBindingModel
     {

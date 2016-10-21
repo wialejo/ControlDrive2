@@ -18,6 +18,7 @@ namespace ControlDrive.Core.Modelos
 
         public string Nombre { get; set; }
         public ICollection<Sucursal> Sucursales { get; set; }
+        public string Rol { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
