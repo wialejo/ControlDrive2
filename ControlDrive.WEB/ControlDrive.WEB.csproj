@@ -167,6 +167,7 @@
     <Content Include="src\app\administracion\movimientos\movimientos.service.js" />
     <Content Include="src\app\administracion\pagos\pagoAProveedores.controller.js" />
     <Content Include="src\app\administracion\pagos\pagoAProveedores.html" />
+    <Content Include="src\app\index.constant.js" />
     <Content Include="src\app\inicio\inicioResumen.controller.js" />
     <Content Include="src\app\inicio\inicioResumen.html" />
     <Content Include="src\app\main\blocks\header.html" />

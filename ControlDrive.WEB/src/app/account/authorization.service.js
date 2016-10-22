@@ -6,7 +6,7 @@
       .factory('authorizationService', authorization);
 
     /** @ngInject */
-    function authorization($rootScope) {
+    function authorization($rootScope, UsuarioSvc) {
         var service = {
             authorize: authorize,
             constants: {
@@ -20,7 +20,7 @@
 
         function authorize(loginRequired, requiredPermissions, permissionCheckType) {
             var result = service.constants.authorised,
-                user = $rootScope.currentUser,
+                user = UsuarioSvc.ObtenerActual(),
                 loweredPermissions = [],
                 hasPermission = true,
                 permission;

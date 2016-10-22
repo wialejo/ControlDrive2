@@ -6,7 +6,8 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log, $rootScope, $state, authorizationService) {
+  function runBlock($log, $rootScope, $state, authorizationService, authService) {
+      authService.fillAuthData();
 
       $rootScope.$on('$stateChangeStart', function (event, toState) {
           // route authorizationService check

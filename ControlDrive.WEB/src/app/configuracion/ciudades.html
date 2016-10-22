@@ -17,7 +17,6 @@
                                         <th>Nombre</th>
                                         <th class="text-center">Tarifa</th>
                                         <th class="text-center">Principal</th>
-                                        <th class="text-center">Sucursal</th>
                                         <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
@@ -51,9 +50,6 @@
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            {{ciudad.Sucursal.Descripcion}}
-                                        </td>
-                                        <td class="text-center">
                                             <input ng-if="ciudad.enEdicion" type="button" value="Actualizar" class="btn btn-info btn-sm"
                                                    ng-click="vm.editar(ciudad)" />
                                             <input ng-if="ciudad.enEdicion" type="button" value="Cancelar" class="btn btn-danger btn-sm" ng-click="ciudad.enEdicion = false;" />
@@ -82,7 +78,6 @@
                                                     </label>
                                                 </div>
                                             </td>
-                                            <td></td>
                                             <td class="text-center">
                                                 <input type="submit" value="Guardar" class="btn btn-info btn-sm" ng-click="vm.guardar(vm.nuevaCiudad);" />
                                             </td>

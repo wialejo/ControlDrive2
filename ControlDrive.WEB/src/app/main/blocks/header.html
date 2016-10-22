@@ -32,14 +32,9 @@
     <ul class="nav navbar-nav navbar-right">
         <li class="nav navbar-nav">
             <!--<a class="m-n font-thin h3" ng-click="seleccionarSucursal()" title="Sucursal"> {{ sucursal.Descripcion }} </a>-->
-            <select uib-tooltip="Sucursal"
-                    ng-model="sucursal"
-                    class="navbar-btn form-control "
-                    id="SelSucursal"
-                    name="SelSucursal"
-                    required
-                    ng-change="seleccionarSucursal(sucursal)"
-                    ng-options="sucursal.Descripcion for sucursal in sucursales"></select>
+            <select uib-tooltip="Sucursal" tooltip-placement="bottom" class="navbar-btn form-control " id="SelSucursal"
+                    name="SelSucursal" required ng-model="sucursal" ng-change="seleccionarSucursal(sucursal)"
+                    ng-options="sucursal as sucursal.Descripcion for sucursal in sucursales track by sucursal.Id "></select>
         </li>
         <li class="hidden-xs">
             <a ui-fullscreen></a>

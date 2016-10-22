@@ -3,7 +3,7 @@
 
     angular
       .module('controldriveApp')
-          .factory('authService', function ($http, $q, localStorageService, ngAuthSettings) {
+          .factory('authService', function ($http, $q, localStorageService, ngAuthSettings, UsuarioSvc) {
 
               var serviceBase = ngAuthSettings.apiServiceBaseUri;
               var authServiceFactory = {};
@@ -57,13 +57,16 @@
                           if (loginData.useRefreshTokens) {
                               localStorageService.set('authorizationData', {
                                   token: response.access_token,
-                                  userName:loginData.userName, refreshToken: response.refresh_token, useRefreshTokens: true });
+                                  userName: loginData.userName,
+                                  refreshToken: response.refresh_token,
+                                  useRefreshTokens: true
+                              });
                           }
                           else {
                               localStorageService.set('authorizationData', {
                                   token: response.access_token,
                                   userName: loginData.userName,
-                                  refreshToken: "", 
+                                  refreshToken: "",
                                   useRefreshTokens: false
                               });
                           }
@@ -71,8 +74,9 @@
                           _authentication.userName = loginData.userName;
                           _authentication.useRefreshTokens = loginData.useRefreshTokens;
 
-                          deferred.resolve(response);
-
+                          UsuarioSvc.EstablecerTempUsuarioActual().then(function () {
+                              deferred.resolve(response);
+                          });
                       }).error(function (err) {
                           _logOut();
                           deferred.reject(err);
@@ -82,22 +86,23 @@
               };
 
               var _logOut = function () {
-
                   localStorageService.remove('authorizationData');
-
+                  UsuarioSvc.RemoverUsuarioActual();
                   _authentication.isAuth = false;
                   _authentication.userName = "";
                   _authentication.useRefreshTokens = false;
-
               };
 
               var _fillAuthData = function () {
 
                   var authData = localStorageService.get('authorizationData');
-                  if (authData) {
+                  var currentUser = localStorageService.get('currentUser');
+                  if (authData && currentUser) {
                       _authentication.isAuth = true;
                       _authentication.userName = authData.userName;
                       _authentication.useRefreshTokens = authData.useRefreshTokens;
+                  } else {
+                      _authentication.isAuth = false;
                   }
 
               };

@@ -263,7 +263,7 @@ namespace ControlDrive.CORE.Modelos
         public string Tarifa { get; set; }
 
         public int? SucursalId { get; set; }
-        public virtual Sucursal Sucursal { get; set; }
+        public Sucursal Sucursal { get; set; }
     }
 
     public class Barrio

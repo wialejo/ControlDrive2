@@ -18,7 +18,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ControlDrive.Core.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class UsuariosController : ApiController
     {
         private IUsuarioService _usuarioService;

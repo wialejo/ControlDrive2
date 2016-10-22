@@ -15,9 +15,9 @@
                 config.headers.Authorization = 'Bearer ' + authData.token;
             }
 
-            var sucursalActual = localStorageService.get('sucursal');
+            var sucursalActual = localStorageService.get('currentUser')
             if (sucursalActual) {
-                config.headers.idSucursal = sucursalActual.Id;
+                config.headers.idSucursal = sucursalActual.SucursalActual.Id;
             } else {
              //   toastr.warning("Debe seleccionar una sucursal.");
             }

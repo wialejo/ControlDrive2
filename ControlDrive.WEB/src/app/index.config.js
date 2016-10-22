@@ -1,9 +1,11 @@
 (function() {
 'use strict';
     angular.module('controldriveApp')
-        .config(function ($controllerProvider, $compileProvider, $filterProvider, $provide, $logProvider, toastrConfig) {
+        .config(function ($controllerProvider, $httpProvider, $compileProvider, $filterProvider, $provide, $logProvider, toastrConfig) {
             // Enable log
             $logProvider.debugEnabled(true);
+
+            $httpProvider.interceptors.push('authInterceptorService');
 
             // Set options third-party lib
             toastrConfig.allowHtml = true;
@@ -11,22 +13,5 @@
             toastrConfig.positionClass = 'toast-top-right';
             toastrConfig.preventDuplicates = false;
             toastrConfig.progressBar = false;
-        });
-    //var ApiUrl= "http://192.168.0.29/API/";
-    //var ApiUrl= "http://controldrive.co/API/";
-    var ApiUrl = "http://" + location.hostname +  "/" + location.pathname.split("/")[1] + "/API/";
-    angular.module('controldriveApp')
-        .constant('ngAuthSettings', {
-            apiServiceBaseUri: ApiUrl,
-            clientId: 'ngAuthApp'
-        });
-    angular.module('controldriveApp')
-        .config(function ($httpProvider) {
-            $httpProvider.interceptors.push('authInterceptorService');
-        });
-
-    angular.module('controldriveApp')
-        .run( function (authService) {
-            authService.fillAuthData();
         });
 })();
