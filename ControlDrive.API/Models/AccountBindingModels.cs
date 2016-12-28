@@ -32,6 +32,7 @@ namespace ControlDrive.Core.Modelos
 
     public class RegisterBindingModel
     {
+        
 
         [Required]
         [Display(Name = "User name")]
@@ -55,6 +56,10 @@ namespace ControlDrive.Core.Modelos
         [Required]
         [Display(Name = "Nombre")]
         public string nombre { get; set; }
+
+        [Required]
+        [Display(Name = "Rol")]
+        public string rol { get; set; }
     }
 
     public class RegisterExternalBindingModel

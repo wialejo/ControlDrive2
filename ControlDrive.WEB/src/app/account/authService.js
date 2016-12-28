@@ -22,7 +22,7 @@
 
               var _saveRegistration = function (registration) {
 
-                  _logOut();
+                  //_logOut();
 
                   return $http.post(serviceBase + 'api/account/register', registration).then(function (response) {
                       return response;

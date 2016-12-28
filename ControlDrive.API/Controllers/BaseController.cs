@@ -11,6 +11,9 @@ namespace ControlDrive.Core.Controllers
         {
             get
             {
+                if (!Request.Headers.Contains("idSucursal"))
+                    throw new System.Exception("Es necesario seleccionar una sucursal.");
+
                 IEnumerable<string> headerValues = Request.Headers.GetValues("idSucursal");
                 return int.Parse(headerValues.FirstOrDefault());
             }

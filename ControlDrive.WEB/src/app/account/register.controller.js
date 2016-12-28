@@ -1,8 +1,9 @@
+/// <reference path="register.html" />
 (function() {
 'use strict';
 
     angular.module('controldriveApp')
-        .controller('RegisterController', function ( $location, $timeout, authService) {
+        .controller('RegisterController', function ($location, toastr, $state, $timeout, authService) {
             var vm = this;
             vm.savedSuccessfully = false;
             vm.message = "";
@@ -10,13 +11,14 @@
             vm.registration = {
                 userName: "",
                 password: "",
-                confirmPassword: ""
+                confirmPassword: "",
+                rol: "Administrador"
             };
 
             vm.signUp = function () {
                 authService.saveRegistration(vm.registration).then(function () {
-                    vm.savedSuccessfully = true;
-                    vm.message = "User has been registered successfully, you will be redicted to login page in 2 seconds.";
+                    //vm.savedSuccessfully = true;
+                    toastr.success("Usuario registrado correctamente, asigne las sucursales correspondientes.");
                     startTimer();
                 },
                  function (response) {
@@ -31,9 +33,10 @@
             };
             var startTimer = function () {
                 var timer = $timeout(function () {
-                      $timeout.cancel(timer);
-                    $location.path('/login');
-                }, 2000);
+                    $timeout.cancel(timer);
+                    $state.go("app.usuarios")
+                    //$location.path('/login');
+                }, 4000);
             }
         });
 })();

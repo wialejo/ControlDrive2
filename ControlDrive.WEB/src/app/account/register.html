@@ -1,30 +1,41 @@
-    <div class="container w-xxl w-auto-xs" ng-controller="RegisterController as vm" ng-init="app.settings.container = false;">
-      <div class="m-b-lg">
+<div class="container w-xxl w-auto-xs" ng-controller="RegisterController as vm" ng-init="app.settings.container = false;">
+    <div class="m-b-lg">
         <div class="wrapper text-center">
-          <strong>Registro de usuarios para ingreso a la aplicación</strong>
+            <strong>Registro de usuarios para ingreso a la aplicación</strong>
         </div>
         <form name="form" class="form-validation">
-          <div class="text-danger wrapper text-center" ng-show="vm.authError">
-              {{vm.authError}}
-          </div>
-          <div class="list-group list-group-sm">
-            <div class="list-group-item">
-              <input type="text" placeholder="Nombre" class="form-control no-border" ng-model="vm.registration.nombre" required>
+            <div class="text-danger wrapper text-center" ng-show="vm.authError">
+                {{vm.authError}}
             </div>
-              <div class="list-group-item">
-                  <input type="text" placeholder="Nombre usuario" class="form-control no-border" ng-model="vm.registration.userName" required>
-              </div>
-            <div class="list-group-item">
-              <input type="email" placeholder="Email" class="form-control no-border" ng-model="vm.registration.email" required>
+            <div class="list-group list-group-sm">
+                <div class="list-group-item">
+                    <input type="text" placeholder="Nombre" class="form-control no-border" ng-model="vm.registration.nombre" required>
+                </div>
+                <div class="list-group-item">
+                    <input type="text" placeholder="Nombre usuario" class="form-control no-border" ng-model="vm.registration.userName" required>
+                </div>
+                <div class="list-group-item">
+                    <input type="email" placeholder="Email" class="form-control no-border" ng-model="vm.registration.email" required>
+                </div>
+                <div class="list-group-item">
+                    <input type="password" placeholder="Contraseña" class="form-control no-border" ng-model="vm.registration.password" required>
+                </div>
+                <div class="list-group-item">
+                    <input type="password" placeholder="Confirmar contraseña" class="form-control no-border"
+                           ng-model="vm.registration.confirmPassword" required>
+                </div>
+                <div class="list-group-item">
+                    <select ng-model="vm.registration.rol" class="form-control">
+                        <option value="Administrador" selected="selected">Administrador</option>
+                        <option value="Coordinador">Coordinador</option>
+                        <option value="Seguimiento">Seguimiento</option>
+                        <option value="Proveedor">Proveedor</option>
+                    </select>
+                </div>
+          
             </div>
-            <div class="list-group-item">
-               <input type="password" placeholder="Contraseña" class="form-control no-border" ng-model="vm.registration.password" required>
-            </div>
-            <div class="list-group-item">
-                <input type="password" placeholder="Confirmar contraseña" class="form-control no-border" ng-model="vm.registration.confirmPassword" required>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="vm.signUp()" ng-disabled='form.$invalid'>Registrar</button>
+
+            <button type="submit" class="btn btn-lg btn-primary btn-block" ng-click="vm.signUp()" ng-disabled='form.$invalid'>Registrar</button>
         </form>
-      </div>
     </div>
+</div>
