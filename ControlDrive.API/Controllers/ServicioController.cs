@@ -43,11 +43,12 @@ namespace ControlDrive.Core.Controllers
 
             if (!string.IsNullOrEmpty(consecutivo))
             {
-                servicios = _servicioServiceExt.Obtener(s => !string.IsNullOrEmpty(consecutivo) && s.Radicado.Contains(consecutivo)).ToList();
+                //servicios = _servicioServiceExt.Obtener(s => !string.IsNullOrEmpty(consecutivo) && s.Radicado.Contains(consecutivo)).ToList();
+
+                servicios = _servicioServiceExt.Obtener(s => s.Radicado.Equals(consecutivo)).ToList();
             }
             else
             {
-
                 servicios = _servicioServiceExt.Obtener(s => (DbFunctions.TruncateTime(s.Fecha) >= DbFunctions.TruncateTime(inicio)
                                                                     && DbFunctions.TruncateTime(s.Fecha) <= DbFunctions.TruncateTime(fin))).ToList();
             }

@@ -27,11 +27,29 @@ namespace ControlDrive.CORE.Services
         private readonly ICommonInterface<Asegurado> _aseguradoService;
         private readonly ICommonInterface<Vehiculo> _vehiculoService;
         private readonly ICorreoService _correoService;
+        private readonly IEntityBaseRepository<Sucursal> _sucursalRepositorio;
+        private readonly IEntityBaseRepository<TipoServicio> _tipoServicioRepositorio;
+        private readonly IEntityBaseRepository<Conductor> _conductorRepositorio;
+        private readonly IEntityBaseRepository<Seguimiento> _seguimientoRepositorio;
         private readonly IEntityBaseRepository<Movimiento> _movimientoRepositorio;
 
+        public IEntityBaseRepository<Direccion> _direccionRepositorio { get; }
+
         public ServicioService(IEntityBaseRepository<Movimiento> movimientoRepositorio, IEntityBaseRepository<Servicio> servicioRepositorio, ICommonInterface<Direccion> direccionService,
-            ICommonInterface<Asegurado> aseguradoService, ICommonInterface<Vehiculo> vehiculoService, ICorreoService correoService, IUnitOfWork unitOfWork)
+            ICommonInterface<Asegurado> aseguradoService, ICommonInterface<Vehiculo> vehiculoService,
+            ICorreoService correoService,
+            IEntityBaseRepository<Direccion> direccionRepositorio,
+            IEntityBaseRepository<Sucursal> sucursalRepositorio,
+            IEntityBaseRepository<TipoServicio> tipoServicioRepositorio,
+            IEntityBaseRepository<Conductor> conductorRepositorio,
+            IEntityBaseRepository<Seguimiento> seguimientoRepositorio,
+            IUnitOfWork unitOfWork)
         {
+            _direccionRepositorio = direccionRepositorio;
+            _sucursalRepositorio = sucursalRepositorio;
+            _tipoServicioRepositorio = tipoServicioRepositorio;
+            _conductorRepositorio = conductorRepositorio;
+            this._seguimientoRepositorio = seguimientoRepositorio;
             _servicioRepositorio = servicioRepositorio;
             _movimientoRepositorio = movimientoRepositorio;
             _direccionService = direccionService;
@@ -39,7 +57,6 @@ namespace ControlDrive.CORE.Services
             _vehiculoService = vehiculoService;
             _correoService = correoService;
             _unitOfWork = unitOfWork;
-
         }
 
         public Servicio Guardar(Servicio servicio)
@@ -292,7 +309,6 @@ namespace ControlDrive.CORE.Services
             return servicios;
         }
 
-
         public List<ResumenServiciosEstados> ObtenerResumenEstados(Expression<Func<Servicio, bool>> predicate)
         {
             var servicios = _servicioRepositorio.FindBy(predicate)
@@ -321,21 +337,13 @@ namespace ControlDrive.CORE.Services
         {
             var servicios = _servicioRepositorio
                 .FindBy(predicate)
-                .OrderBy(s => s.Fecha)
                 .Select(s => new ServicioDto
                 {
                     Id = s.Id,
                     EstadoCodigo = s.EstadoCodigo,
                     Estado = s.Estado,
-                    Sucursal = new SucursalDto { Id =  s.Sucursal.Id, Descripcion = s.Sucursal.Descripcion },
                     SucursalId = s.SucursalId,
-                    TipoServicio = new TipoServicioDto
-                    {
-                        Id = s.TipoServicio.Id,
-                        Descripcion = s.TipoServicio.Descripcion,
-                        ConceptosPagos = s.TipoServicio.ConceptosPagos,
-                        RequiereSeguimiento = s.TipoServicio.RequiereSeguimiento
-                    },
+                    TipoServicioId = s.TipoServicioId,
                     Fecha = s.Fecha,
                     Hora = s.Hora,
                     Radicado = s.Radicado,
@@ -348,69 +356,103 @@ namespace ControlDrive.CORE.Services
                     Observacion = s.Observacion,
                     Asegurado = s.Asegurado,
                     DireccionInicioId = s.DireccionInicioId,
-                    DireccionInicio = s.DireccionInicio,
                     DireccionDestinoId = s.DireccionDestinoId,
-                    DireccionDestino = s.DireccionDestino,
                     ConductorId = s.ConductorId,
-                    Conductor = s.Conductor,
                     RutaId = s.RutaId,
-                    Ruta = s.Ruta,
                     UsuarioRegistro = new ApplicationUserDto { Nombre = s.UsuarioRegistro.Nombre },
                     FechaRegistro = s.FechaRegistro,
                     UsuarioModificacion = new ApplicationUserDto { Nombre = s.UsuarioModificacion.Nombre },
                     FechaModificacion = s.FechaModificacion,
                     Notificado = s.Notificado,
-                    Seguimientos = s.Seguimientos.Select(sg => new SeguimientoDto
-                    {
-                        Id = sg.Id,
-                        Fecha = sg.Fecha,
-                        NuevoEstado = sg.Estado.Descripcion,
-                        Observacion = sg.Observacion,
-                        UsuarioRegistro = new ApplicationUserDto { Nombre = sg.UsuarioRegistro.Nombre }
-                    }).OrderBy(sg => sg.Fecha).ToList(),
-                    Movimientos = s.Movimientos.Select(m => new MovimientoDto
-                    {
-                        Id = m.Id,
-                        ServicioId = m.ServicioId,
-                        Valor = m.Valor,
-                        ConceptoCodigo = m.ConceptoCodigo,
-                        Documento = new DocumentoDto { Numero = m.Documento.Numero, Tipo = m.Documento.Tipo },
-                        Concepto = new ServicioConceptoDto { Codigo = m.Concepto.Codigo, Descripcion = m.Concepto.Descripcion },
-                        //ProveedorId = m.ProveedorId,
-                        //ClienteId = m.ClienteId,
-                        DocumentoId = m.DocumentoId,
-                        FechaRegistro = m.FechaRegistro,
-                        UsuarioRegistroId = m.UsuarioRegistroId,
-                        FechaModificacion = m.FechaModificacion,
-                        UsuarioModificacionId = m.UsuarioModificacionId,
-                        Aprobado = m.Aprobado,
-                    }).ToList()
+
                 })
-                .OrderBy(s => s.Fecha)
+                .ToList()
+                .OrderBy(s => s.Fecha).ToList();
+
+
+            List<int> idsDirecciones = servicios.Where(s => s.DireccionInicioId != null)
+                .Select(s => (int)s.DireccionInicioId).ToList();
+            idsDirecciones.AddRange(servicios.Where(s => s.DireccionDestinoId != null)
+                .Select(s => (int)s.DireccionDestinoId).ToList());
+
+            List<Direccion> direcciones = _direccionRepositorio.FindBy(d => idsDirecciones.Contains(d.Id)).ToList();
+
+            List<SucursalDto> sucursales = _sucursalRepositorio.All
+                .Select(s => new SucursalDto { Id = s.Id, Descripcion = s.Descripcion }).ToList();
+
+            List<TipoServicioDto> tiposServicio = _tipoServicioRepositorio.All.Select(t => new TipoServicioDto
+            {
+                Id = t.Id,
+                Descripcion = t.Descripcion,
+                ConceptosPagos = t.ConceptosPagos,
+                RequiereSeguimiento = t.RequiereSeguimiento
+            }).ToList();
+
+            List<int> idsConductores = servicios.Where(s => s.ConductorId != null).Select(s => (int)s.ConductorId).ToList();
+            idsConductores.AddRange(servicios.Where(s => s.RutaId != null).Select(s => (int)s.RutaId).ToList());
+
+            List<Conductor> conductores = _conductorRepositorio.FindBy(c => idsConductores.Contains(c.Id)).ToList();
+
+            List<int> idsServicios = servicios.Select(s => s.Id).ToList();
+
+            List<MovimientoDto> movimientos = _movimientoRepositorio
+                .FindBy(m => idsServicios.Contains(m.ServicioId))
+                .Select(m => new MovimientoDto
+                {
+                    Id = m.Id,
+                    ServicioId = m.ServicioId,
+                    Valor = m.Valor,
+                    ConceptoCodigo = m.ConceptoCodigo,
+                    Documento = new DocumentoDto { Numero = m.Documento.Numero, Tipo = m.Documento.Tipo },
+                    Concepto = new ServicioConceptoDto
+                    { Codigo = m.Concepto.Codigo, Descripcion = m.Concepto.Descripcion },
+                    //ProveedorId = m.ProveedorId,
+                    //ClienteId = m.ClienteId,
+                    DocumentoId = m.DocumentoId,
+                    FechaRegistro = m.FechaRegistro,
+                    UsuarioRegistroId = m.UsuarioRegistroId,
+                    FechaModificacion = m.FechaModificacion,
+                    UsuarioModificacionId = m.UsuarioModificacionId,
+                    Aprobado = m.Aprobado,
+                }).ToList();
+
+
+            List<SeguimientoDto> seguimientos = _seguimientoRepositorio
+                .FindBy(s => idsServicios.Contains(s.ServicioId))
+                .Select(sg => new SeguimientoDto
+                {
+                    Id = sg.Id,
+                    Fecha = sg.Fecha,
+                    NuevoEstado = sg.Estado.Descripcion,
+                    Observacion = sg.Observacion,
+                    UsuarioRegistro = new ApplicationUserDto { Nombre = sg.UsuarioRegistro.Nombre },
+                    ServicioId = sg.ServicioId
+                })
+                .OrderBy(sg => sg.Fecha)
                 .ToList();
 
             servicios.ForEach(servicio =>
             {
-                if (servicio.Conductor != null)
-                {
-                    servicio.ConductorResumen = servicio.Conductor.ToResumen();
-                }
-                else
-                {
-                    servicio.ConductorResumen = string.Empty;
-                }
+                if (servicio.DireccionInicioId != null)
+                    servicio.DireccionInicio = direcciones.FirstOrDefault(d => d.Id == servicio.DireccionInicioId);
 
-                //if (servicio.UsuarioRegistro != null)
-                //    servicio.UsuarioRegistro = new ApplicationUser { Nombre = servicio.UsuarioRegistro.Nombre };
+                if (servicio.DireccionDestinoId != null)
+                    servicio.DireccionDestino = direcciones.FirstOrDefault(d => d.Id == servicio.DireccionDestinoId);
 
-                if (servicio.Ruta != null)
-                {
-                    servicio.RutaResumen = servicio.Ruta.ToResumen();
-                }
-                else
-                {
-                    servicio.RutaResumen = string.Empty;
-                }
+                if (servicio.SucursalId != null)
+                    servicio.Sucursal = sucursales.FirstOrDefault(s => s.Id == servicio.SucursalId);
+
+                if (servicio.TipoServicioId != null)
+                    servicio.TipoServicio = tiposServicio.FirstOrDefault(s => s.Id == servicio.TipoServicioId);
+
+                servicio.Conductor = conductores.FirstOrDefault(c => c.Id == servicio.ConductorId);
+                servicio.ConductorResumen = servicio.Conductor != null ? servicio.Conductor.ToResumen() : string.Empty;
+
+                servicio.Ruta = conductores.FirstOrDefault(c => c.Id == servicio.RutaId);
+                servicio.RutaResumen = servicio.Ruta != null ? servicio.Ruta.ToResumen() : string.Empty;
+
+                servicio.Movimientos = movimientos.Where(m => m.ServicioId == servicio.Id).ToList();
+                servicio.Seguimientos = seguimientos.Where(s => s.ServicioId == servicio.Id).ToList();
             });
 
             return servicios;
@@ -476,7 +518,7 @@ namespace ControlDrive.CORE.Services
                     hora = f.Fecha.ToString("HH:mm"),
                     fecha = f.Fecha.ToString("dd/MM/yyyy"),
                     codigo = f.Radicado,
-                    aseguradora = (f.Aseguradora != null) ? 
+                    aseguradora = (f.Aseguradora != null) ?
                             f.Aseguradora.Nombre : "",
                     asegurado = (f.Asegurado != null) ? (
                             f.Asegurado.Nombre +

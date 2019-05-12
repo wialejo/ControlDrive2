@@ -67,7 +67,7 @@ namespace ControlDrive.CORE.Modelos
         public ICollection<SeguimientoDto> Seguimientos { get; set; }
         public ICollection<MovimientoDto> Movimientos { get; set; }
         public bool Notificado { get; set; }
-
+        public int? TipoServicioId { get; internal set; }
     }
 
     public class SucursalDto
@@ -133,6 +133,7 @@ namespace ControlDrive.CORE.Modelos
         public string Observacion { get; set; }
         public virtual ApplicationUserDto UsuarioRegistro { get; set; }
         public string NuevoEstado { get; set; }
+        public int ServicioId { get; internal set; }
     }
 
 
